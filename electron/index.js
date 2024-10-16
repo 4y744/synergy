@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require("electron");
+const { join } = require("path");
 
 app.whenReady().then(() => {
   const window = new BrowserWindow({
@@ -6,9 +7,10 @@ app.whenReady().then(() => {
     height: 800,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: true,
+      preload: join(__dirname, "./preload.js"),
     },
   });
 
-  window.loadFile("../app/build/index.html");
-  //window.loadURL("https://synergy-44df2.web.app");
+  window.loadFile(join(__dirname, "../app/build/index.html"));
 });

@@ -1,11 +1,21 @@
-import { createBrowserRouter } from "react-router-dom";
+//React Router
+import { createBrowserRouter, createHashRouter } from "react-router-dom";
 
+//Views
 import { Root } from "../views";
 
-export const router = createBrowserRouter([
+//Configs
+import { ENV_PLATFORM } from "../config/env";
+
+const routes = [
   {
-    path: "/",
+    path: "",
     element: <Root />,
     children: [],
   },
-]);
+];
+
+export const router =
+  ENV_PLATFORM == "electron"
+    ? createHashRouter(routes)
+    : createBrowserRouter(routes);
