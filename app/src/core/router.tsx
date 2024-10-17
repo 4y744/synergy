@@ -1,17 +1,39 @@
 //React Router
-import { createBrowserRouter, createHashRouter } from "react-router-dom";
-
-//Views
-import { Root } from "../views";
+import {
+  createBrowserRouter,
+  createHashRouter,
+  Outlet,
+  RouteObject,
+} from "react-router-dom";
 
 //Configs
 import { ENV_PLATFORM } from "../config/env";
+import { Views } from "../views";
 
-const routes = [
+const routes: RouteObject[] = [
   {
     path: "",
-    element: <Root />,
-    children: [],
+    element: <Outlet />,
+    children: [
+      {
+        path: "",
+        element: <Views.Home />,
+      },
+      {
+        path: "groups",
+        element: <Views.Groups />,
+        children: [
+          {
+            path: "",
+            element: <Views.Groups.Default />,
+          },
+          {
+            path: ":groupId",
+            element: <Views.Groups.Group />,
+          },
+        ],
+      },
+    ],
   },
 ];
 
