@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
 
-export const _Groups = () => {
+export const Component = () => {
   return <Outlet />;
 };

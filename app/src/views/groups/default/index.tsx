@@ -1,3 +1,3 @@
-export const _GroupsDefault = () => {
+export const Component = () => {
   return <div>groups default</div>;
 };

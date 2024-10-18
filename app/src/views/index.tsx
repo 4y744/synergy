@@ -1,14 +1,5 @@
-import { _Home } from "./default";
-import { _Groups } from "./groups";
-import { _Group } from "./groups/[groupId]";
-import { _GroupsDefault } from "./groups/default";
+import { Outlet } from "react-router-dom";
 
-const index = {
-  Home: _Home,
-  Groups: Object.assign(_Groups, {
-    Default: _GroupsDefault,
-    Group: _Group,
-  }),
+export const Component = () => {
+  return <Outlet />;
 };
-
-export { index as Views };

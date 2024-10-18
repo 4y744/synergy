@@ -2,34 +2,32 @@
 import {
   createBrowserRouter,
   createHashRouter,
-  Outlet,
   RouteObject,
 } from "react-router-dom";
 
 //Configs
 import { ENV_PLATFORM } from "../config/env";
-import { Views } from "../views";
 
 const routes: RouteObject[] = [
   {
     path: "",
-    element: <Outlet />,
+    lazy: () => import("../views"),
     children: [
       {
         path: "",
-        element: <Views.Home />,
+        lazy: () => import("../views/default"),
       },
       {
         path: "groups",
-        element: <Views.Groups />,
+        lazy: () => import("../views/groups"),
         children: [
           {
             path: "",
-            element: <Views.Groups.Default />,
+            lazy: () => import("../views/groups/default"),
           },
           {
             path: ":groupId",
-            element: <Views.Groups.Group />,
+            lazy: () => import("../views/groups/[groupId]"),
           },
         ],
       },
