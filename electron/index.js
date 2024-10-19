@@ -6,7 +6,7 @@ app.whenReady().then(() => {
     width: 800,
     height: 800,
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: false,
       contextIsolation: true,
       preload: join(__dirname, "./preload.js"),
     },

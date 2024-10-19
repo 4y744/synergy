@@ -1,6 +1,15 @@
-import { useParams } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 
 export const Component = () => {
   const { groupId } = useParams();
-  return <div>group page {groupId}</div>;
+  return (
+    <div className="flex">
+      <div>
+        <div>chats</div>
+        <div>calls</div>
+        <div>folders</div>
+      </div>
+      <Outlet />
+    </div>
+  );
 };

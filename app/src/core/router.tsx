@@ -28,6 +28,41 @@ const routes: RouteObject[] = [
           {
             path: ":groupId",
             lazy: () => import("../views/groups/[groupId]"),
+            children: [
+              {
+                path: "chats",
+                lazy: () => import("../views/groups/[groupId]/chats"),
+                children: [
+                  {
+                    path: ":chatId",
+                    lazy: () =>
+                      import("../views/groups/[groupId]/chats/[chatId]"),
+                  },
+                ],
+              },
+              {
+                path: "calls",
+                lazy: () => import("../views/groups/[groupId]/calls"),
+                children: [
+                  {
+                    path: ":callId",
+                    lazy: () =>
+                      import("../views/groups/[groupId]/calls/[callId]"),
+                  },
+                ],
+              },
+              {
+                path: "folders",
+                lazy: () => import("../views/groups/[groupId]/folders"),
+                children: [
+                  {
+                    path: ":folderId",
+                    lazy: () =>
+                      import("../views/groups/[groupId]/folders/[folderId]"),
+                  },
+                ],
+              },
+            ],
           },
         ],
       },

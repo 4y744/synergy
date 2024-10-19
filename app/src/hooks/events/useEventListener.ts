@@ -10,8 +10,6 @@ import { useEffect } from "react";
  * @param options
  * ```deps``` - When they change the listener will update to the current ```eventFn```;
  * ```target``` - Defaults to ```window```, determines which DOM node the listener will be attached to.
- * @overload ```Default``` - generic event. Default overload when no type arguments are passed.
- * @overload ```<EventType>``` - specific event. Determines the type for ```eventFn```'s parameters.
  */
 export const useEventListener = <EventType = Event>(
   eventType: string,
