@@ -2,15 +2,16 @@ import { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 
 type Props = {
-  children: ReactNode;
+  children?: ReactNode;
   to: string;
 };
 
-export const _ChatsLink = ({ children, to }: Props) => {
+export const _SidebarLink = ({ children, to }: Props) => {
   return (
     <NavLink
       to={to}
-      className={({ isActive }) => ``}
+      className={({ isActive }) => `
+      px-4 py-2`}
     >
       {children}
     </NavLink>

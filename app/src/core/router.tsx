@@ -11,62 +11,47 @@ import { ENV_PLATFORM } from "../config/env";
 const routes: RouteObject[] = [
   {
     path: "",
-    lazy: () => import("../views"),
+    lazy: () => import("../views/home"),
+  },
+  {
+    path: "groups",
+    lazy: () => import("../views/groups"),
     children: [
       {
         path: "",
-        lazy: () => import("../views/default"),
+        lazy: () => import("../views/groups/default"),
       },
       {
-        path: "groups",
-        lazy: () => import("../views/groups"),
+        path: ":groupId",
+        lazy: () => import("../views/groups/[groupId]"),
         children: [
           {
-            path: "",
-            lazy: () => import("../views/groups/default"),
+            path: "chats/:chatId",
+            lazy: () => import("../views/groups/[groupId]/chats/[chatId]"),
           },
           {
-            path: ":groupId",
-            lazy: () => import("../views/groups/[groupId]"),
-            children: [
-              {
-                path: "chats",
-                lazy: () => import("../views/groups/[groupId]/chats"),
-                children: [
-                  {
-                    path: ":chatId",
-                    lazy: () =>
-                      import("../views/groups/[groupId]/chats/[chatId]"),
-                  },
-                ],
-              },
-              {
-                path: "calls",
-                lazy: () => import("../views/groups/[groupId]/calls"),
-                children: [
-                  {
-                    path: ":callId",
-                    lazy: () =>
-                      import("../views/groups/[groupId]/calls/[callId]"),
-                  },
-                ],
-              },
-              {
-                path: "folders",
-                lazy: () => import("../views/groups/[groupId]/folders"),
-                children: [
-                  {
-                    path: ":folderId",
-                    lazy: () =>
-                      import("../views/groups/[groupId]/folders/[folderId]"),
-                  },
-                ],
-              },
-            ],
+            path: "calls/:callId",
+            lazy: () => import("../views/groups/[groupId]/calls/[callId]"),
+          },
+          {
+            path: "folders/:folderId",
+            lazy: () => import("../views/groups/[groupId]/folders/[folderId]"),
           },
         ],
       },
     ],
+  },
+  {
+    path: "settings",
+    lazy: () => import("../views/settings"),
+  },
+  {
+    path: "invite",
+    lazy: () => import("../views/invite"),
+  },
+  {
+    path: "join",
+    lazy: () => import("../views/join"),
   },
 ];
 

@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { Navbar } from "./components/Navbar";
+import { Navbar } from "../../components/Navbar";
 
 export const Component = () => {
   return (

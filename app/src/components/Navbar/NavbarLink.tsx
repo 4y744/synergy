@@ -9,12 +9,12 @@ type Props = {
   to: string;
 };
 
-export const _Navlink = ({ children, to }: Props) => {
+export const _NavbarLink = ({ children, to }: Props) => {
   return (
     <NavLink
       className={({
         isActive,
-      }) => `${isActive ? "bg-white text-neutral-900" : "bg-neutral-900 hover:bg-neutral-800"}
+      }) => `${isActive ? "bg-white text-dark-900" : "bg-dark-950 hover:bg-dark-800"}
       rounded-md 
       px-2 py-1 m-1`}
       to={to}

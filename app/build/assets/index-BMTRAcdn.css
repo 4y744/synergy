@@ -228,8 +228,8 @@ video {
 :after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
-  --tw-translate-x: 0;
-  --tw-translate-y: 0;
+  --tw-trandark-x: 0;
+  --tw-trandark-y: 0;
   --tw-rotate: 0;
   --tw-skew-x: 0;
   --tw-skew-y: 0;
@@ -258,7 +258,7 @@ video {
   --tw-blur: ;
   --tw-brightness: ;
   --tw-contrast: ;
-  --tw-neutralscale: ;
+  --tw-darkscale: ;
   --tw-hue-rotate: ;
   --tw-invert: ;
   --tw-saturate: ;
@@ -267,7 +267,7 @@ video {
   --tw-backdrop-blur: ;
   --tw-backdrop-brightness: ;
   --tw-backdrop-contrast: ;
-  --tw-backdrop-neutralscale: ;
+  --tw-backdrop-darkscale: ;
   --tw-backdrop-hue-rotate: ;
   --tw-backdrop-invert: ;
   --tw-backdrop-opacity: ;
@@ -281,8 +281,8 @@ video {
 ::backdrop {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
-  --tw-translate-x: 0;
-  --tw-translate-y: 0;
+  --tw-trandark-x: 0;
+  --tw-trandark-y: 0;
   --tw-rotate: 0;
   --tw-skew-x: 0;
   --tw-skew-y: 0;
@@ -311,7 +311,7 @@ video {
   --tw-blur: ;
   --tw-brightness: ;
   --tw-contrast: ;
-  --tw-neutralscale: ;
+  --tw-darkscale: ;
   --tw-hue-rotate: ;
   --tw-invert: ;
   --tw-saturate: ;
@@ -320,7 +320,7 @@ video {
   --tw-backdrop-blur: ;
   --tw-backdrop-brightness: ;
   --tw-backdrop-contrast: ;
-  --tw-backdrop-neutralscale: ;
+  --tw-backdrop-darkscale: ;
   --tw-backdrop-hue-rotate: ;
   --tw-backdrop-invert: ;
   --tw-backdrop-opacity: ;

@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply dark:bg-neutral-800 font-poppins dark:text-white;
+    @apply dark:bg-dark-800 font-poppins dark:text-white;
   }
 }
 

@@ -5,13 +5,13 @@ type Props = {
   children?: ReactNode;
 };
 
-export const _Navbar = ({ children }: Props) => {
+export const _SidebarSection = ({ children }: Props) => {
   return (
-    <nav
-      className="bg-neutral-900
-      flex"
+    <section
+      className="
+      grid grid-cols-1"
     >
       {children}
-    </nav>
+    </section>
   );
 };
