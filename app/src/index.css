@@ -8,6 +8,14 @@
   body {
     @apply dark:bg-dark-800 font-poppins dark:text-white select-none;
   }
+
+  #root {
+    @apply h-screen overflow-hidden;
+  }
+
+  input {
+    @apply focus:outline-none;
+  }
 }
 
 @layer components {

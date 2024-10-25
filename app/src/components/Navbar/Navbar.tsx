@@ -9,7 +9,7 @@ export const _Navbar = ({ children }: Props) => {
   return (
     <nav
       className="bg-dark-950
-      flex"
+      flex items-center h-12 gap-2"
     >
       {children}
     </nav>

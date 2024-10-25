@@ -1,0 +1,9 @@
+import{j as s,N as r,O as t}from"./index-C5FbmJY2.js";const o=({children:a})=>s.jsx("div",{className:`bg-dark-900\r
+      flex flex-col min-w-64 h-full\r
+      border-r border-r-dark-700`,children:a}),d=({children:a,title:c})=>s.jsxs("section",{className:`\r
+      grid grid-cols-1`,children:[s.jsx("span",{className:`px-4 py-2\r
+      text-dark-400 text-sm font-medium`,children:c}),a]}),x=({children:a,to:c,icon:i})=>s.jsxs(r,{to:c,className:({isActive:l})=>`
+      ${l?"bg-white text-black":"hover:bg-dark-800"}
+      flex items-center gap-2
+      p-2 mx-2 rounded-md text-dark-100 text-base`,draggable:!1,children:[s.jsx("span",{className:`text-xs\r
+      `,children:i}),a]}),e=Object.assign(o,{Section:d,Link:x}),h=()=>s.jsx("i",{className:"fa-solid fa-volume-high"}),j=()=>s.jsx("i",{className:"fa-solid fa-folder"}),f=()=>s.jsx("i",{className:"fa-solid fa-hashtag"}),n={Hashtag:f,Audio:h,Folder:j},b=()=>s.jsxs("div",{className:"flex h-full",children:[s.jsxs(e,{children:[s.jsxs(e.Section,{title:"Chats",children:[s.jsx(e.Link,{to:"chats/a",icon:s.jsx(n.Hashtag,{}),children:"chat a"}),s.jsx(e.Link,{to:"chats/b",icon:s.jsx(n.Hashtag,{}),children:"chat b"}),s.jsx(e.Link,{to:"chats/c",icon:s.jsx(n.Hashtag,{}),children:"chat c"})]}),s.jsxs(e.Section,{title:"Calls",children:[s.jsx(e.Link,{to:"calls/a",icon:s.jsx(n.Audio,{}),children:"call a"}),s.jsx(e.Link,{to:"calls/b",icon:s.jsx(n.Audio,{}),children:"call b"}),s.jsx(e.Link,{to:"calls/c",icon:s.jsx(n.Audio,{}),children:"call c"})]}),s.jsxs(e.Section,{title:"Folders",children:[s.jsx(e.Link,{to:"folders/a",icon:s.jsx(n.Folder,{}),children:"folder a"}),s.jsx(e.Link,{to:"folders/b",icon:s.jsx(n.Folder,{}),children:"folder b"}),s.jsx(e.Link,{to:"folders/c",icon:s.jsx(n.Folder,{}),children:"folder c"})]})]}),s.jsx(t,{})]});export{b as Component};

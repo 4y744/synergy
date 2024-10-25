@@ -21,6 +21,15 @@ export default {
       fontFamily: {
         poppins: ["Poppins", "sans-serif", "system-ui"],
       },
+      transitionProperty: {
+        bg: "background",
+        w: "width",
+        h: "height",
+        m: "margin",
+        p: "padding",
+        text: "color, font-size",
+        link: "background, color",
+      },
     },
   },
   plugins: [],

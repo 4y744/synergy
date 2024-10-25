@@ -1,6 +1,3 @@
-/* WORKS AS INTENDED */
-
-//React
 import { useEffect } from "react";
 
 /**

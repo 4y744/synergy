@@ -14,7 +14,8 @@ export const _SidebarLink = ({ children, to, icon }: Props) => {
       className={({ isActive }) => `
       ${isActive ? "bg-white text-black" : "hover:bg-dark-800"}
       flex items-center gap-2
-      p-2 mx-2 rounded-md text-dark-100 text-base`}
+      p-2 mx-2 rounded-md text-base
+      transition-link duration-200`}
       draggable={false}
     >
       <span

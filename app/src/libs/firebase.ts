@@ -1,16 +1,14 @@
-//Firebase
 import { initializeApp } from "firebase/app";
 import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
 import { connectStorageEmulator, getStorage } from "firebase/storage";
 
-//Configs
 import {
   DEV_FIREBASE_AUTH_EMULATOR_HOST,
   DEV_FIREBASE_FIRESTORE_EMULATOR_PORT,
   DEV_FIREBASE_STORAGE_EMULATOR_PORT,
   DEV_USE_FIREBASE_EMULATORS,
-} from "./dev";
+} from "@/config/dev";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCTN4awx5CTCd0WnB8tlQ2dsMR4QR1K-VY",

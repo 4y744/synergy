@@ -1,11 +1,11 @@
-import { Outlet, useParams } from "react-router-dom";
-import { Sidebar } from "../../../components/Sidebar";
-import { Icons } from "../../../components/Icons";
+import { Outlet } from "react-router-dom";
+import { Sidebar } from "@/components/Sidebar";
+import { Icons } from "@/components/Icons";
 
 export const Component = () => {
-  const { groupId } = useParams();
+  // const { groupId } = useParams();
   return (
-    <div className="flex h-full">
+    <div className="flex h-[calc(100%-48px)]">
       <Sidebar>
         <Sidebar.Section title="Chats">
           <Sidebar.Link
