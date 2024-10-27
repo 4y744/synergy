@@ -1,7 +1,4 @@
-//React
 import { ReactNode } from "react";
-
-//React Router
 import { NavLink } from "react-router-dom";
 
 type Props = {

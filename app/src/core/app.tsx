@@ -1,20 +1,22 @@
-import { useState, useMemo } from "react";
-
 import { RouterProvider } from "react-router";
-import { createAppRouter } from "./router";
+import { router } from "./router";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider } from "@/features/auth/components/AuthProvider";
+import { store } from "./store";
+import { StoreProvider } from "@/libs/redux";
+
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/libs/react-query";
+
+import { Auth } from "@/features/auth/components";
 
 export const App = () => {
-  const [queryClient] = useState(new QueryClient({}));
-  const router = useMemo(() => createAppRouter(queryClient), [queryClient]);
-
   return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </AuthProvider>
+    <StoreProvider store={store}>
+      <Auth.Provider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </Auth.Provider>
+    </StoreProvider>
   );
 };

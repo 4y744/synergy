@@ -1,9 +1,8 @@
 import { Outlet } from "react-router-dom";
-import { Sidebar } from "@/components/Sidebar";
+import { Sidebar } from "@/features/sidebar/components";
 import { Icons } from "@/components/Icons";
 
 export const Component = () => {
-  // const { groupId } = useParams();
   return (
     <div className="flex h-[calc(100%-48px)]">
       <Sidebar>

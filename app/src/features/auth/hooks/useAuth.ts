@@ -1,5 +1,4 @@
-import { useContext } from "react";
+import { RootState } from "@/core/store";
+import { useSelector } from "react-redux";
 
-import { AuthContext } from "../components/AuthProvider";
-
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => useSelector((state: RootState) => state.auth);

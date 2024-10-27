@@ -5,7 +5,7 @@ export const DEV_USE_FIREBASE_EMULATORS = true;
 /**
  * Host url for the Firebase Auth emulator.
  */
-export const DEV_FIREBASE_AUTH_EMULATOR_HOST = "127.0.0.1:9099";
+export const DEV_FIREBASE_AUTH_EMULATOR_HOST = "http://localhost:9099";
 /**
  * Port for the Firebase Firestore emulator.
  */

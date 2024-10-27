@@ -1,4 +1,3 @@
-//Components
 import { _Navbar } from "./Navbar";
 import { _NavbarLink } from "./NavbarLink";
 

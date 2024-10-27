@@ -1,15 +1,27 @@
-import { createContext, ReactNode, useState } from "react";
+import { ReactNode, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
-export const AuthContext = createContext({});
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/libs/firebase";
 
 type Props = {
   children?: ReactNode;
 };
 
 export const AuthProvider = ({ children }: Props) => {
-  const [auth, setAuth] = useState();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      dispatch({
+        type: "auth/change",
+        payload: {
+          uid: user?.uid,
+          email: user?.email,
+          signedIn: user ? true : false,
+        },
+      });
+    });
+  }, []);
 
-  return (
-    <AuthContext.Provider value={{ auth }}>{children}</AuthContext.Provider>
-  );
+  return <>{children}</>;
 };

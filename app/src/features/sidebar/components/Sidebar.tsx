@@ -1,4 +1,3 @@
-//React
 import { ReactNode } from "react";
 
 type Props = {

@@ -35,18 +35,31 @@ const storage = getStorage(app);
  */
 const auth = getAuth(app);
 
+/**
+ * Promise that resolves once emulators have been loaded.
+ */
+const loadEmulators = Promise.all([
+  fetch(`http://localhost:${DEV_FIREBASE_FIRESTORE_EMULATOR_PORT}`),
+  fetch(`http://localhost:${DEV_FIREBASE_STORAGE_EMULATOR_PORT}`),
+  fetch(DEV_FIREBASE_AUTH_EMULATOR_HOST),
+]);
+
 if (DEV_USE_FIREBASE_EMULATORS) {
-  connectFirestoreEmulator(
-    db,
-    "127.0.0.1",
-    DEV_FIREBASE_FIRESTORE_EMULATOR_PORT
-  );
-  connectStorageEmulator(
-    storage,
-    "127.0.0.1",
-    DEV_FIREBASE_STORAGE_EMULATOR_PORT
-  );
-  connectAuthEmulator(auth, DEV_FIREBASE_AUTH_EMULATOR_HOST);
+  loadEmulators.then(() => {
+    connectFirestoreEmulator(
+      db,
+      "http://localhost",
+      DEV_FIREBASE_FIRESTORE_EMULATOR_PORT
+    );
+    connectStorageEmulator(
+      storage,
+      "http://localhost",
+      DEV_FIREBASE_STORAGE_EMULATOR_PORT
+    );
+    connectAuthEmulator(auth, DEV_FIREBASE_AUTH_EMULATOR_HOST, {
+      disableWarnings: true,
+    });
+  });
 }
 
 export { db, auth, storage };
