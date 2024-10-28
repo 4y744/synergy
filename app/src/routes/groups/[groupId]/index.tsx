@@ -4,7 +4,7 @@ import { Icons } from "@/components/Icons";
 
 export const Component = () => {
   return (
-    <div className="flex h-[calc(100%-48px)]">
+    <>
       <Sidebar>
         <Sidebar.Section title="Chats">
           <Sidebar.Link
@@ -68,6 +68,6 @@ export const Component = () => {
         </Sidebar.Section>
       </Sidebar>
       <Outlet />
-    </div>
+    </>
   );
 };

@@ -26,6 +26,10 @@ const routes: RouteObject[] = [
         lazy: () => import("@/routes/groups/[groupId]"),
         children: [
           {
+            path: "",
+            lazy: () => import("@/routes/groups/[groupId]/default"),
+          },
+          {
             path: "chats/:chatId",
             lazy: () => import("@/routes/groups/[groupId]/chats/[chatId]"),
           },

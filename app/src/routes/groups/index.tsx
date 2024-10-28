@@ -10,7 +10,9 @@ export const Component = () => {
         <Navbar.Link to="c">group c</Navbar.Link>
         <Navbar.Link to="d">group d</Navbar.Link>
       </Navbar>
-      <Outlet />
+      <div className="flex h-[calc(100%-48px)]">
+        <Outlet />
+      </div>
     </>
   );
 };

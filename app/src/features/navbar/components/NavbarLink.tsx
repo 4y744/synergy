@@ -12,7 +12,7 @@ export const _NavbarLink = ({ children, to }: Props) => {
       className={({ isActive }) => `
       ${isActive ? "bg-white text-black" : "hover:bg-dark-800"}
       flex justify-center items-center
-      px-4 h-3/4 rounded-md`}
+      px-4 mx-1 h-3/4 rounded-md`}
       to={to}
     >
       {children}

@@ -1,4 +1,2 @@
-import { useEventListener } from "./useEventListener";
-import { useEventDispatcher } from "./useEventDispatcher";
-
-export { useEventListener, useEventDispatcher };
+export * from "./useEventListener";
+export * from "./useEventDispatcher";

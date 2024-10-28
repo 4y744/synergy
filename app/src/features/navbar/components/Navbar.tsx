@@ -7,8 +7,9 @@ type Props = {
 export const _Navbar = ({ children }: Props) => {
   return (
     <nav
-      className="bg-dark-950
-      flex items-center h-12 gap-2"
+      className="bg-dark-900
+      flex items-center h-12
+      border-b border-b-dark-700"
     >
       {children}
     </nav>
