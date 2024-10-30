@@ -35,20 +35,22 @@ const storage = getStorage(app);
  */
 const auth = getAuth(app);
 
-connectFirestoreEmulator(
-  db,
-  "http://localhost",
-  DEV_FIREBASE_FIRESTORE_EMULATOR_PORT
-);
+if (DEV_USE_FIREBASE_EMULATORS) {
+  connectFirestoreEmulator(
+    db,
+    "http://localhost",
+    DEV_FIREBASE_FIRESTORE_EMULATOR_PORT
+  );
 
-connectStorageEmulator(
-  storage,
-  "http://localhost",
-  DEV_FIREBASE_STORAGE_EMULATOR_PORT
-);
+  connectStorageEmulator(
+    storage,
+    "http://localhost",
+    DEV_FIREBASE_STORAGE_EMULATOR_PORT
+  );
 
-connectAuthEmulator(auth, DEV_FIREBASE_AUTH_EMULATOR_HOST, {
-  disableWarnings: true,
-});
+  connectAuthEmulator(auth, DEV_FIREBASE_AUTH_EMULATOR_HOST, {
+    disableWarnings: true,
+  });
+}
 
 export { db, auth, storage };

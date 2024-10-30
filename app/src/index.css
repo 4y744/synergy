@@ -13,8 +13,16 @@
     @apply h-screen overflow-hidden;
   }
 
-  input {
-    @apply focus:outline-none;
+  h1 {
+    @apply font-bold text-3xl;
+  }
+
+  h2 {
+    @apply font-bold text-2xl;
+  }
+
+  h3 {
+    @apply font-bold text-xl;
   }
 }
 
@@ -22,4 +30,16 @@
 }
 
 @layer utilities {
+  .slide-animation {
+    animation: slide linear infinite 1s;
+  }
+
+  @keyframes slide {
+    0% {
+      left: -50vw;
+    }
+    100% {
+      left: 150vw;
+    }
+  }
 }

@@ -2,6 +2,10 @@ import { Outlet } from "react-router-dom";
 import { Sidebar } from "@/features/sidebar/components";
 import { Icons } from "@/components/Icons";
 
+export const loader = () => {
+  return new Promise((resolve) => setTimeout(() => resolve(null), 2000));
+};
+
 export const Component = () => {
   return (
     <>

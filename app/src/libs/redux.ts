@@ -1,3 +1,1 @@
-import { Provider } from "react-redux";
-
-export const StoreProvider = Provider;
+export { Provider as StoreProvider } from "react-redux";
