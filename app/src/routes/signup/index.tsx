@@ -1,4 +1,4 @@
-import { Auth } from "@/features/auth/components";
+import { SignUpForm } from "@/features/auth/components";
 
 export const Component = () => {
   return (
@@ -6,7 +6,7 @@ export const Component = () => {
       className="w-full h-screen
     flex justify-center items-center"
     >
-      <Auth.SignUp />
+      <SignUpForm />
     </div>
   );
 };

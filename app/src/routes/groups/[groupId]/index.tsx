@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "@/features/sidebar/components";
-import { Icons } from "@/components/Icons";
+import { HashtagIcon, AudioIcon, FolderIcon } from "@/components/icons";
 
 export const loader = () => {
   return new Promise((resolve) => setTimeout(() => resolve(null), 2000));
@@ -13,19 +13,19 @@ export const Component = () => {
         <Sidebar.Section title="Chats">
           <Sidebar.Link
             to="chats/a"
-            icon={<Icons.Hashtag />}
+            icon={<HashtagIcon />}
           >
             chat a
           </Sidebar.Link>
           <Sidebar.Link
             to="chats/b"
-            icon={<Icons.Hashtag />}
+            icon={<HashtagIcon />}
           >
             chat b
           </Sidebar.Link>
           <Sidebar.Link
             to="chats/c"
-            icon={<Icons.Hashtag />}
+            icon={<HashtagIcon />}
           >
             chat c
           </Sidebar.Link>
@@ -33,19 +33,19 @@ export const Component = () => {
         <Sidebar.Section title="Calls">
           <Sidebar.Link
             to="calls/a"
-            icon={<Icons.Audio />}
+            icon={<AudioIcon />}
           >
             call a
           </Sidebar.Link>
           <Sidebar.Link
             to="calls/b"
-            icon={<Icons.Audio />}
+            icon={<AudioIcon />}
           >
             call b
           </Sidebar.Link>
           <Sidebar.Link
             to="calls/c"
-            icon={<Icons.Audio />}
+            icon={<AudioIcon />}
           >
             call c
           </Sidebar.Link>
@@ -53,19 +53,19 @@ export const Component = () => {
         <Sidebar.Section title="Folders">
           <Sidebar.Link
             to="folders/a"
-            icon={<Icons.Folder />}
+            icon={<FolderIcon />}
           >
             folder a
           </Sidebar.Link>
           <Sidebar.Link
             to="folders/b"
-            icon={<Icons.Folder />}
+            icon={<FolderIcon />}
           >
             folder b
           </Sidebar.Link>
           <Sidebar.Link
             to="folders/c"
-            icon={<Icons.Folder />}
+            icon={<FolderIcon />}
           >
             folder c
           </Sidebar.Link>

@@ -12,3 +12,12 @@ export const SignInCredentialsSchema = z.object({
 });
 
 export type SignInCredentials = z.infer<typeof SignInCredentialsSchema>;
+
+export const SignUpCredentialsSchema = z.object({
+  username: z.string(),
+  email: z.string().email(),
+  password: z.string(),
+  confirmPassword: z.string(),
+});
+
+export type SignUpCredentials = z.infer<typeof SignUpCredentialsSchema>;
