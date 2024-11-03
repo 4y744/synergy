@@ -1,77 +1,77 @@
 import { Outlet } from "react-router-dom";
-import { Sidebar } from "@/features/sidebar/components";
+import {
+  Sidebar,
+  SidebarLink,
+  SidebarSection,
+} from "@/features/sidebar/components";
 import { HashtagIcon, AudioIcon, FolderIcon } from "@/components/icons";
-
-export const loader = () => {
-  return new Promise((resolve) => setTimeout(() => resolve(null), 2000));
-};
 
 export const Component = () => {
   return (
-    <>
+    <div className="flex h-full">
       <Sidebar>
-        <Sidebar.Section title="Chats">
-          <Sidebar.Link
+        <SidebarSection title="Chats">
+          <SidebarLink
             to="chats/a"
             icon={<HashtagIcon />}
           >
             chat a
-          </Sidebar.Link>
-          <Sidebar.Link
+          </SidebarLink>
+          <SidebarLink
             to="chats/b"
             icon={<HashtagIcon />}
           >
             chat b
-          </Sidebar.Link>
-          <Sidebar.Link
+          </SidebarLink>
+          <SidebarLink
             to="chats/c"
             icon={<HashtagIcon />}
           >
             chat c
-          </Sidebar.Link>
-        </Sidebar.Section>
-        <Sidebar.Section title="Calls">
-          <Sidebar.Link
+          </SidebarLink>
+        </SidebarSection>
+        <SidebarSection title="Calls">
+          <SidebarLink
             to="calls/a"
             icon={<AudioIcon />}
           >
             call a
-          </Sidebar.Link>
-          <Sidebar.Link
+          </SidebarLink>
+          <SidebarLink
             to="calls/b"
             icon={<AudioIcon />}
           >
             call b
-          </Sidebar.Link>
-          <Sidebar.Link
+          </SidebarLink>
+          <SidebarLink
             to="calls/c"
             icon={<AudioIcon />}
           >
             call c
-          </Sidebar.Link>
-        </Sidebar.Section>
-        <Sidebar.Section title="Folders">
-          <Sidebar.Link
+          </SidebarLink>
+        </SidebarSection>
+        <SidebarSection title="Folders">
+          <SidebarLink
             to="folders/a"
             icon={<FolderIcon />}
           >
             folder a
-          </Sidebar.Link>
-          <Sidebar.Link
+          </SidebarLink>
+          <SidebarLink
             to="folders/b"
             icon={<FolderIcon />}
           >
             folder b
-          </Sidebar.Link>
-          <Sidebar.Link
+          </SidebarLink>
+          <SidebarLink
             to="folders/c"
             icon={<FolderIcon />}
           >
             folder c
-          </Sidebar.Link>
-        </Sidebar.Section>
+          </SidebarLink>
+        </SidebarSection>
       </Sidebar>
       <Outlet />
-    </>
+    </div>
   );
 };

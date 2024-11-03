@@ -7,5 +7,19 @@ service cloud.firestore {
       allow create: if request.auth.uid == userId;
     }
 
+    match /{path=**}/members/{memberId} {
+      allow read, write: if request.auth.uid == resource.data.uid;
+    }
+
+    match /groups/{groupId} {
+
+      allow read: if isInGroup();
+
+      function isInGroup(){
+        return exists(/databases/$(database)/documents/groups/$(groupId)/members/$(request.auth.uid))
+      }
+
+    }
+
   }
 }

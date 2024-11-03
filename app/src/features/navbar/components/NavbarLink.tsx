@@ -6,7 +6,7 @@ type Props = {
   to: string;
 };
 
-export const _NavbarLink = ({ children, to }: Props) => {
+export const NavbarLink = ({ children, to }: Props) => {
   return (
     <NavLink
       className={({ isActive }) => `

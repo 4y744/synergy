@@ -1,10 +1,12 @@
 import { ReactNode } from "react";
+import { SidebarSection } from "./SidebarSection";
+import { SidebarLink } from "./SidebaseLink";
 
 type Props = {
   children?: ReactNode;
 };
 
-export const _Sidebar = ({ children }: Props) => {
+export const Sidebar = ({ children }: Props) => {
   return (
     <div
       className="bg-dark-900

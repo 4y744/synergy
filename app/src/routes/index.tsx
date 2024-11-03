@@ -2,7 +2,6 @@ import { Outlet, useNavigation } from "react-router-dom";
 
 export const Component = () => {
   const { state } = useNavigation();
-
   return (
     <>
       <div className="fixed top-0 left-0 w-full">

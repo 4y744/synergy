@@ -6,7 +6,7 @@ export const HashtagIcon = ({ className, ...props }: Props) => {
   return (
     <i
       className={`fa-solid fa-hashtag
-        ${className}`}
+      ${className}`}
       {...props}
     />
   );

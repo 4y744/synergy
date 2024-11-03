@@ -4,7 +4,7 @@ type Props = {
   children?: ReactNode;
 };
 
-export const _Navbar = ({ children }: Props) => {
+export const Navbar = ({ children }: Props) => {
   return (
     <nav
       className="bg-dark-900

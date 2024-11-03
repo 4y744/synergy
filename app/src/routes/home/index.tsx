@@ -1,3 +1,9 @@
+import { Link } from "react-router-dom";
+
 export const Component = () => {
-  return <div>home page</div>;
+  return (
+    <div>
+      <Link to={"/groups"}>groups</Link>
+    </div>
+  );
 };

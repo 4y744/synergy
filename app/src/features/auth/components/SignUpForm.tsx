@@ -4,12 +4,12 @@ import { SignUpCredentials } from "../types";
 import { useNavigate } from "react-router-dom";
 import {
   Form,
-  Title,
-  Field,
-  Label,
-  Input,
-  Submit,
-  Error,
+  FormTitle,
+  FormField,
+  FormLabel,
+  FormInput,
+  FormError,
+  FormSubmit,
 } from "@/components/form";
 
 export const SignUpForm = () => {
@@ -19,51 +19,51 @@ export const SignUpForm = () => {
 
   return (
     <Form>
-      <Title>Sign up</Title>
-      <Field>
-        <Label>Username</Label>
-        <Input
+      <FormTitle>Sign up</FormTitle>
+      <FormField>
+        <FormLabel>Username</FormLabel>
+        <FormInput
           type="text"
           placeholder="John Doe"
           onChange={(event) =>
             (credentials.current.username = event.target.value)
           }
-          error={error}
+          error={error ? true : false}
         />
-      </Field>
-      <Field>
-        <Label>Email</Label>
-        <Input
+      </FormField>
+      <FormField>
+        <FormLabel>Email</FormLabel>
+        <FormInput
           type="text"
           placeholder="johndoe@gmail.com"
           onChange={(event) => (credentials.current.email = event.target.value)}
-          error={error}
+          error={error ? true : false}
         />
-      </Field>
-      <Field>
-        <Label>Password</Label>
-        <Input
+      </FormField>
+      <FormField>
+        <FormLabel>Password</FormLabel>
+        <FormInput
           type="password"
           placeholder="Your password..."
           onChange={(event) =>
             (credentials.current.password = event.target.value)
           }
-          error={error}
+          error={error ? true : false}
         />
-      </Field>
-      <Field>
-        <Label>Confirm password</Label>
-        <Input
+      </FormField>
+      <FormField>
+        <FormLabel>Confirm password</FormLabel>
+        <FormInput
           type="password"
           placeholder="Confirm your password..."
           onChange={(event) =>
             (credentials.current.confirmPassword = event.target.value)
           }
-          error={error}
+          error={error ? true : false}
         />
-      </Field>
-      <Error>{error}</Error>
-      <Submit
+      </FormField>
+      <FormError>{error}</FormError>
+      <FormSubmit
         loading={loading}
         onClick={() => {
           signUp(
@@ -78,7 +78,7 @@ export const SignUpForm = () => {
         }}
       >
         Sign in
-      </Submit>
+      </FormSubmit>
     </Form>
   );
 };

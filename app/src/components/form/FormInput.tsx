@@ -1,10 +1,10 @@
 import { InputHTMLAttributes } from "react";
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {
-  error?: string;
+  error?: boolean;
 };
 
-export const Input = ({ error, className, ...props }: Props) => {
+export const FormInput = ({ error, className, ...props }: Props) => {
   return (
     <input
       className={`bg-dark-800 rounded-md px-4 h-12

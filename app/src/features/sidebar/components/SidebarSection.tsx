@@ -5,7 +5,7 @@ type Props = {
   title: string;
 };
 
-export const _SidebarSection = ({ children, title }: Props) => {
+export const SidebarSection = ({ children, title }: Props) => {
   return (
     <section
       className="

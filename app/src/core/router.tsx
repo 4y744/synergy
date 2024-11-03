@@ -3,14 +3,13 @@ import {
   createHashRouter,
   RouteObject,
 } from "react-router-dom";
-
-import { queryClient } from "@/libs/react-query";
+import { ProtectedRoute } from "@/features/auth/components";
 
 import { ENV_PLATFORM } from "@/config/env";
 
 const routes: RouteObject[] = [
   {
-    path: "/",
+    path: "",
     lazy: () => import("@/routes"),
     children: [
       {
@@ -30,49 +29,56 @@ const routes: RouteObject[] = [
         lazy: () => import("@/routes/signout"),
       },
       {
-        path: "groups",
-        lazy: () => import("@/routes/groups"),
+        element: <ProtectedRoute />,
         children: [
           {
-            path: "",
-            lazy: () => import("@/routes/groups/default"),
-          },
-          {
-            path: ":groupId",
-            lazy: () => import("@/routes/groups/[groupId]"),
+            path: "groups",
+            lazy: () => import("@/routes/groups"),
             children: [
               {
                 path: "",
-                lazy: () => import("@/routes/groups/[groupId]/default"),
+                lazy: () => import("@/routes/groups/default"),
               },
               {
-                path: "chats/:chatId",
-                lazy: () => import("@/routes/groups/[groupId]/chats/[chatId]"),
-              },
-              {
-                path: "calls/:callId",
-                lazy: () => import("@/routes/groups/[groupId]/calls/[callId]"),
-              },
-              {
-                path: "folders/:folderId",
-                lazy: () =>
-                  import("@/routes/groups/[groupId]/folders/[folderId]"),
+                path: ":groupId",
+                lazy: () => import("@/routes/groups/[groupId]"),
+                children: [
+                  {
+                    path: "",
+                    lazy: () => import("@/routes/groups/[groupId]/default"),
+                  },
+                  {
+                    path: "chats/:chatId",
+                    lazy: () =>
+                      import("@/routes/groups/[groupId]/chats/[chatId]"),
+                  },
+                  {
+                    path: "calls/:callId",
+                    lazy: () =>
+                      import("@/routes/groups/[groupId]/calls/[callId]"),
+                  },
+                  {
+                    path: "folders/:folderId",
+                    lazy: () =>
+                      import("@/routes/groups/[groupId]/folders/[folderId]"),
+                  },
+                ],
               },
             ],
           },
+          {
+            path: "settings",
+            lazy: () => import("@/routes/settings"),
+          },
+          {
+            path: "invite",
+            lazy: () => import("@/routes/invite"),
+          },
+          {
+            path: "join",
+            lazy: () => import("@/routes/join"),
+          },
         ],
-      },
-      {
-        path: "settings",
-        lazy: () => import("@/routes/settings"),
-      },
-      {
-        path: "invite",
-        lazy: () => import("@/routes/invite"),
-      },
-      {
-        path: "join",
-        lazy: () => import("@/routes/join"),
       },
     ],
   },

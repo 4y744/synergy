@@ -7,7 +7,7 @@ type Props = {
   icon?: ReactNode;
 };
 
-export const _SidebarLink = ({ children, to, icon }: Props) => {
+export const SidebarLink = ({ children, to, icon }: Props) => {
   return (
     <NavLink
       to={to}
@@ -18,12 +18,7 @@ export const _SidebarLink = ({ children, to, icon }: Props) => {
       transition-link duration-200`}
       draggable={false}
     >
-      <span
-        className="text-xs
-      "
-      >
-        {icon}
-      </span>
+      <span className="text-xs">{icon}</span>
       {children}
     </NavLink>
   );

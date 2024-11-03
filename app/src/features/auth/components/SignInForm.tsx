@@ -5,12 +5,12 @@ import { SignInCredentials } from "../types";
 
 import {
   Form,
-  Title,
-  Field,
-  Label,
-  Input,
-  Submit,
-  Error,
+  FormTitle,
+  FormField,
+  FormLabel,
+  FormInput,
+  FormError,
+  FormSubmit,
 } from "@/components/form";
 
 export const SignInForm = () => {
@@ -20,29 +20,29 @@ export const SignInForm = () => {
 
   return (
     <Form>
-      <Title>Sign in</Title>
-      <Field>
-        <Label>Email</Label>
-        <Input
+      <FormTitle>Sign in</FormTitle>
+      <FormField>
+        <FormLabel>Email</FormLabel>
+        <FormInput
           type="text"
           placeholder="johndoe@gmail.com"
           onChange={(event) => (credentials.current.email = event.target.value)}
-          error={error}
+          error={error ? true : false}
         />
-      </Field>
-      <Field>
-        <Label>Password</Label>
-        <Input
+      </FormField>
+      <FormField>
+        <FormLabel>Password</FormLabel>
+        <FormInput
           type="password"
           placeholder="Your password..."
           onChange={(event) =>
             (credentials.current.password = event.target.value)
           }
-          error={error}
+          error={error ? true : false}
         />
-      </Field>
-      <Error>{error}</Error>
-      <Submit
+      </FormField>
+      <FormError>{error}</FormError>
+      <FormSubmit
         loading={loading}
         onClick={() => {
           signIn(
@@ -55,7 +55,7 @@ export const SignInForm = () => {
         }}
       >
         Sign in
-      </Submit>
+      </FormSubmit>
     </Form>
   );
 };

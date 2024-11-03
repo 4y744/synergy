@@ -5,7 +5,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean;
 };
 
-export const Submit = ({
+export const FormSubmit = ({
   children,
   loading,
   className,

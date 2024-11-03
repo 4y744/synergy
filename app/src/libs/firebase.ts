@@ -35,16 +35,19 @@ const storage = getStorage(app);
  */
 const auth = getAuth(app);
 
-if (DEV_USE_FIREBASE_EMULATORS) {
+if (
+  DEV_USE_FIREBASE_EMULATORS &&
+  !(db.toJSON() as any).settings.host.startsWith("localhost")
+) {
   connectFirestoreEmulator(
     db,
-    "http://localhost",
+    "localhost",
     DEV_FIREBASE_FIRESTORE_EMULATOR_PORT
   );
 
   connectStorageEmulator(
     storage,
-    "http://localhost",
+    "localhost",
     DEV_FIREBASE_STORAGE_EMULATOR_PORT
   );
 
