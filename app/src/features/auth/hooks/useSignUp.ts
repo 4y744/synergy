@@ -7,7 +7,7 @@ export const useSignUp = () => {
   const [error, setError] = useState<string>("");
 
   return {
-    signUp: (
+    signUp: async (
       username: string,
       email: string,
       password: string,
@@ -15,10 +15,14 @@ export const useSignUp = () => {
       onsuccess?: (credential?: UserCredential) => void
     ) => {
       setLoading(true);
-      signUp(username, email, password, confirmPassword)
-        .then((credential) => onsuccess?.(credential))
-        .catch((error) => setError(error))
-        .finally(() => setLoading(false));
+      try {
+        await signUp(username, email, password, confirmPassword);
+        onsuccess?.();
+      } catch (err: any) {
+        setError(err.code);
+      } finally {
+        setLoading(false);
+      }
     },
     loading,
     error,

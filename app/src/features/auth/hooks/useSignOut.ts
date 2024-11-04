@@ -6,12 +6,16 @@ export const useSignOut = () => {
   const [error, setError] = useState<string>("");
 
   return {
-    signOut: (onsuccess: () => void) => {
+    signOut: async (onsuccess?: () => void) => {
       setLoading(true);
-      signOut()
-        .then(() => onsuccess?.())
-        .catch((error) => setError(error))
-        .finally(() => setLoading(false));
+      try {
+        await signOut();
+        onsuccess?.();
+      } catch (err: any) {
+        setError(err.code);
+      } finally {
+        setLoading(false);
+      }
     },
     loading,
     error,

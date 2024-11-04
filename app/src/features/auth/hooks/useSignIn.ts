@@ -7,16 +7,20 @@ export const useSignIn = () => {
   const [error, setError] = useState<string>("");
 
   return {
-    signIn: (
+    signIn: async (
       email: string,
       password: string,
       onsuccess?: (credential?: UserCredential) => void
     ) => {
       setLoading(true);
-      signIn(email, password)
-        .then((credential) => onsuccess?.(credential))
-        .catch((error) => setError(error))
-        .finally(() => setLoading(false));
+      try {
+        await signIn(email, password);
+        onsuccess?.();
+      } catch (err: any) {
+        setError(err.code);
+      } finally {
+        setLoading(false);
+      }
     },
     loading,
     error,

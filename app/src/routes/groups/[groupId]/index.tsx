@@ -6,6 +6,10 @@ import {
 } from "@/features/sidebar/components";
 import { HashtagIcon, AudioIcon, FolderIcon } from "@/components/icons";
 
+// export const loader = () => {
+//   return new Promise((res) => setTimeout(() => res(0), 1000));
+// };
+
 export const Component = () => {
   return (
     <div className="flex h-full">

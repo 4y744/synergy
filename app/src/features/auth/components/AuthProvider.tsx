@@ -1,8 +1,8 @@
 import { ReactNode, useEffect } from "react";
 
 import { onAuthStateChanged } from "firebase/auth";
-import { useAuthActions } from "../hooks/useAuthActions";
 import { auth } from "@/libs/firebase";
+import { useAuthActions } from "../hooks/useAuthActions";
 
 type Props = {
   children?: ReactNode;
