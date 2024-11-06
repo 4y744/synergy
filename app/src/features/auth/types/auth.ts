@@ -1,6 +1,7 @@
 export type Auth = {
   uid: string | null;
+  username: string | null;
   email: string | null;
   signedIn: boolean;
-  loading: boolean;
+  ready: boolean;
 };

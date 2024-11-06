@@ -1,3 +1,4 @@
+import { cn } from "@/utils/cn";
 import { Outlet, useNavigation } from "react-router-dom";
 
 export const Component = () => {
@@ -6,9 +7,11 @@ export const Component = () => {
     <>
       <div className="fixed top-0 left-0 w-full">
         <div
-          className={`bg-cyan-800
-          absolute left-[-50vw] top-0 w-[50vw] h-[2px]
-          ${state == "loading" ? "slide-animation" : ""}`}
+          className={cn(
+            "bg-cyan-800",
+            "absolute left-[-50vw] top-0 w-[50vw] h-[2px]",
+            { "animation-slide": state == "loading" }
+          )}
         />
       </div>
       <Outlet />

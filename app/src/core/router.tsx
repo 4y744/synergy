@@ -6,11 +6,13 @@ import {
 } from "react-router-dom";
 
 import { ENV_PLATFORM } from "@/config/env";
+import { ErrorFallback } from "@/components/fallbacks";
 
 const routes: RouteObject[] = [
   {
     path: "",
     lazy: () => import("@/routes"),
+    errorElement: <ErrorFallback />,
     children: [
       {
         path: "",

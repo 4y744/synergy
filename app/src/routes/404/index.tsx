@@ -1,4 +1,3 @@
-import { ArrowLeftIcon } from "@/components/icons";
 import { cn } from "@/utils/cn";
 import { Link } from "react-router-dom";
 

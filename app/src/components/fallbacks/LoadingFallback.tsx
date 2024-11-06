@@ -1,5 +1,5 @@
 import { cn } from "@/utils/cn";
-import { Spinner } from "./Spinner";
+import { Spinner } from "../loading/Spinner";
 
 export const LoadingFallback = () => {
   return (

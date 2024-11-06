@@ -77,7 +77,7 @@ export const SignUpForm = () => {
           );
         }}
       >
-        Sign in
+        Sign up
       </FormSubmit>
     </Form>
   );

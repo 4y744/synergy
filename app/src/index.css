@@ -30,7 +30,7 @@
 }
 
 @layer utilities {
-  .slide-animation {
+  .animation-slide {
     animation: slide linear infinite 1s;
   }
 

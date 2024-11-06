@@ -31,7 +31,7 @@ const db = getFirestore(app);
  */
 const storage = getStorage(app);
 /**
- * Firestore Auth instance.
+ * Firebase Auth instance.
  */
 const auth = getAuth(app);
 

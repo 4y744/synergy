@@ -1,6 +1,8 @@
-import { createUserWithEmailAndPassword, UserCredential } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { SignUpCredentialsSchema } from "../schemas";
-import { auth } from "@/libs/firebase";
+import { auth, db } from "@/libs/firebase";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { useAuthStore } from "../stores";
 
 export const signUp = async (
   username: string,
@@ -20,9 +22,21 @@ export const signUp = async (
   if (parsed.data.password != parsed.data.confirmPassword) {
     throw { code: "auth/password-mismatch" };
   }
-  return createUserWithEmailAndPassword(
+  const credential = await createUserWithEmailAndPassword(
     auth,
     parsed.data.email,
     parsed.data.password
   );
+  await setDoc(doc(db, "users", credential.user.uid), {
+    username,
+    created: serverTimestamp(),
+  });
+  useAuthStore.setState({
+    uid: credential.user.uid,
+    username,
+    email,
+    signedIn: true,
+    ready: true,
+  });
+  return;
 };
