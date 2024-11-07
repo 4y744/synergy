@@ -12,7 +12,7 @@ const routes: RouteObject[] = [
   {
     path: "",
     lazy: () => import("@/routes"),
-    errorElement: <ErrorFallback />,
+    // errorElement: <ErrorFallback />,
     children: [
       {
         path: "",

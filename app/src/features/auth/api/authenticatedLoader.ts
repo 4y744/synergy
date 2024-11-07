@@ -1,7 +1,7 @@
 import { LoaderFunctionArgs, redirect } from "react-router-dom";
+import { onStoreStateChanged } from "@/libs/zustand";
 import { useAuthStore } from "../stores";
 import { Auth } from "../types";
-import { onStoreStateChanged } from "@/libs/zustand";
 
 /**
  * Loader that tries to authenticate before rendering the route.
@@ -14,15 +14,17 @@ export const authenticatedLoader = (
 ) => {
   return async (args: LoaderFunctionArgs) => {
     await new Promise((resolve) => {
-      onStoreStateChanged(useAuthStore, (state) => {
-        state.ready && resolve(null);
-        return state.ready;
+      onStoreStateChanged(useAuthStore, (state, prevState, unsubscribe) => {
+        if (state.ready) {
+          unsubscribe();
+          resolve(null);
+        }
       });
     });
     const auth = useAuthStore.getState();
     if (!auth.signedIn) {
       throw redirect("/signin");
     }
-    return await (loader?.(auth, args) || null);
+    return loader?.(auth, args) || null;
   };
 };
