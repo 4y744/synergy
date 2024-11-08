@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { signIn } from "../api/signIn";
 import { UserCredential } from "firebase/auth";
-import { useAuth } from "./useAuth";
 
 export const useSignIn = () => {
   const [loading, setLoading] = useState<boolean>(false);

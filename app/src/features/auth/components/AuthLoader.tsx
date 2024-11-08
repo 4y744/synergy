@@ -1,8 +1,7 @@
 import { auth, db } from "@/libs/firebase";
 import { ReactNode, useEffect } from "react";
-import { useAuthStore } from "../stores";
 import { doc, getDoc } from "firebase/firestore";
-import { onAuthStateChanged } from "firebase/auth";
+import { authStore } from "../stores";
 
 type Props = {
   children?: ReactNode;
@@ -10,10 +9,11 @@ type Props = {
 
 export const AuthLoader = ({ children }: Props) => {
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    auth.authStateReady().then(async () => {
+      const user = auth.currentUser;
       if (user) {
         const snapshot = await getDoc(doc(db, "users", user.uid));
-        useAuthStore.setState({
+        authStore.setState({
           uid: user.uid,
           username: snapshot.data()?.username,
           email: user.email,
@@ -21,12 +21,11 @@ export const AuthLoader = ({ children }: Props) => {
           ready: true,
         });
       } else {
-        useAuthStore.setState({
-          ...useAuthStore.getState(),
+        authStore.setState({
+          ...authStore.getState(),
           ready: true,
         });
       }
-      unsubscribe();
     });
   }, []);
   return <>{children}</>;

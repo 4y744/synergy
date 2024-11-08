@@ -1,3 +1,4 @@
+import { cn } from "@/utils/cn";
 import { HTMLAttributes } from "react";
 
 type Props = HTMLAttributes<HTMLSpanElement>;
@@ -5,7 +6,7 @@ type Props = HTMLAttributes<HTMLSpanElement>;
 export const FormLabel = ({ className, ...props }: Props) => {
   return (
     <span
-      className={`font-medium ${className}`}
+      className={cn("font-medium", className)}
       {...props}
     />
   );

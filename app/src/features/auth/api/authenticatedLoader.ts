@@ -1,6 +1,5 @@
 import { LoaderFunctionArgs, redirect } from "react-router-dom";
-import { onStoreStateChanged } from "@/libs/zustand";
-import { useAuthStore } from "../stores";
+import { authStore } from "../stores";
 import { Auth } from "../types";
 
 /**
@@ -10,18 +9,19 @@ import { Auth } from "../types";
  * @returns
  */
 export const authenticatedLoader = (
-  loader?: (auth?: Auth, args?: LoaderFunctionArgs) => any | Promise<any>
+  loader?: (auth: Auth, args: LoaderFunctionArgs) => any | Promise<any>
 ) => {
   return async (args: LoaderFunctionArgs) => {
+    let unsubscribe: () => void;
     await new Promise((resolve) => {
-      onStoreStateChanged(useAuthStore, (state, prevState, unsubscribe) => {
-        if (state.ready) {
-          unsubscribe();
-          resolve(null);
-        }
-      });
+      unsubscribe = authStore.subscribe(
+        (state) => state.ready,
+        (ready) => ready && resolve(null),
+        { fireImmediately: true }
+      );
     });
-    const auth = useAuthStore.getState();
+    unsubscribe!();
+    const auth = authStore.getState();
     if (!auth.signedIn) {
       throw redirect("/signin");
     }

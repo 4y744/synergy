@@ -2,7 +2,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { SignUpCredentialsSchema } from "../schemas";
 import { auth, db } from "@/libs/firebase";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { useAuthStore } from "../stores";
+import { authStore } from "../stores";
 
 export const signUp = async (
   username: string,
@@ -31,7 +31,7 @@ export const signUp = async (
     username,
     created: serverTimestamp(),
   });
-  useAuthStore.setState({
+  authStore.setState({
     uid: credential.user.uid,
     username,
     email,

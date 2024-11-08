@@ -1,3 +1,4 @@
+import { cn } from "@/utils/cn";
 import { HTMLAttributes } from "react";
 
 type Props = HTMLAttributes<HTMLElement>;
@@ -5,8 +6,7 @@ type Props = HTMLAttributes<HTMLElement>;
 export const HashtagIcon = ({ className, ...props }: Props) => {
   return (
     <i
-      className={`fa-solid fa-hashtag
-      ${className}`}
+      className={cn("fa-solid fa-hashtag", className)}
       {...props}
     />
   );

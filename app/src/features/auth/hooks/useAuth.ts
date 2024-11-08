@@ -1,3 +1,4 @@
-import { useAuthStore } from "../stores/auth";
+import { useStore } from "zustand";
+import { authStore } from "../stores/auth";
 
-export const useAuth = () => useAuthStore();
+export const useAuth = () => useStore(authStore);

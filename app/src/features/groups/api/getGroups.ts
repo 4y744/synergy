@@ -19,6 +19,7 @@ const getGroups = async (uid: string) => {
       .map((doc) => doc.ref.parent.parent?.id)
       .map((id) => getDoc(doc(db, "groups", `${id}`)))
   );
+  console.log(groupDocs[0].data());
   const parsed = groupDocs.map((doc) =>
     GroupSchema.safeParse({
       id: doc.id,
