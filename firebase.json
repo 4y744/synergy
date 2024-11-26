@@ -1,7 +1,7 @@
 {
   "firestore": {
-    "rules": "firebase/firestore/firestore.rules",
-    "indexes": "firebase/firestore/firestore.indexes.json"
+    "rules": "backend/firestore/firestore.rules",
+    "indexes": "backend/firestore/firestore.indexes.json"
   },
   "hosting": {
     "public": "app/build",
@@ -14,7 +14,7 @@
     ]
   },
   "storage": {
-    "rules": "firebase/storage/storage.rules"
+    "rules": "backend/storage/storage.rules"
   },
   "emulators": {
     "auth": {

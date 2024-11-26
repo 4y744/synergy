@@ -1,6 +1,5 @@
 import z from "zod";
-import { SignInCredentialsSchema, SignUpCredentialsSchema } from "../schemas";
+import { SignInSchema, SignUpSchema } from "../schemas/api";
 
-export type SignInCredentials = z.infer<typeof SignInCredentialsSchema>;
-
-export type SignUpCredentials = z.infer<typeof SignUpCredentialsSchema>;
+export type SignInCredentials = z.infer<typeof SignInSchema>;
+export type SignUpCredentials = z.infer<typeof SignUpSchema>;

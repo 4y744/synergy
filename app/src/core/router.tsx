@@ -1,93 +1,53 @@
-import {
-  createBrowserRouter,
-  createHashRouter,
-  Navigate,
-  RouteObject,
-} from "react-router-dom";
-
-import { ENV_PLATFORM } from "@/config/env";
-import { ErrorFallback } from "@/components/fallbacks";
+import { createBrowserRouter, RouteObject } from "react-router-dom";
 
 const routes: RouteObject[] = [
   {
     path: "",
-    lazy: () => import("@/routes"),
-    errorElement: <ErrorFallback />,
+    lazy: () => import("@/routes/(home)/page"),
+  },
+  {
+    path: "",
+    lazy: () => import("@/routes/(app)/layout"),
     children: [
       {
-        path: "",
-        lazy: () => import("@/routes/home"),
-      },
-      {
-        path: "signup",
-        lazy: () => import("@/routes/signup"),
-      },
-      {
-        path: "signin",
-        lazy: () => import("@/routes/signin"),
-      },
-      {
-        path: "signout",
-        lazy: () => import("@/routes/signout"),
-      },
-      {
         path: "groups",
-        lazy: () => import("@/routes/groups"),
+        lazy: () => import("@/routes/(app)/groups/layout"),
         children: [
           {
             path: "",
-            lazy: () => import("@/routes/groups/default"),
+            lazy: () => import("@/routes/(app)/groups/page"),
           },
           {
             path: ":groupId",
-            lazy: () => import("@/routes/groups/[groupId]"),
+            lazy: () => import("@/routes/(app)/groups/[groupId]/layout"),
             children: [
               {
                 path: "",
-                lazy: () => import("@/routes/groups/[groupId]/default"),
+                lazy: () => import("@/routes/(app)/groups/[groupId]/page"),
               },
               {
                 path: "chats/:chatId",
-                lazy: () => import("@/routes/groups/[groupId]/chats/[chatId]"),
-              },
-              {
-                path: "calls/:callId",
-                lazy: () => import("@/routes/groups/[groupId]/calls/[callId]"),
-              },
-              {
-                path: "folders/:folderId",
                 lazy: () =>
-                  import("@/routes/groups/[groupId]/folders/[folderId]"),
+                  import("@/routes/(app)/groups/[groupId]/chats/[chatId]/page"),
               },
             ],
           },
         ],
       },
-      {
-        path: "settings",
-        lazy: () => import("@/routes/settings"),
-      },
-      {
-        path: "invite",
-        lazy: () => import("@/routes/invite"),
-      },
-      {
-        path: "join",
-        lazy: () => import("@/routes/join"),
-      },
-      {
-        path: "404",
-        lazy: () => import("@/routes/404"),
-      },
-      {
-        path: "*",
-        element: <Navigate to={"/404"} />,
-      },
     ],
+  },
+  {
+    path: "signin",
+    lazy: () => import("@/routes/(auth)/signin/page"),
+  },
+  {
+    path: "signup",
+    lazy: () => import("@/routes/(auth)/signup/page"),
+  },
+  {
+    path: "*",
+    lazy: () => import("@/routes/not-found"),
   },
 ];
 
-export const router =
-  ENV_PLATFORM == "electron"
-    ? createHashRouter(routes)
-    : createBrowserRouter(routes);
+export const router = createBrowserRouter(routes);

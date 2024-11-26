@@ -4,7 +4,7 @@ import { connectAuthEmulator, getAuth } from "firebase/auth";
 import { connectStorageEmulator, getStorage } from "firebase/storage";
 
 import {
-  DEV_FIREBASE_AUTH_EMULATOR_HOST,
+  DEV_FIREBASE_AUTH_EMULATOR_PORT,
   DEV_FIREBASE_FIRESTORE_EMULATOR_PORT,
   DEV_FIREBASE_STORAGE_EMULATOR_PORT,
   DEV_USE_FIREBASE_EMULATORS,
@@ -20,20 +20,22 @@ const firebaseConfig = {
   measurementId: "G-QMZTDWQB33",
 };
 
+/**
+ * Firebase app instance.
+ */
 const app = initializeApp(firebaseConfig);
-
 /**
  * Firestore instance.
  */
-const db = getFirestore(app);
+export const db = getFirestore(app);
 /**
  * Firebase Storage instance.
  */
-const storage = getStorage(app);
+export const storage = getStorage(app);
 /**
  * Firebase Auth instance.
  */
-const auth = getAuth(app);
+export const auth = getAuth(app);
 
 if (
   DEV_USE_FIREBASE_EMULATORS &&
@@ -51,9 +53,11 @@ if (
     DEV_FIREBASE_STORAGE_EMULATOR_PORT
   );
 
-  connectAuthEmulator(auth, DEV_FIREBASE_AUTH_EMULATOR_HOST, {
-    disableWarnings: true,
-  });
+  connectAuthEmulator(
+    auth,
+    `http://localhost:${DEV_FIREBASE_AUTH_EMULATOR_PORT}`,
+    {
+      disableWarnings: true,
+    }
+  );
 }
-
-export { db, auth, storage };

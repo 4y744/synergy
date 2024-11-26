@@ -4,8 +4,8 @@ import { router } from "./router";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/libs/react-query";
 
-import { LoadingFallback } from "@/components/fallbacks";
-import { AuthLoader } from "@/features/auth/components";
+import { AuthLoader } from "@/features/auth/components/auth-loader";
+import { LoadingFallback } from "@/components/fallbacks/loading-fallback";
 
 export const App = () => {
   return (

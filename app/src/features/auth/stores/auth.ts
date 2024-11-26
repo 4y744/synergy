@@ -1,5 +1,5 @@
 import { createStore } from "zustand";
-import { Auth } from "../types";
+import { Auth } from "../types/auth";
 import { subscribeWithSelector } from "zustand/middleware";
 
 /**

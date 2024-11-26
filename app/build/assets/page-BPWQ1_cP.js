@@ -1,0 +1,1 @@
+import{j as e,c as s}from"./index-C0dVWJZn.js";import{M as t}from"./typography-yR8G4Xyp.js";const n=()=>e.jsx("div",{className:s("w-full h-full","flex justify-center","items-center"),children:e.jsx(t,{children:"Please select a group"})});export{n as Component};
