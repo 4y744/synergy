@@ -1,11 +1,9 @@
-"use client";
-
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { ChevronsUpDown, Plus } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -15,11 +13,13 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { AddGroup } from "./add-group";
-
-const groups = ["English", "Bulgarian", "Math"];
+import { AddGroup } from "../../features/groups/components/add-group";
+import { useGroups } from "@/features/groups/hooks/use-groups";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 
 export const NavGroups = () => {
+  const { uid } = useAuth();
+  const { data: groups } = useGroups(uid);
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -49,14 +49,14 @@ export const NavGroups = () => {
             <DropdownMenuLabel className="font-semibold text-xs text-muted-foreground">
               Groups
             </DropdownMenuLabel>
-            {groups.map((group) => (
-              <DropdownMenuItem key={group}>
+            {groups?.map((group) => (
+              <DropdownMenuItem key={group.id}>
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="text-sm leading-tight">
-                  <span className="line-clamp-2">{group}</span>
+                  <span className="line-clamp-2">{group.name}</span>
                 </div>
               </DropdownMenuItem>
             ))}

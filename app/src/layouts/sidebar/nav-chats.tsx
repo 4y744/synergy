@@ -1,6 +1,4 @@
-"use client";
-
-import { Folder } from "lucide-react";
+import { Hash } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -10,18 +8,18 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-const folders = ["repository 1", "repository 2", "repository 3"];
+const folders = ["chat 1", "chat 2", "chat 3"];
 
-export const NavFolders = () => {
+export const NavChats = () => {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Folders</SidebarGroupLabel>
+      <SidebarGroupLabel>Chats</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
           {folders.map((folder) => (
-            <SidebarMenuItem>
+            <SidebarMenuItem key={folder}>
               <SidebarMenuButton>
-                <Folder />
+                <Hash />
                 <span>{folder}</span>
               </SidebarMenuButton>
             </SidebarMenuItem>

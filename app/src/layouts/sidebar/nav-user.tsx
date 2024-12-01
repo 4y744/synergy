@@ -1,5 +1,3 @@
-"use client";
-
 import { LogOut, Settings } from "lucide-react";
 import {
   DropdownMenu,
@@ -15,8 +13,16 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getProfileAlt, getRandomProfileColor } from "@/utils/profile";
+import { cn } from "@/utils/cn";
+import { authStore } from "@/features/auth/stores/auth";
+import { signOut } from "@/features/auth/api/sign-out";
+import { useNavigate } from "react-router-dom";
 
 export const NavUser = () => {
+  const navigate = useNavigate();
+  const { username, email } = authStore.getState()!;
+  const profileBackground = getRandomProfileColor();
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -28,11 +34,13 @@ export const NavUser = () => {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className={cn("rounded-lg", profileBackground)}>
+                  {getProfileAlt(username)}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">test</span>
-                <span className="truncate text-xs">test@test.com</span>
+                <span className="truncate font-semibold">{username}</span>
+                <span className="truncate text-xs">{email}</span>
               </div>
               <Settings />
             </SidebarMenuButton>
@@ -46,11 +54,15 @@ export const NavUser = () => {
               <div className="flex items-center gap-2 p-1 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback
+                    className={cn("rounded-lg", profileBackground)}
+                  >
+                    {getProfileAlt(username)}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">test</span>
-                  <span className="truncate text-xs">test@test.com</span>
+                  <span className="truncate font-semibold">{username}</span>
+                  <span className="truncate text-xs">{email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -59,7 +71,12 @@ export const NavUser = () => {
               Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                signOut();
+                navigate("/");
+              }}
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

@@ -1,7 +1,7 @@
 export type Auth = {
-  uid: string | null;
-  username: string | null;
-  email: string | null;
+  uid: string;
+  username: string;
+  created: Date;
+  email: string;
   signedIn: boolean;
-  ready: boolean;
-};
+} | null;

@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { SignUpForm } from "@/features/auth/components/sign-up-form";
 import { SignInForm } from "@/features/auth/components/sign-in-form";

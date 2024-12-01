@@ -13,18 +13,16 @@ export const AuthLoader = ({ children }: Props) => {
       const user = auth.currentUser;
       if (user) {
         const snapshot = await getDoc(doc(db, "users", user.uid));
+        const data = snapshot.data();
         authStore.setState({
           uid: user.uid,
-          username: snapshot.data()?.username,
-          email: user.email,
+          email: user.email!,
+          username: data?.username,
+          created: data?.created,
           signedIn: true,
-          ready: true,
         });
       } else {
-        authStore.setState({
-          ...authStore.getState(),
-          ready: true,
-        });
+        authStore.setState({ signedIn: false });
       }
     });
   }, []);

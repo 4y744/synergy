@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { signUp } from "../api/sigin-up";
 import { AuthError, UserCredential } from "firebase/auth";
+import { Auth } from "../types/auth";
 
 export const useSignUp = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -12,15 +13,15 @@ export const useSignUp = () => {
       email: string,
       password: string,
       options?: {
-        onSuccess?: (credential: UserCredential) => void;
+        onSuccess?: (authState: Auth) => void;
         onError?: (error: AuthError) => void;
       }
     ) => {
       setLoading(true);
       setError("");
       try {
-        const credential = await signUp(email, password);
-        options?.onSuccess?.(credential);
+        const authState = await signUp(username, email, password);
+        options?.onSuccess?.(authState);
       } catch (err: any) {
         options?.onError?.(err as AuthError);
         setLoading(false);

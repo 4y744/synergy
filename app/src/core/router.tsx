@@ -19,18 +19,12 @@ const routes: RouteObject[] = [
           },
           {
             path: ":groupId",
-            lazy: () => import("@/routes/(app)/groups/[groupId]/layout"),
-            children: [
-              {
-                path: "",
-                lazy: () => import("@/routes/(app)/groups/[groupId]/page"),
-              },
-              {
-                path: "chats/:chatId",
-                lazy: () =>
-                  import("@/routes/(app)/groups/[groupId]/chats/[chatId]/page"),
-              },
-            ],
+            lazy: () => import("@/routes/(app)/groups/[groupId]/page"),
+          },
+          {
+            path: ":groupId/chats/:chatId",
+            lazy: () =>
+              import("@/routes/(app)/groups/[groupId]/chats/[chatId]/page"),
           },
         ],
       },

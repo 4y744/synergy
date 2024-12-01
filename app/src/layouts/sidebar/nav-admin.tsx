@@ -1,6 +1,4 @@
-"use client";
-
-import { Hash, MailPlus, Settings, Users, Users2 } from "lucide-react";
+import { MailPlus, Settings, Users } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupContent,

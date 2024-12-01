@@ -7,15 +7,14 @@ service cloud.firestore {
       return exists(/databases/$(database)/documents/groups/$(groupId)/members/$(uid));
     }
 
-    function isAdmin(groupId, uid){
-      return get(/databases/$(database)/documents/groups/$(groupId)).data.creator == uid;
-    }
+    // function isAdmin(groupId, uid){
+    //   return get(/databases/$(database)/documents/groups/$(groupId)).data.creator == uid;
+    // }
 
     match /users/{userId} {
       allow create: if (
         request.resource.data.created == request.time
         && request.auth.uid == userId
-        && request.auth.uid == request.resource.data.uid
         && request.resource.data.keys().hasOnly(["uid", "created", "username"])
       );
       allow update: if (
@@ -45,7 +44,6 @@ service cloud.firestore {
     match /groups/{groupId}/members/{memberId} {
       allow create: if (
         request.auth.uid != null
-        && request.resource.data.groupId == groupId
       );
       allow update, delete: if (
         request.auth.uid == memberId
@@ -55,30 +53,36 @@ service cloud.firestore {
       );
     }
 
-    match /groups/{groupId}/chats/{chatId} {
-      allow create: if (
-        isAdmin(groupId, request.auth.uid) 
-      );
-      allow update, delete: if (
-        isAdmin(groupId, request.auth.uid) 
-      );
+    match /{path=**}/members/{memberId} {
       allow get, list: if (
-        isMember(groupId, request.auth.uid)
+        resource.data.uid == request.auth.uid
       );
     }
 
-    match /groups/{groupId}/chats/{chatId}/messages/{messageId} {
-      allow create: if (
-        isMember(groupId, request.auth.uid)
-      );
-      allow update, delete: if (
-        resource.data.creator == request.auth.uid
-        || isAdmin(groupId, request.auth.uid) 
-      )
-      allow get, list: if (
-        isMember(groupId, request.auth.uid)
-      )
-    }
+    // match /groups/{groupId}/chats/{chatId} {
+    //   allow create: if (
+    //     isAdmin(groupId, request.auth.uid) 
+    //   );
+    //   allow update, delete: if (
+    //     isAdmin(groupId, request.auth.uid) 
+    //   );
+    //   allow get, list: if (
+    //     isMember(groupId, request.auth.uid)
+    //   );
+    // }
+
+    // match /groups/{groupId}/chats/{chatId}/messages/{messageId} {
+    //   allow create: if (
+    //     isMember(groupId, request.auth.uid)
+    //   );
+    //   allow update, delete: if (
+    //     resource.data.creator == request.auth.uid
+    //     || isAdmin(groupId, request.auth.uid) 
+    //   )
+    //   allow get, list: if (
+    //     isMember(groupId, request.auth.uid)
+    //   )
+    // }
 
   }
 }

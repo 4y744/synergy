@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Card,
   CardContent,
@@ -44,8 +42,8 @@ export const SignUpForm = ({ onSwitchToSignIn }: Props) => {
   });
 
   const onSubmit: SubmitHandler<SignUpCredentials> = async (data) => {
-    const { email, password } = data;
-    await signUp("hello", email, password, {
+    const { username, email, password } = data;
+    await signUp(username, email, password, {
       onSuccess: () => {
         navigate("/groups");
       },
