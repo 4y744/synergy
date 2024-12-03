@@ -1,7 +1,7 @@
 import { cn } from "@/utils/cn";
 import { Link } from "react-router-dom";
 
-export const Component = () => {
+export default () => {
   return (
     <div
       className={cn(

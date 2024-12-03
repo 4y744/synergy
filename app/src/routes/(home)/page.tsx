@@ -2,10 +2,7 @@ import { cn } from "@/utils/cn";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { getGroups } from "@/features/groups/api/get-groups";
-import { authStore } from "@/features/auth/stores/auth";
-
-export const Component = () => {
+export default () => {
   return (
     <div
       className={cn(

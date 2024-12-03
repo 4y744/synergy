@@ -5,19 +5,16 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Outlet } from "react-router-dom";
-import { queryClient } from "@/libs/react-query";
 import { authenticate } from "@/features/auth/api/authenticate";
+import { groupsLoader } from "@/features/groups/api/groups-loader";
+import { DataLoader } from "@/types/router";
 
-export const loader = async () => {
+export const loader: DataLoader = async (_, queryClient) => {
   const auth = await authenticate();
-  const uid = auth.uid;
-  return queryClient.ensureQueryData({
-    queryKey: ["groups", uid],
-    queryFn: () => [],
-  });
+  return await groupsLoader(auth.uid, queryClient);
 };
 
-export const Component = () => {
+export default () => {
   return (
     <SidebarProvider>
       <AppSidebar />

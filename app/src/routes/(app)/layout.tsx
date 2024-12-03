@@ -1,9 +1,8 @@
 import { Outlet, redirect } from "react-router-dom";
 import { authenticate } from "@/features/auth/api/authenticate";
-import { useState } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { DataLoader } from "@/types/router";
 
-export const loader = async () => {
+export const loader: DataLoader = async () => {
   const { signedIn } = await authenticate();
   if (!signedIn) {
     throw redirect("/signin");
@@ -11,11 +10,6 @@ export const loader = async () => {
   return null;
 };
 
-export const Component = () => {
-  const [queryClient] = useState(new QueryClient());
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Outlet />
-    </QueryClientProvider>
-  );
+export default () => {
+  return <Outlet />;
 };

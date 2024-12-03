@@ -1,5 +1,5 @@
 import { AuthFormSwitch } from "@/features/auth/components/auth-form-switch";
 
-export const Component = () => {
+export default () => {
   return <AuthFormSwitch initial="signup" />;
 };

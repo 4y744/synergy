@@ -7,19 +7,19 @@ import {
   setDoc,
 } from "firebase/firestore";
 
-type Params = {
+type CreateGroupParams = {
   name: string;
   creator: string;
 };
 
-export const createGroup = async ({ name, creator }: Params) => {
-  const groupDoc = await addDoc(collection(db, "groups"), {
+export const createGroup = async ({ name, creator }: CreateGroupParams) => {
+  const group = await addDoc(collection(db, "groups"), {
     name,
     creator,
     created: serverTimestamp(),
   });
-  await setDoc(doc(db, "groups", groupDoc.id, "members", creator), {
+  await setDoc(doc(db, "groups", group.id, "members", creator), {
     uid: creator,
-  }).catch((err) => console.log(err));
-  return groupDoc.id;
+  });
+  return group;
 };

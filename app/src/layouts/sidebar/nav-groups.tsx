@@ -19,7 +19,7 @@ import { useAuth } from "@/features/auth/hooks/use-auth";
 
 export const NavGroups = () => {
   const { uid } = useAuth();
-  const { data: groups } = useGroups(uid);
+  const groups = useGroups(uid);
   return (
     <SidebarMenu>
       <SidebarMenuItem>

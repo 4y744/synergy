@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 
-export const Component = () => {
+export default () => {
   const { chatId } = useParams();
   return <div>{chatId}</div>;
 };
