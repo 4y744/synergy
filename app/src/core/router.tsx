@@ -1,5 +1,11 @@
-import { QueryClient } from "@tanstack/react-query";
-import { createBrowserRouter, LoaderFunctionArgs } from "react-router-dom";
+import { LoadingFallback } from "@/components/fallbacks/loading-fallback";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useMemo } from "react";
+import {
+  createBrowserRouter,
+  LoaderFunctionArgs,
+  RouterProvider,
+} from "react-router-dom";
 
 const load = (imp: any, queryClient?: QueryClient) => async () => {
   const { default: Component, loader, ...rest } = await imp;
@@ -57,4 +63,15 @@ export const createRouter = (queryClient: QueryClient) => {
       lazy: load(import("@/routes/not-found")),
     },
   ]);
+};
+
+export const AppRouter = () => {
+  const queryClient = useQueryClient();
+  const router = useMemo(() => createRouter(queryClient), []);
+  return (
+    <RouterProvider
+      router={router}
+      fallbackElement={<LoadingFallback />}
+    />
+  );
 };

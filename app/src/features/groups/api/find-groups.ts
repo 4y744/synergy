@@ -11,7 +11,7 @@ export const findGroups = async (uid: string) => {
 
 export const findGroupsQueryOptions = (uid: string) => {
   return {
-    queryKey: ["groups", uid],
+    queryKey: ["groups"],
     queryFn: () => findGroups(uid),
   } satisfies UseQueryOptions;
 };

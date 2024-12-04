@@ -16,6 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AddGroup } from "../../features/groups/components/add-group";
 import { useGroups } from "@/features/groups/hooks/use-groups";
 import { useAuth } from "@/features/auth/hooks/use-auth";
+import { Button } from "@/components/ui/button";
 
 export const NavGroups = () => {
   const { uid } = useAuth();
@@ -61,9 +62,7 @@ export const NavGroups = () => {
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <AddGroup />
-            </DropdownMenuItem>
+            <AddGroup />
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

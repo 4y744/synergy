@@ -73,8 +73,8 @@ export const NavUser = () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                signOut();
                 navigate("/");
+                signOut();
               }}
             >
               <LogOut />

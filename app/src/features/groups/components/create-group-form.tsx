@@ -31,7 +31,7 @@ export const CreateGroupForm = ({ onSubmit: closeDialog }: Props) => {
 
   const onSubmit: SubmitHandler<Group> = (data) => {
     const { name, creator } = data;
-    createGroup({ name, creator });
+    createGroup({ name, uid: creator });
     closeDialog();
   };
 

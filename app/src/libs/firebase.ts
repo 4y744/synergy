@@ -7,7 +7,6 @@ import {
   DEV_FIREBASE_AUTH_EMULATOR_PORT,
   DEV_FIREBASE_FIRESTORE_EMULATOR_PORT,
   DEV_FIREBASE_STORAGE_EMULATOR_PORT,
-  DEV_USE_FIREBASE_EMULATORS,
 } from "@/config/dev";
 
 const firebaseConfig = {
@@ -38,7 +37,7 @@ export const storage = getStorage(app);
 export const auth = getAuth(app);
 
 if (
-  DEV_USE_FIREBASE_EMULATORS &&
+  import.meta.env.DEV &&
   !(db.toJSON() as any).settings.host.startsWith("localhost")
 ) {
   connectFirestoreEmulator(

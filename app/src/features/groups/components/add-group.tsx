@@ -4,12 +4,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus } from "lucide-react";
-import { useState } from "react";
-import { CreateGroupForm } from "./create-group-form";
 import { JoinGroupForm } from "./join-group-form";
+import { Button } from "@/components/ui/button";
+import { CreateGroupForm } from "./create-group-form";
+import { useState } from "react";
 
 export const AddGroup = () => {
   const [open, setOpen] = useState(false);
@@ -20,10 +20,10 @@ export const AddGroup = () => {
       onOpenChange={setOpen}
     >
       <DialogTrigger asChild>
-        <SidebarMenuButton>
+        <Button className="w-full">
           <Plus />
           <span className="line-clamp-2">Add a group</span>
-        </SidebarMenuButton>
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogTitle className="relative">Add group</DialogTitle>

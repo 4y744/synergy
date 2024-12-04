@@ -1,9 +1,5 @@
 /**
- * Connect to Firestore emulators instead of live project.
- */
-export const DEV_USE_FIREBASE_EMULATORS = import.meta.env.DEV;
-/**
- * Host url for the Firebase Auth emulator.
+ * Port for the Firebase Auth emulator.
  */
 export const DEV_FIREBASE_AUTH_EMULATOR_PORT = 9099;
 /**
