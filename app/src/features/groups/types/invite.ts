@@ -1,4 +1,7 @@
 import z from "zod";
-import { InviteSchema } from "../schemas/invite";
+
+export const InviteSchema = z.object({
+  url: z.string().url("form/invalid-url"),
+});
 
 export type Invite = z.infer<typeof InviteSchema>;

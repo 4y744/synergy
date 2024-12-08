@@ -1,4 +1,5 @@
 import { LoadingFallback } from "@/components/fallbacks/loading-fallback";
+import { Route } from "@/types/router";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
 import {
@@ -7,44 +8,58 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-const load = (imp: any, queryClient?: QueryClient) => async () => {
-  const { default: Component, loader, ...rest } = await imp;
-  return {
-    Component,
-    loader: queryClient
-      ? (args: LoaderFunctionArgs) => loader(args, queryClient)
-      : loader,
-    ...rest,
+const createDefine = (queryClient: QueryClient) => {
+  const define = (importFn: () => Promise<Route>) => async () => {
+    const { default: Component, loader } = await importFn();
+    return {
+      Component,
+      loader: (args: LoaderFunctionArgs) => loader?.(args, queryClient) || null,
+    };
   };
+  return define;
 };
 
 export const createRouter = (queryClient: QueryClient) => {
+  const define = createDefine(queryClient);
   return createBrowserRouter([
     {
       path: "",
-      lazy: load(import("@/routes/(home)/page")),
+      lazy: define(() => import("@/routes/(home)/page")),
     },
     {
       path: "",
-      lazy: load(import("@/routes/(app)/layout"), queryClient),
+      lazy: define(() => import("@/routes/(app)/layout")),
       children: [
         {
           path: "groups",
-          lazy: load(import("@/routes/(app)/groups/layout"), queryClient),
+          lazy: define(() => import("@/routes/(app)/groups/layout")),
           children: [
             {
               path: "",
-              lazy: load(import("@/routes/(app)/groups/page")),
+              lazy: define(() => import("@/routes/(app)/groups/page")),
             },
             {
               path: ":groupId",
-              lazy: load(import("@/routes/(app)/groups/[groupId]/page")),
-            },
-            {
-              path: ":groupId/chats/:chatId",
-              lazy: load(
-                import("@/routes/(app)/groups/[groupId]/chats/[chatId]/page")
+              lazy: define(
+                () => import("@/routes/(app)/groups/[groupId]/layout")
               ),
+              children: [
+                {
+                  path: "",
+                  lazy: define(
+                    () => import("@/routes/(app)/groups/[groupId]/page")
+                  ),
+                },
+                {
+                  path: "chats/:chatId",
+                  lazy: define(
+                    () =>
+                      import(
+                        "@/routes/(app)/groups/[groupId]/chats/[chatId]/page"
+                      )
+                  ),
+                },
+              ],
             },
           ],
         },
@@ -52,15 +67,15 @@ export const createRouter = (queryClient: QueryClient) => {
     },
     {
       path: "signin",
-      lazy: load(import("@/routes/(auth)/signin/page")),
+      lazy: define(() => import("@/routes/(auth)/signin/page")),
     },
     {
       path: "signup",
-      lazy: load(import("@/routes/(auth)/signup/page")),
+      lazy: define(() => import("@/routes/(auth)/signup/page")),
     },
     {
       path: "*",
-      lazy: load(import("@/routes/not-found")),
+      lazy: define(() => import("@/routes/not-found")),
     },
   ]);
 };

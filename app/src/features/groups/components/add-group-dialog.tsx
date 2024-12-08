@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { CreateGroupForm } from "./create-group-form";
 import { useState } from "react";
 
-export const AddGroup = () => {
+export const AddGroupDialog = () => {
   const [open, setOpen] = useState(false);
 
   return (

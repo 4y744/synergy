@@ -1,7 +1,10 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { AuthError, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/libs/firebase";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
-import { authStore } from "../stores/auth";
+import { authStore } from "../stores/auth-store";
+import { MutationOptions } from "@tanstack/react-query";
+import { Auth } from "../types/auth";
+import { SignUpCredentials, SignUpMutationOptions } from "../types/sign-up";
 
 export const signUp = async (
   username: string,
@@ -31,4 +34,13 @@ export const signUp = async (
     signedIn: true,
   });
   return authStore.getState();
+};
+
+export const signUpMutationConfig = () => {
+  return {
+    mutationKey: ["auth"],
+    mutationFn: ({ username, email, password }) => {
+      return signUp(username, email, password);
+    },
+  } satisfies SignUpMutationOptions;
 };

@@ -1,7 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
-import { GroupSchema } from "../schemas/group";
+import { GroupQueryOptions, GroupSchema } from "../types/group";
 import { db } from "@/libs/firebase";
-import { UseQueryOptions } from "@tanstack/react-query";
 
 export const getGroup = async (groupId: string) => {
   const groupDoc = await getDoc(doc(db, "groups", groupId));
@@ -17,9 +16,7 @@ export const getGroup = async (groupId: string) => {
 
 export const getGroupQueryOptions = (groupId: string) => {
   return {
-    queryKey: ["group", groupId],
+    queryKey: ["groups", groupId],
     queryFn: () => getGroup(groupId),
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
-  } satisfies UseQueryOptions;
+  } satisfies GroupQueryOptions;
 };

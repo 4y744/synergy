@@ -13,10 +13,10 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { AddGroup } from "../../features/groups/components/add-group";
+import { AddGroupDialog } from "../../features/groups/components/add-group-dialog";
 import { useGroups } from "@/features/groups/hooks/use-groups";
 import { useAuth } from "@/features/auth/hooks/use-auth";
-import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export const NavGroups = () => {
   const { uid } = useAuth();
@@ -51,18 +51,23 @@ export const NavGroups = () => {
               Groups
             </DropdownMenuLabel>
             {groups?.map((group) => (
-              <DropdownMenuItem key={group.id}>
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                </Avatar>
-                <div className="text-sm leading-tight">
-                  <span className="line-clamp-2">{group.name}</span>
-                </div>
+              <DropdownMenuItem
+                key={group.id}
+                asChild
+              >
+                <Link to={`/groups/${group.id}`}>
+                  <Avatar className="h-8 w-8 rounded-lg">
+                    <AvatarImage />
+                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  </Avatar>
+                  <div className="text-sm leading-tight">
+                    <span className="line-clamp-2">{group.name}</span>
+                  </div>
+                </Link>
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <AddGroup />
+            <AddGroupDialog />
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

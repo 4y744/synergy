@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Invite } from "../types/invite";
-import { InviteSchema } from "../schemas/invite";
+import { InviteSchema } from "../types/invite";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 type Props = Readonly<{

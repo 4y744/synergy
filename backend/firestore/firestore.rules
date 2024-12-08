@@ -59,30 +59,30 @@ service cloud.firestore {
       );
     }
 
-    // match /groups/{groupId}/chats/{chatId} {
-    //   allow create: if (
-    //     isAdmin(groupId, request.auth.uid) 
-    //   );
-    //   allow update, delete: if (
-    //     isAdmin(groupId, request.auth.uid) 
-    //   );
-    //   allow get, list: if (
-    //     isMember(groupId, request.auth.uid)
-    //   );
-    // }
+    match /groups/{groupId}/chats/{chatId} {
+      allow create: if (
+        isAdmin(groupId, request.auth.uid) 
+      );
+      allow update, delete: if (
+        isAdmin(groupId, request.auth.uid) 
+      );
+      allow get, list: if (
+        isMember(groupId, request.auth.uid)
+      );
+    }
 
-    // match /groups/{groupId}/chats/{chatId}/messages/{messageId} {
-    //   allow create: if (
-    //     isMember(groupId, request.auth.uid)
-    //   );
-    //   allow update, delete: if (
-    //     resource.data.creator == request.auth.uid
-    //     || isAdmin(groupId, request.auth.uid) 
-    //   )
-    //   allow get, list: if (
-    //     isMember(groupId, request.auth.uid)
-    //   )
-    // }
+    match /groups/{groupId}/chats/{chatId}/messages/{messageId} {
+      allow create: if (
+        isMember(groupId, request.auth.uid)
+      );
+      allow update, delete: if (
+        resource.data.creator == request.auth.uid
+        || isAdmin(groupId, request.auth.uid) 
+      )
+      allow get, list: if (
+        isMember(groupId, request.auth.uid)
+      )
+    }
 
   }
 }

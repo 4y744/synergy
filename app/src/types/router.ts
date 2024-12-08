@@ -5,3 +5,8 @@ export type DataLoader = (
   args: LoaderFunctionArgs,
   queryClient: QueryClient
 ) => any | Promise<any>;
+
+export type Route = {
+  default: () => JSX.Element;
+  loader?: DataLoader;
+};

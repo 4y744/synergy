@@ -1,5 +1,5 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { GroupSchema } from "../schemas/group";
+import { GroupSchema } from "../types/group";
 import { Group } from "../types/group";
 import {
   Form,
@@ -13,7 +13,8 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { useCreateGroup } from "../hooks/use-create-group";
-import { authStore } from "@/features/auth/stores/auth";
+import { authStore } from "@/features/auth/stores/auth-store";
+import { CreateGroup, CreateGroupSchema } from "../types/create-group";
 
 type Props = Readonly<{
   onSubmit: () => void;
@@ -21,17 +22,16 @@ type Props = Readonly<{
 
 export const CreateGroupForm = ({ onSubmit: closeDialog }: Props) => {
   const { mutate: createGroup } = useCreateGroup();
-  const form = useForm<Group>({
-    resolver: zodResolver(GroupSchema),
+  const form = useForm<CreateGroup>({
+    resolver: zodResolver(CreateGroupSchema),
     defaultValues: {
       name: "",
-      creator: authStore.getState()!.uid,
+      uid: authStore.getState()!.uid,
     },
   });
 
-  const onSubmit: SubmitHandler<Group> = (data) => {
-    const { name, creator } = data;
-    createGroup({ name, uid: creator });
+  const onSubmit: SubmitHandler<CreateGroup> = (data) => {
+    createGroup(data);
     closeDialog();
   };
 

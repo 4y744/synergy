@@ -1,18 +1,20 @@
-import { authStore } from "../stores/auth";
+import { authStore } from "../stores/auth-store";
 
 /**
- * Fetches the current authentication state. Waits if it's still loading.
+ * Fetches the current authentication state. Waits if it's still not initialized.
  */
 export const authenticate = async () => {
-  let unsubscribe: () => void;
   await new Promise((resolve) => {
-    unsubscribe = authStore.subscribe(
-      (state) => state,
-      (state) => state && resolve(null),
+    const unsubscribe = authStore.subscribe(
+      (state) => state.initialized,
+      (initialized) => {
+        if (initialized) {
+          resolve(null);
+          unsubscribe();
+        }
+      },
       { fireImmediately: true }
     );
   });
-  unsubscribe!();
-  //When this line is reached, authState is guaranteed not to be null.
-  return authStore.getState()!;
+  return authStore.getState();
 };

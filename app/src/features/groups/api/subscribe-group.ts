@@ -1,8 +1,8 @@
 import { doc, onSnapshot } from "firebase/firestore";
-import { GroupSchema } from "../schemas/group";
+import { GroupQueryOptions, GroupSchema } from "../types/group";
 import { db } from "@/libs/firebase";
-import { UseQueryOptions } from "@tanstack/react-query";
 import { Group } from "../types/group";
+
 export const subscribeGroup = (
   groupId: string,
   options?: {
@@ -45,9 +45,7 @@ export const subscribeGroupQueryOptions = (
   }
 ) => {
   return {
-    queryKey: ["group", groupId],
+    queryKey: ["groups", groupId],
     queryFn: ({ signal }) => subscribeGroup(groupId, { ...options, signal }),
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
-  } satisfies UseQueryOptions;
+  } satisfies GroupQueryOptions;
 };

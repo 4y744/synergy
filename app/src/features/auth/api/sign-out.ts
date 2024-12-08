@@ -1,7 +1,6 @@
 import { signOut as firebaseSignOut } from "firebase/auth";
 import { auth } from "@/libs/firebase";
-import { authStore } from "../stores/auth";
-
+import { authStore } from "../stores/auth-store";
 export const signOut = async () => {
   await firebaseSignOut(auth);
   authStore.setState({
@@ -11,5 +10,5 @@ export const signOut = async () => {
     email: undefined,
     signedIn: false,
   });
-  return;
+  return authStore.getState();
 };

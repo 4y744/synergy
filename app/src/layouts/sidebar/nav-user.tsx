@@ -15,7 +15,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getProfileAlt, getRandomProfileColor } from "@/utils/profile";
 import { cn } from "@/utils/cn";
-import { authStore } from "@/features/auth/stores/auth";
+import { authStore } from "@/features/auth/stores/auth-store";
 import { signOut } from "@/features/auth/api/sign-out";
 import { useNavigate } from "react-router-dom";
 

@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { FirebaseOptions, initializeApp } from "firebase/app";
 import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
 import { connectStorageEmulator, getStorage } from "firebase/storage";
@@ -17,23 +17,18 @@ const firebaseConfig = {
   messagingSenderId: "274563670688",
   appId: "1:274563670688:web:4c1517c801b2d5b0045fc5",
   measurementId: "G-QMZTDWQB33",
-};
+} satisfies FirebaseOptions;
 
-/**
- * Firebase app instance.
- */
+/** Firebase app instance. */
 const app = initializeApp(firebaseConfig);
-/**
- * Firestore instance.
- */
+
+/** Firestore instance. */
 export const db = getFirestore(app);
-/**
- * Firebase Storage instance.
- */
+
+/** Firebase Storage instance. */
 export const storage = getStorage(app);
-/**
- * Firebase Auth instance.
- */
+
+/** Firebase Auth instance. */
 export const auth = getAuth(app);
 
 if (

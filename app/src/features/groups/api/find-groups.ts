@@ -1,6 +1,6 @@
 import { db } from "@/libs/firebase";
-import { UseQueryOptions } from "@tanstack/react-query";
 import { collectionGroup, getDocs, query, where } from "firebase/firestore";
+import { FindGroupsQueryOptions } from "../types/find-groups";
 
 export const findGroups = async (uid: string) => {
   const { docs: memberDocs } = await getDocs(
@@ -13,5 +13,5 @@ export const findGroupsQueryOptions = (uid: string) => {
   return {
     queryKey: ["groups"],
     queryFn: () => findGroups(uid),
-  } satisfies UseQueryOptions;
+  } satisfies FindGroupsQueryOptions;
 };

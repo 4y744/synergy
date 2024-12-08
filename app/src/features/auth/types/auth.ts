@@ -4,4 +4,5 @@ export type Auth = {
   created: Date;
   email: string;
   signedIn: boolean;
-} | null;
+  initialized: boolean;
+};

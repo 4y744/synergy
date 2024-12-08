@@ -1,9 +1,7 @@
+import { MutationOptions, UseMutationOptions } from "@tanstack/react-query";
 import z from "zod";
-
-export const SignInSchema = z.object({
-  email: z.string().email("form/invalid-email"),
-  password: z.string().min(1, "form/password-required"),
-});
+import { Auth } from "./auth";
+import { AuthError } from "firebase/auth";
 
 export const SignUpSchema = z
   .object({
@@ -26,3 +24,17 @@ export const SignUpSchema = z
       path: ["confirmPassword"],
     }
   );
+
+export type SignUpCredentials = z.infer<typeof SignUpSchema>;
+
+export type SignUpMutationOptions = MutationOptions<
+  Auth,
+  AuthError,
+  SignUpCredentials
+>;
+
+export type UseSignUpMutationOptions = UseMutationOptions<
+  Auth,
+  AuthError,
+  SignUpCredentials
+>;

@@ -1,13 +1,12 @@
 import { db } from "@/libs/firebase";
-import { UseMutationOptions } from "@tanstack/react-query";
 import {
   addDoc,
   collection,
   doc,
-  FirestoreError,
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
+import { CreateGroupMutationOptions } from "../types/create-group";
 
 export const createGroup = async (name: string, uid: string) => {
   const { id: groupId } = await addDoc(collection(db, "groups"), {
@@ -23,13 +22,7 @@ export const createGroup = async (name: string, uid: string) => {
 
 export const createGroupMutationOptions = () => {
   return {
-    mutationKey: ["group", "add"],
-    mutationFn: ({ name, uid }) => {
-      return createGroup(name, uid);
-    },
-  } satisfies UseMutationOptions<
-    string,
-    FirestoreError,
-    { name: string; uid: string }
-  >;
+    mutationKey: ["groups", "create"],
+    mutationFn: ({ name, uid }) => createGroup(name, uid),
+  } satisfies CreateGroupMutationOptions;
 };

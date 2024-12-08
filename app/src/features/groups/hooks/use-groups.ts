@@ -1,6 +1,7 @@
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { useFindGroups } from "./use-find-groups";
 import { subscribeGroupQueryOptions } from "../api/subscribe-group";
+import { UseGroupQueryOptions } from "../types/group";
 
 /**
  * Requires ```groupsLoader``` to prefetch data.
@@ -10,20 +11,21 @@ import { subscribeGroupQueryOptions } from "../api/subscribe-group";
  * @param uid used to find groups that belong to the user.
  * @returns groups that the user is a member of.
  */
-export const useGroups = (uid: string) => {
+export const useGroups = (uid: string, options?: UseGroupQueryOptions) => {
   const { data: groupIds } = useFindGroups(uid);
   const queryClient = useQueryClient();
   const queries = useQueries({
-    queries: groupIds!.map((groupId) =>
-      subscribeGroupQueryOptions(groupId, {
+    queries: groupIds!.map((groupId) => ({
+      ...options,
+      ...subscribeGroupQueryOptions(groupId, {
         onUpdate: (group) => {
-          queryClient.setQueryData(["group", groupId], group);
+          queryClient.setQueryData(["groups", groupId], group);
         },
         onAbort: () => {
-          queryClient.invalidateQueries({ queryKey: ["group", groupId] });
+          queryClient.invalidateQueries({ queryKey: ["groups", groupId] });
         },
-      })
-    ),
+      }),
+    })),
   });
   return queries.map((query) => query.data!);
 };

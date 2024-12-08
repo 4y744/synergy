@@ -1,7 +1,8 @@
 import { auth, db } from "@/libs/firebase";
 import { ReactNode, useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
-import { authStore } from "../stores/auth";
+import { authStore } from "../stores/auth-store";
+import { Auth } from "../types/auth";
 
 type Props = {
   children?: ReactNode;
@@ -18,11 +19,12 @@ export const AuthLoader = ({ children }: Props) => {
           uid: user.uid,
           email: user.email!,
           username: data?.username,
-          created: data?.created,
+          created: new Date(data?.created.seconds),
           signedIn: true,
-        });
+          initialized: true,
+        } satisfies Auth);
       } else {
-        authStore.setState({ signedIn: false });
+        authStore.setState({ initialized: true });
       }
     });
   }, []);

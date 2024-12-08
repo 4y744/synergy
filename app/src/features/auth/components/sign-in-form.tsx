@@ -16,10 +16,9 @@ import {
 } from "@/components/ui/form";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SignInSchema } from "../schemas/api";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { SignInCredentials } from "../types/api";
+import { SignInCredentials, SignInSchema } from "../types/sign-in";
 import { Loader2 } from "lucide-react";
 import { useSignIn } from "../hooks/use-sign-in";
 import { useNavigate } from "react-router-dom";
@@ -29,8 +28,16 @@ type Props = Readonly<{
 }>;
 
 export const SignInForm = ({ onSwitchToSignUp }: Props) => {
-  const { signIn, loading } = useSignIn();
-  const navigate = useNavigate();
+  const { mutate: signIn, isPending } = useSignIn({
+    onSuccess: () => {
+      navigate("/groups");
+    },
+    onError: (error) => {
+      form.setError("password", {
+        message: error.code,
+      });
+    },
+  });
   const form = useForm<SignInCredentials>({
     resolver: zodResolver(SignInSchema),
     defaultValues: {
@@ -38,19 +45,9 @@ export const SignInForm = ({ onSwitchToSignUp }: Props) => {
       password: "",
     },
   });
-  const onSubmit: SubmitHandler<SignInCredentials> = async (data) => {
-    const { email, password } = data;
-    await signIn(email, password, {
-      onSuccess: () => {
-        navigate("/groups");
-      },
-      onError: (error) => {
-        form.setError("password", {
-          message: error.code,
-        });
-      },
-    });
-  };
+  const navigate = useNavigate();
+
+  const onSubmit: SubmitHandler<SignInCredentials> = (data) => signIn(data);
 
   return (
     <Card className="w-96">
@@ -98,9 +95,9 @@ export const SignInForm = ({ onSwitchToSignUp }: Props) => {
             <Button
               type="submit"
               className="w-full"
-              disabled={loading}
+              disabled={isPending}
             >
-              {loading && <Loader2 className="animate-spin" />}
+              {isPending && <Loader2 className="animate-spin" />}
               Sign in
             </Button>
           </form>
