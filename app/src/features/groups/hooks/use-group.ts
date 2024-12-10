@@ -1,19 +1,30 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { subscribeGroupQueryOptions } from "../api/subscribe-group";
-import { UseGroupQueryOptions } from "../types/group";
+import { QueryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getGroupQueryOptions } from "../api/get-group";
+import { useEffect } from "react";
+import { Group } from "../types/group";
+import { FirestoreError } from "firebase/firestore";
+import { subscribeGroup } from "../api/subscribe-group";
 
-export const useGroup = (groupId: string, options?: UseGroupQueryOptions) => {
+export type UseGroupQueryOptions = QueryOptions<
+  Group,
+  FirestoreError,
+  Group,
+  string[]
+>;
+
+export const useGroup = (
+  groupId: string,
+  options?: Partial<UseGroupQueryOptions>
+) => {
   const queryClient = useQueryClient();
-  const query = useQuery({
+  useEffect(() => {
+    const unsubscribe = subscribeGroup(groupId, (group) => {
+      queryClient.setQueryData(["groups", groupId], group);
+    });
+    return () => unsubscribe();
+  }, []);
+  return useQuery({
     ...options,
-    ...subscribeGroupQueryOptions(groupId, {
-      onUpdate: (group) => {
-        queryClient.setQueryData(["groups", groupId], group);
-      },
-      onAbort: () => {
-        queryClient.invalidateQueries({ queryKey: ["groups", groupId] });
-      },
-    }),
-  });
-  return query.data!;
+    ...getGroupQueryOptions(groupId),
+  } satisfies UseGroupQueryOptions);
 };

@@ -1,19 +1,24 @@
-import { getGroupQueryOptions } from "../api/get-group";
-import { UseCreateGroupMutationOptions } from "../types/create-group";
+import { FirestoreError } from "firebase/firestore";
 import { createGroupMutationOptions } from "./../api/create-group";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  UseMutationOptions,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { NewGroup } from "../types/group";
 
-export const useCreateGroup = (options?: UseCreateGroupMutationOptions) => {
+export type UseCreateGroupMutationOptions = UseMutationOptions<
+  string,
+  FirestoreError,
+  NewGroup
+>;
+
+export const useCreateGroup = (
+  options?: Partial<UseCreateGroupMutationOptions>
+) => {
   const queryClient = useQueryClient();
   return useMutation({
     ...options,
-    ...createGroupMutationOptions(),
-    onSuccess: async (groupId) => {
-      await queryClient.fetchQuery(getGroupQueryOptions(groupId));
-      queryClient.setQueryData(["groups"], (prev: string[]) => [
-        ...prev,
-        groupId,
-      ]);
-    },
-  });
+    ...createGroupMutationOptions(queryClient),
+  } satisfies UseCreateGroupMutationOptions);
 };

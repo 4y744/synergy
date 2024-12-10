@@ -1,13 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { findGroupsQueryOptions } from "../api/find-groups";
-import { UseFindGroupsQueryOptions } from "../types/find-groups";
+import { FirestoreError } from "firebase/firestore";
+
+export type UseFindGroupsQueryOptions = UseQueryOptions<
+  string[],
+  FirestoreError,
+  string[],
+  string[]
+>;
 
 export const useFindGroups = (
   uid: string,
-  options?: UseFindGroupsQueryOptions
+  options?: Partial<UseFindGroupsQueryOptions>
 ) => {
   return useQuery({
     ...options,
     ...findGroupsQueryOptions(uid),
-  });
+  } satisfies UseFindGroupsQueryOptions);
 };

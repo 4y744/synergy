@@ -1,7 +1,9 @@
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { useFindGroups } from "./use-find-groups";
-import { subscribeGroupQueryOptions } from "../api/subscribe-group";
-import { UseGroupQueryOptions } from "../types/group";
+import { useEffect } from "react";
+import { UseGroupQueryOptions } from "./use-group";
+import { getGroupQueryOptions } from "../api/get-group";
+import { subscribeGroup } from "../api/subscribe-group";
 
 /**
  * Requires ```groupsLoader``` to prefetch data.
@@ -11,21 +13,32 @@ import { UseGroupQueryOptions } from "../types/group";
  * @param uid used to find groups that belong to the user.
  * @returns groups that the user is a member of.
  */
-export const useGroups = (uid: string, options?: UseGroupQueryOptions) => {
-  const { data: groupIds } = useFindGroups(uid);
-  const queryClient = useQueryClient();
-  const queries = useQueries({
-    queries: groupIds!.map((groupId) => ({
-      ...options,
-      ...subscribeGroupQueryOptions(groupId, {
-        onUpdate: (group) => {
-          queryClient.setQueryData(["groups", groupId], group);
-        },
-        onAbort: () => {
-          queryClient.invalidateQueries({ queryKey: ["groups", groupId] });
-        },
-      }),
-    })),
+export const useGroups = (
+  uid: string,
+  options?: Partial<UseGroupQueryOptions>
+) => {
+  const { data: groupIds } = useFindGroups(uid, {
+    initialData: [],
   });
-  return queries.map((query) => query.data!);
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    const unsubscribeArr = groupIds?.map((groupId) => {
+      return subscribeGroup(groupId, (group) => {
+        queryClient.setQueryData(["groups", groupId], group);
+      });
+    });
+    return () => {
+      unsubscribeArr?.forEach((unsubscribe) => unsubscribe());
+    };
+  }, []);
+  return useQueries({
+    queries:
+      groupIds!.map(
+        (groupId) =>
+          ({
+            ...options,
+            ...getGroupQueryOptions(groupId),
+          }) satisfies UseGroupQueryOptions
+      ) || [],
+  });
 };

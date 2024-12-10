@@ -3,7 +3,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown, Loader2 } from "lucide-react";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { AddGroupDialog } from "../../features/groups/components/add-group-dialog";
+import { AddGroupDialog } from "@/features/groups/components/add-group-dialog";
 import { useGroups } from "@/features/groups/hooks/use-groups";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Link } from "react-router-dom";
@@ -50,22 +50,24 @@ export const NavGroups = () => {
             <DropdownMenuLabel className="font-semibold text-xs text-muted-foreground">
               Groups
             </DropdownMenuLabel>
-            {groups?.map((group) => (
-              <DropdownMenuItem
-                key={group.id}
-                asChild
-              >
-                <Link to={`/groups/${group.id}`}>
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage />
-                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                  </Avatar>
-                  <div className="text-sm leading-tight">
-                    <span className="line-clamp-2">{group.name}</span>
-                  </div>
-                </Link>
-              </DropdownMenuItem>
-            ))}
+            {groups
+              .filter((group) => !group.isPending)
+              .map(({ data: group }) => (
+                <DropdownMenuItem
+                  key={group?.id}
+                  asChild
+                >
+                  <Link to={`/groups/${group?.id}`}>
+                    <Avatar className="h-8 w-8 rounded-lg">
+                      <AvatarImage />
+                      <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                    </Avatar>
+                    <div className="text-sm leading-tight">
+                      <span className="line-clamp-2">{group?.name}</span>
+                    </div>
+                  </Link>
+                </DropdownMenuItem>
+              ))}
             <DropdownMenuSeparator />
             <AddGroupDialog />
           </DropdownMenuContent>

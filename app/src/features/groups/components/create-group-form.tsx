@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { useCreateGroup } from "../hooks/use-create-group";
 import { authStore } from "@/features/auth/stores/auth-store";
-import { CreateGroup, CreateGroupSchema } from "../types/create-group";
+import { NewGroup, NewGroupSchema } from "../types/group";
 
 type Props = Readonly<{
   onSubmit: () => void;
@@ -22,15 +22,15 @@ type Props = Readonly<{
 
 export const CreateGroupForm = ({ onSubmit: closeDialog }: Props) => {
   const { mutate: createGroup } = useCreateGroup();
-  const form = useForm<CreateGroup>({
-    resolver: zodResolver(CreateGroupSchema),
+  const form = useForm<NewGroup>({
+    resolver: zodResolver(NewGroupSchema),
     defaultValues: {
       name: "",
       uid: authStore.getState()!.uid,
     },
   });
 
-  const onSubmit: SubmitHandler<CreateGroup> = (data) => {
+  const onSubmit: SubmitHandler<NewGroup> = (data) => {
     createGroup(data);
     closeDialog();
   };
