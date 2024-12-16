@@ -3,6 +3,6 @@ export type Auth = {
   username: string;
   created: Date;
   email: string;
-  signedIn: boolean;
-  initialized: boolean;
+  isSignedIn: boolean;
+  isInitialized: boolean;
 };

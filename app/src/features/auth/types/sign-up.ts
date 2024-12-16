@@ -1,7 +1,4 @@
-import { MutationOptions, UseMutationOptions } from "@tanstack/react-query";
 import z from "zod";
-import { Auth } from "./auth";
-import { AuthError } from "firebase/auth";
 
 export const SignUpSchema = z
   .object({
@@ -25,16 +22,4 @@ export const SignUpSchema = z
     }
   );
 
-export type SignUpCredentials = z.infer<typeof SignUpSchema>;
-
-export type SignUpMutationOptions = MutationOptions<
-  Auth,
-  AuthError,
-  SignUpCredentials
->;
-
-export type UseSignUpMutationOptions = UseMutationOptions<
-  Auth,
-  AuthError,
-  SignUpCredentials
->;
+export type SignUp = z.infer<typeof SignUpSchema>;

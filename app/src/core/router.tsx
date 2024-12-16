@@ -1,88 +1,72 @@
 import { LoadingFallback } from "@/components/fallbacks/loading-fallback";
+import { AuthContext } from "@/features/auth/components/auth-provider";
+import { AuthStore } from "@/features/auth/stores/auth-store";
 import { Route } from "@/types/router";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import {
   createBrowserRouter,
   LoaderFunctionArgs,
   RouterProvider,
 } from "react-router-dom";
 
-const createDefine = (queryClient: QueryClient) => {
+const createDefine = (authStore: AuthStore, queryClient: QueryClient) => {
   const define = (importFn: () => Promise<Route>) => async () => {
     const { default: Component, loader } = await importFn();
     return {
       Component,
-      loader: (args: LoaderFunctionArgs) => loader?.(args, queryClient) || null,
+      loader: (args: LoaderFunctionArgs) =>
+        loader?.({ args, authStore, queryClient }) || null,
     };
   };
   return define;
 };
 
-export const createRouter = (queryClient: QueryClient) => {
-  const define = createDefine(queryClient);
+export const createRouter = (
+  authStore: AuthStore | undefined,
+  queryClient: QueryClient
+) => {
+  if (!authStore) {
+    throw new Error("Can't find AuthProvider!");
+  }
+  const define = createDefine(authStore, queryClient);
+
   return createBrowserRouter([
     {
       path: "",
-      lazy: define(() => import("@/routes/(home)/page")),
+      lazy: define(() => import("@/routes/home")),
     },
     {
-      path: "",
-      lazy: define(() => import("@/routes/(app)/layout")),
+      path: "signin",
+      lazy: define(() => import("@/routes/home")),
+    },
+    {
+      path: "signup",
+      lazy: define(() => import("@/routes/home")),
+    },
+    {
+      path: "groups/:groupId",
+      lazy: define(() => import("@/routes/groups/group")),
       children: [
         {
-          path: "groups",
-          lazy: define(() => import("@/routes/(app)/groups/layout")),
-          children: [
-            {
-              path: "",
-              lazy: define(() => import("@/routes/(app)/groups/page")),
-            },
-            {
-              path: ":groupId",
-              lazy: define(
-                () => import("@/routes/(app)/groups/[groupId]/layout")
-              ),
-              children: [
-                {
-                  path: "",
-                  lazy: define(
-                    () => import("@/routes/(app)/groups/[groupId]/page")
-                  ),
-                },
-                {
-                  path: "chats/:chatId",
-                  lazy: define(
-                    () =>
-                      import(
-                        "@/routes/(app)/groups/[groupId]/chats/[chatId]/page"
-                      )
-                  ),
-                },
-              ],
-            },
-          ],
+          path: "chats/:chatId",
+          lazy: define(() => import("@/routes/groups/chats/chat")),
         },
       ],
     },
     {
-      path: "signin",
-      lazy: define(() => import("@/routes/(auth)/signin/page")),
-    },
-    {
-      path: "signup",
-      lazy: define(() => import("@/routes/(auth)/signup/page")),
-    },
-    {
       path: "*",
-      lazy: define(() => import("@/routes/not-found")),
+      lazy: define(() => import("@/routes/home")),
     },
   ]);
 };
 
 export const AppRouter = () => {
   const queryClient = useQueryClient();
-  const router = useMemo(() => createRouter(queryClient), []);
+  const authStore = useContext(AuthContext);
+
+  const router = useMemo(() => createRouter(authStore, queryClient), []);
+
   return (
     <RouterProvider
       router={router}

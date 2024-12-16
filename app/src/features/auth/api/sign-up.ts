@@ -1,10 +1,9 @@
 import { AuthError, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/libs/firebase";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
-import { authStore } from "../stores/auth-store";
 import { MutationOptions } from "@tanstack/react-query";
 import { Auth } from "../types/auth";
-import { SignUpCredentials, SignUpMutationOptions } from "../types/sign-up";
+import { SignUp } from "../types/sign-up";
 
 export const signUp = async (
   username: string,
@@ -26,15 +25,15 @@ export const signUp = async (
     created: serverTimestamp(),
   });
   const userDoc = await getDoc(userDocRef);
-  authStore.setState({
+  return {
     uid: credential.user.uid,
     username,
     email,
     created: userDoc.data()?.created,
-    signedIn: true,
-  });
-  return authStore.getState();
+  } as Auth;
 };
+
+export type SignUpMutationOptions = MutationOptions<Auth, AuthError, SignUp>;
 
 export const signUpMutationConfig = () => {
   return {

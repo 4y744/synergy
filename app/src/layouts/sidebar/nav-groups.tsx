@@ -15,8 +15,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AddGroupDialog } from "@/features/groups/components/add-group-dialog";
 import { useGroups } from "@/features/groups/hooks/use-groups";
-import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 
 export const NavGroups = () => {
   const { uid } = useAuth();

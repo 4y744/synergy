@@ -9,10 +9,12 @@ import { NavChats } from "./nav-chats";
 import { NavGroups } from "./nav-groups";
 import { NavUser } from "./nav-user";
 import { NavAdmin } from "./nav-admin";
+import { useParams } from "react-router-dom";
 
 type Props = ComponentProps<typeof Sidebar>;
 
 export const AppSidebar = (props: Props) => {
+  const { groupId } = useParams();
   return (
     <Sidebar
       {...props}
@@ -22,9 +24,12 @@ export const AppSidebar = (props: Props) => {
         <NavGroups />
       </SidebarHeader>
       <SidebarContent>
-        <NavAdmin />
-        <NavChats />
-        {/* <NavFolders /> */}
+        {groupId && (
+          <>
+            <NavAdmin />
+            <NavChats />
+          </>
+        )}
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

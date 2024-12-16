@@ -13,20 +13,21 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { useCreateGroup } from "../hooks/use-create-group";
-import { authStore } from "@/features/auth/stores/auth-store";
 import { NewGroup, NewGroupSchema } from "../types/group";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 
 type Props = Readonly<{
   onSubmit: () => void;
 }>;
 
 export const CreateGroupForm = ({ onSubmit: closeDialog }: Props) => {
+  const { uid } = useAuth();
   const { mutate: createGroup } = useCreateGroup();
   const form = useForm<NewGroup>({
     resolver: zodResolver(NewGroupSchema),
     defaultValues: {
       name: "",
-      uid: authStore.getState()!.uid,
+      uid,
     },
   });
 

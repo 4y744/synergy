@@ -1,4 +1,11 @@
+import { useContext } from "react";
+import { AuthContext } from "../components/auth-provider";
 import { useStore } from "zustand";
-import { authStore } from "../stores/auth-store";
 
-export const useAuth = () => useStore(authStore)!;
+export const useAuth = () => {
+  const authStore = useContext(AuthContext);
+  if (!authStore) {
+    throw new Error("Can't find AuthProvider.");
+  }
+  return useStore(authStore);
+};

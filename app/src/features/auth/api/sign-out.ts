@@ -1,14 +1,13 @@
 import { signOut as firebaseSignOut } from "firebase/auth";
 import { auth } from "@/libs/firebase";
-import { authStore } from "../stores/auth-store";
+import { MutationOptions } from "@tanstack/react-query";
+
 export const signOut = async () => {
   await firebaseSignOut(auth);
-  authStore.setState({
-    uid: undefined,
-    username: undefined,
-    created: undefined,
-    email: undefined,
-    signedIn: false,
-  });
-  return authStore.getState();
+};
+
+export const signOutMutationOptions = () => {
+  return {
+    mutationFn: () => signOut(),
+  } satisfies MutationOptions;
 };

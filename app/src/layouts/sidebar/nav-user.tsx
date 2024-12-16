@@ -15,13 +15,14 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getProfileAlt, getRandomProfileColor } from "@/utils/profile";
 import { cn } from "@/utils/cn";
-import { authStore } from "@/features/auth/stores/auth-store";
-import { signOut } from "@/features/auth/api/sign-out";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/features/auth/hooks/use-auth";
+import { useSignOut } from "@/features/auth/hooks/use-sign-out";
 
 export const NavUser = () => {
   const navigate = useNavigate();
-  const { username, email } = authStore.getState()!;
+  const { username, email } = useAuth();
+  const { mutate: signOut } = useSignOut();
   const profileBackground = getRandomProfileColor();
   return (
     <SidebarMenu>

@@ -18,7 +18,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { SignInCredentials, SignInSchema } from "../types/sign-in";
+import { SignIn, SignInSchema } from "../types/sign-in";
 import { Loader2 } from "lucide-react";
 import { useSignIn } from "../hooks/use-sign-in";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +38,7 @@ export const SignInForm = ({ onSwitchToSignUp }: Props) => {
       });
     },
   });
-  const form = useForm<SignInCredentials>({
+  const form = useForm<SignIn>({
     resolver: zodResolver(SignInSchema),
     defaultValues: {
       email: "",
@@ -47,10 +47,10 @@ export const SignInForm = ({ onSwitchToSignUp }: Props) => {
   });
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<SignInCredentials> = (data) => signIn(data);
+  const onSubmit: SubmitHandler<SignIn> = (data) => signIn(data);
 
   return (
-    <Card className="w-96">
+    <Card className="border-none shadow-none w-96">
       <CardHeader>
         <CardTitle>Sign in</CardTitle>
         <CardDescription>Sign into your account.</CardDescription>
