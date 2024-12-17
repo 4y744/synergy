@@ -1,1 +1,0 @@
-import{j as t}from"./index-C0dVWJZn.js";import{A as o}from"./auth-form-switch-CGNZX6K8.js";import"./zod-Dgx5S-VR.js";import"./button-C-yvXE_o.js";import"./badge-C2WiDZ-w.js";const s=()=>t.jsx(o,{initial:"signup"});export{s as Component};

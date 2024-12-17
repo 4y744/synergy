@@ -1,10 +1,10 @@
 {
   "firestore": {
-    "rules": "backend/firestore/firestore.rules",
-    "indexes": "backend/firestore/firestore.indexes.json"
+    "rules": "apps/backend/firestore/firestore.rules",
+    "indexes": "apps/backend/firestore/firestore.indexes.json"
   },
   "hosting": {
-    "public": "app/build",
+    "public": "apps/web/dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
@@ -14,7 +14,7 @@
     ]
   },
   "storage": {
-    "rules": "backend/storage/storage.rules"
+    "rules": "apps/backend/storage/storage.rules"
   },
   "emulators": {
     "auth": {
