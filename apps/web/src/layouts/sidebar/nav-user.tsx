@@ -1,7 +1,8 @@
-import { LogOut, Settings } from "lucide-react";
+import { LogOut, Settings, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -21,69 +22,64 @@ import { useSignOut } from "@/features/auth/hooks/use-sign-out";
 
 export const NavUser = () => {
   const navigate = useNavigate();
+
   const { username, email } = useAuth();
   const { mutate: signOut } = useSignOut();
+
   const profileBackground = getRandomProfileColor();
   return (
-    <SidebarMenu>
-      <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage />
-                <AvatarFallback className={cn("rounded-lg", profileBackground)}>
-                  {getProfileAlt(username)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{username}</span>
-                <span className="truncate text-xs">{email}</span>
-              </div>
-              <Settings />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-            align="end"
-            sideOffset={4}
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        onFocus={(event) => event.target.blur()}
+        asChild
+      >
+        <SidebarMenuButton
+          size="lg"
+          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+        >
+          <Avatar className="h-8 w-8 rounded-lg">
+            <AvatarImage />
+            <AvatarFallback className={cn("rounded-lg", profileBackground)}>
+              {getProfileAlt(username)}
+            </AvatarFallback>
+          </Avatar>
+          <div className="grid flex-1 text-left text-sm leading-tight">
+            <span className="truncate font-semibold">{username}</span>
+            <span className="truncate text-xs">{email}</span>
+          </div>
+          <Settings />
+        </SidebarMenuButton>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+        align="end"
+        sideOffset={4}
+      >
+        <DropdownMenuLabel>My account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem>
+            <User />
+            Profile
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Settings />
+            Settings
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem
+            onClick={() => {
+              navigate("/");
+              signOut();
+            }}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 p-1 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage />
-                  <AvatarFallback
-                    className={cn("rounded-lg", profileBackground)}
-                  >
-                    {getProfileAlt(username)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{username}</span>
-                  <span className="truncate text-xs">{email}</span>
-                </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuItem>
-              <Settings />
-              Settings
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => {
-                navigate("/");
-                signOut();
-              }}
-            >
-              <LogOut />
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </SidebarMenuItem>
-    </SidebarMenu>
+            <LogOut />
+            Log out
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };

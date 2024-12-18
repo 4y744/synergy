@@ -5,13 +5,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus } from "lucide-react";
 import { JoinGroupForm } from "./join-group-form";
-import { Button } from "@/components/ui/button";
 import { CreateGroupForm } from "./create-group-form";
-import { useState } from "react";
+import { ReactElement, ReactNode, useState } from "react";
+type Props = Readonly<{
+  children?: ReactElement;
+}>;
 
-export const AddGroupDialog = () => {
+export const AddGroupDialog = ({ children }: Props) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -19,12 +20,7 @@ export const AddGroupDialog = () => {
       open={open}
       onOpenChange={setOpen}
     >
-      <DialogTrigger asChild>
-        <Button className="w-full">
-          <Plus />
-          <span className="line-clamp-2">Add a group</span>
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogTitle className="relative">Add group</DialogTitle>
         <Tabs defaultValue="join">
