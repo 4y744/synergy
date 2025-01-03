@@ -1,59 +1,52 @@
-import { LoadingFallback } from "@/components/fallbacks/loading-fallback";
-import { AuthContext } from "@/features/auth/components/auth-provider";
-import { AuthStore } from "@/features/auth/stores/auth-store";
-import { Route } from "@/types/router";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import { useContext, useMemo } from "react";
-import {
-  createBrowserRouter,
-  LoaderFunctionArgs,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 
-const createDefine = (authStore: AuthStore, queryClient: QueryClient) => {
-  const define = (importFn: () => Promise<Route>) => async () => {
-    const { default: Component, loader } = await importFn();
-    return {
-      Component,
-      loader: (args: LoaderFunctionArgs) =>
-        loader?.({ args, authStore, queryClient }) || null,
-    };
-  };
-  return define;
+import { LoadingFallback } from "~/components/loading-fallback";
+
+import { AuthContext, AuthStore } from "@synergy/features/auth";
+import { createCustomRoute } from "@synergy/libs/react-router";
+
+export type CustomLoaderData = {
+  authStore: AuthStore;
+  queryClient: QueryClient;
 };
 
 export const createRouter = (
   authStore: AuthStore,
   queryClient: QueryClient
 ) => {
-  const define = createDefine(authStore, queryClient);
+  const customRoute = createCustomRoute<CustomLoaderData>({
+    authStore,
+    queryClient,
+  });
 
   return createBrowserRouter([
     {
       path: "",
-      lazy: define(() => import("@/routes/landing")),
+      lazy: customRoute(() => import("~/routes/landing")),
     },
     {
       path: "signin",
-      lazy: define(() => import("@/routes/signin")),
+      lazy: customRoute(() => import("~/routes/signin")),
     },
     {
       path: "signup",
-      lazy: define(() => import("@/routes/signup")),
+      lazy: customRoute(() => import("~/routes/signup")),
     },
     {
       path: "groups/:groupId?",
-      lazy: define(() => import("@/routes/groups/group")),
+      lazy: customRoute(() => import("~/routes/groups/[groupId]")),
       children: [
         {
           path: "chats/:chatId",
-          lazy: define(() => import("@/routes/groups/chats/chat")),
+          lazy: customRoute(() => import("~/routes/groups/chats/[chatId]")),
         },
       ],
     },
     {
       path: "*",
-      lazy: define(() => import("@/routes/not-found")),
+      lazy: customRoute(() => import("~/routes/not-found")),
     },
   ]);
 };

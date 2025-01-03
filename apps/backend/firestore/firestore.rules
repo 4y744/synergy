@@ -7,9 +7,9 @@ service cloud.firestore {
       return exists(/databases/$(database)/documents/groups/$(groupId)/members/$(uid));
     }
 
-    // function isAdmin(groupId, uid){
-    //   return get(/databases/$(database)/documents/groups/$(groupId)).data.creator == uid;
-    // }
+    function isAdmin(groupId, uid){
+      return get(/databases/$(database)/documents/groups/$(groupId)).data.creator == uid;
+    }
 
     match /users/{userId} {
       allow create: if (

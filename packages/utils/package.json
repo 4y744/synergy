@@ -1,0 +1,24 @@
+{
+  "name": "@synergy/utils",
+  "version": "1.0.0",
+  "license": "GPL-3.0-only",
+  "private": true,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.mts"
+    }
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.4"
+  },
+  "devDependencies": {
+    "@synergy/configs": "workspace:*",
+    "tsup": "8.0.0"
+  }
+}

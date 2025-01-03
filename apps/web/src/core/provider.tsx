@@ -1,16 +1,16 @@
-import { ReactNode, useState } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider } from "@/features/auth/components/auth-provider";
+import { ReactNode } from "react";
 
-type Props = Readonly<{
+import { AuthProvider } from "@synergy/features/auth";
+import { QueryProvider } from "@synergy/libs/react-query";
+
+type AppProviderProps = Readonly<{
   children?: ReactNode;
 }>;
 
-export const AppProvider = ({ children }: Props) => {
-  const [queryClient] = useState(new QueryClient());
+export const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <AuthProvider>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryProvider>{children}</QueryProvider>
     </AuthProvider>
   );
 };

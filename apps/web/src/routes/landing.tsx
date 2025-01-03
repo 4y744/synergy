@@ -1,7 +1,7 @@
-import { cn } from "@/utils/cn";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+
+import { Button, Badge } from "@synergy/ui";
+import { cn } from "@synergy/utils";
 
 export default () => {
   return (
