@@ -5,9 +5,9 @@ import { auth, db } from "@synergy/libs/firebase";
 
 export const AuthContext = createContext<AuthStore>({} as AuthStore);
 
-type Props = {
+type Props = Readonly<{
   children?: ReactNode;
-};
+}>;
 
 export const AuthProvider = ({ children }: Props) => {
   const [authStore] = useState(createAuthStore());

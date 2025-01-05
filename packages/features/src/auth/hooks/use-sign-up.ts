@@ -1,13 +1,14 @@
-import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { signUpMutationConfig } from "../api/sign-up";
-import { Auth } from "../types/auth";
-import { AuthError } from "firebase/auth";
-import { SignUp } from "../types/sign-up";
-import { AuthContext } from "../components/auth-provider";
 import { useContext } from "react";
+import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import { AuthError } from "firebase/auth";
+
+import { signUpMutationConfig } from "../api/sign-up";
+import { AuthContext } from "../components/auth-provider";
+import { Auth } from "../types/auth";
+import { SignUp } from "../types/sign-up";
 
 export type UseSignUpMutationOptions = UseMutationOptions<
-  Auth,
+  Partial<Auth>,
   AuthError,
   SignUp
 >;
@@ -15,7 +16,7 @@ export type UseSignUpMutationOptions = UseMutationOptions<
 export const useSignUp = (options?: UseSignUpMutationOptions) => {
   const authStore = useContext(AuthContext);
   return useMutation({
-    ...signUpMutationConfig(authStore),
     ...options,
+    ...signUpMutationConfig(authStore),
   });
 };

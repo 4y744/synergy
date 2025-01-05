@@ -27,14 +27,19 @@ export const signUp = async (
     created: serverTimestamp(),
   });
   const userDoc = await getDoc(userDocRef);
+  const data = userDoc.data({ serverTimestamps: "estimate" });
   return {
     uid: credential.user.uid,
     username,
     email,
-    created: userDoc.data()?.created,
-  } as Auth;
+    created: data?.created.toDate(),
+  };
 };
-export type SignUpMutationOptions = MutationOptions<Auth, AuthError, SignUp>;
+export type SignUpMutationOptions = MutationOptions<
+  Partial<Auth>,
+  AuthError,
+  SignUp
+>;
 
 export const signUpMutationConfig = (authStore: AuthStore) => {
   return {
@@ -42,7 +47,7 @@ export const signUpMutationConfig = (authStore: AuthStore) => {
     mutationFn: async ({ username, email, password }) => {
       const auth = await signUp(username, email, password);
       authStore.getState().signUp(auth);
-      return auth as Auth;
+      return auth;
     },
   } satisfies SignUpMutationOptions;
 };

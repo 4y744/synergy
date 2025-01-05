@@ -1,4 +1,3 @@
-import { db } from "@synergy/libs/firebase";
 import {
   addDoc,
   collection,
@@ -8,7 +7,11 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { MutationOptions, QueryClient } from "@tanstack/react-query";
+
+import { db } from "@synergy/libs/firebase";
+
 import { NewGroup } from "../types/group";
+import { getGroupQueryOptions } from "./get-group";
 
 export const createGroup = async (name: string, uid: string) => {
   const { id: groupId } = await addDoc(collection(db, "groups"), {
@@ -32,7 +35,8 @@ export const createGroupMutationOptions = (queryClient: QueryClient) => {
   return {
     mutationKey: ["groups", "create"],
     mutationFn: ({ name, uid }) => createGroup(name, uid),
-    onSuccess: (groupId) => {
+    onSuccess: async (groupId) => {
+      await queryClient.fetchQuery(getGroupQueryOptions(groupId, queryClient));
       queryClient.setQueryData(["groups"], (prev: string[]) => [
         ...prev,
         groupId,

@@ -5,22 +5,25 @@ import { Group } from "../types/group";
 import { QueryClient, QueryOptions } from "@tanstack/react-query";
 import { Unsubscribe } from "firebase/auth";
 
-export const getGroup = (groupId: string, onUpdate: (group: Group) => void) => {
-  let unsubscribe: Unsubscribe;
-  const group = new Promise((resolve: (group: Group) => void) => {
-    onSnapshot(doc(db, "groups", groupId), async (snapshot) => {
-      const data = snapshot.data();
+export const getGroup = async (
+  groupId: string,
+  onUpdate: (group: Group) => void
+) => {
+  let unsubscribe!: Unsubscribe;
+  const group = await new Promise((resolve: (group: Group) => void) => {
+    unsubscribe = onSnapshot(doc(db, "groups", groupId), (snapshot) => {
+      const data = snapshot.data({ serverTimestamps: "estimate" });
       const group = GroupSchema.parse({
         id: snapshot.id,
         name: data?.name,
         creator: data?.creator,
-        created: new Date(data?.created.seconds),
+        created: data?.created.toDate(),
       });
       resolve(group);
       onUpdate(group);
     });
   });
-  return { group, unsubscribe: unsubscribe! };
+  return { group, unsubscribe };
 };
 
 export type GroupQueryOptions = QueryOptions<
@@ -36,8 +39,8 @@ export const getGroupQueryOptions = (
 ) => {
   return {
     queryKey: ["groups", groupId],
-    queryFn: ({ queryKey }) => {
-      const { group, unsubscribe } = getGroup(groupId, (group) => {
+    queryFn: async ({ queryKey }) => {
+      const { group, unsubscribe } = await getGroup(groupId, (group) => {
         queryClient.setQueryData(queryKey, group);
       });
       const remove = queryClient

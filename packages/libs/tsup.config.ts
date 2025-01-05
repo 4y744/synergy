@@ -1,13 +1,12 @@
-import { defineConfig } from "tsup";
+import { defineConfig, Options } from "tsup";
+import tsupConfig from "@synergy/configs/tsup";
 
-export default defineConfig({
+export default defineConfig((options: Options) => ({
   entry: [
     "./src/firebase/index.ts",
     "./src/react-router/index.ts",
     "./src/react-query/index.ts",
   ],
-  format: ["esm"],
-  outDir: "./dist",
-  dts: true,
-  minify: false,
-});
+  ...(tsupConfig as Options),
+  ...options,
+}));

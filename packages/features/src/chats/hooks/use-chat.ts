@@ -3,7 +3,7 @@ import { useChats, UseChatsMutationOptions } from "./use-chats";
 export const useChat = (
   groupId: string,
   chatId: string,
-  options?: UseChatsMutationOptions
+  options?: Partial<UseChatsMutationOptions>
 ) => {
   const chats = useChats(groupId, options);
   const { data, ...rest } = chats;

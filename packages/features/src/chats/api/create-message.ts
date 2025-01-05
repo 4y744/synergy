@@ -1,5 +1,5 @@
 import { db } from "@synergy/libs/firebase";
-import { UseMutationOptions } from "@tanstack/react-query";
+import { MutationOptions } from "@tanstack/react-query";
 
 import {
   addDoc,
@@ -7,26 +7,29 @@ import {
   FirestoreError,
   serverTimestamp,
 } from "firebase/firestore";
+import { NewMessage } from "../types/message";
 
 export const createMessage = async (
   groupId: string,
   chatId: string,
-  payload: string
+  payload: string,
+  createdBy: string
 ) => {
-  const messageDoc = await addDoc(
+  const { id } = await addDoc(
     collection(db, "groups", groupId, "chats", chatId, "messages"),
     {
       created: serverTimestamp(),
       payload,
+      createdBy,
     }
   );
-  return messageDoc.id;
+  return id;
 };
 
-export type CreateMessageMutationOptions = UseMutationOptions<
+export type CreateMessageMutationOptions = MutationOptions<
   string,
   FirestoreError,
-  { payload: string }
+  NewMessage
 >;
 
 export const createMessageMutationOptions = (
@@ -34,9 +37,8 @@ export const createMessageMutationOptions = (
   chatId: string
 ) => {
   return {
-    mutationKey: ["messages", "create"],
-    mutationFn: ({ payload }) => {
-      return createMessage(groupId, chatId, payload);
+    mutationFn: ({ payload, createdBy }) => {
+      return createMessage(groupId, chatId, payload, createdBy);
     },
   } satisfies CreateMessageMutationOptions;
 };

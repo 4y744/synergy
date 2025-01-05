@@ -14,22 +14,26 @@
     }
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.1",
     "@synergy/features": "workspace:*",
     "@synergy/libs": "workspace:*",
     "@synergy/ui": "workspace:*",
     "@synergy/utils": "workspace:*",
-    "@hookform/resolvers": "^3.9.1",
     "lucide-react": "^0.460.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.2",
     "react-router-dom": "^6.26.1",
+    "react-window": "^1.8.11",
+    "react-window-infinite-loader": "^1.0.9",
     "tailwindcss": "^3.4.10"
   },
   "devDependencies": {
     "@synergy/configs": "workspace:*",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@types/react-window": "^1.8.8",
+    "@types/react-window-infinite-loader": "^1.0.9",
     "tsup": "8.0.0",
     "typescript": "^5.5.3"
   }

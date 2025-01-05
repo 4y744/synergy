@@ -22,18 +22,21 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useCreateChat } from "../hooks/use-create-chat";
 import { NewChat, NewChatShema } from "../types/chat";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "~/auth";
 
 type CreateChatButtonProps = Readonly<{
   groupId: string;
 }>;
 
 const CreateChatButton = ({ groupId }: CreateChatButtonProps) => {
+  const { uid } = useAuth();
   const { mutate: createChat } = useCreateChat(groupId);
 
   const form = useForm<NewChat>({
     resolver: zodResolver(NewChatShema),
     defaultValues: {
       name: "",
+      createdBy: uid,
     },
   });
 

@@ -1,13 +1,14 @@
-import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { signInMutationConfig } from "../api/sign-in";
-import { Auth } from "../types/auth";
-import { AuthError } from "firebase/auth";
-import { SignIn } from "../types/sign-in";
 import { useContext } from "react";
+import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import { AuthError } from "firebase/auth";
+
+import { signInMutationConfig } from "../api/sign-in";
 import { AuthContext } from "../components/auth-provider";
+import { Auth } from "../types/auth";
+import { SignIn } from "../types/sign-in";
 
 export type UseSignInMutationOptions = UseMutationOptions<
-  Auth,
+  Partial<Auth>,
   AuthError,
   SignIn
 >;
@@ -15,7 +16,7 @@ export type UseSignInMutationOptions = UseMutationOptions<
 export const useSignIn = (options?: UseSignInMutationOptions) => {
   const authStore = useContext(AuthContext);
   return useMutation({
-    ...signInMutationConfig(authStore),
     ...options,
+    ...signInMutationConfig(authStore),
   });
 };

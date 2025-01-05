@@ -1,3 +1,7 @@
+import { useNavigate } from "react-router-dom";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
+
 import {
   Card,
   CardContent,
@@ -15,13 +19,10 @@ import {
   Button,
 } from "@synergy/ui";
 
-import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { SignUp, SignUpSchema } from "../types/sign-up";
-import { Loader2 } from "lucide-react";
 import { useSignUp } from "../hooks/use-sign-up";
-import { useNavigate } from "react-router-dom";
 
 export const SignUpForm = () => {
   const { mutate: signUp, isPending } = useSignUp({

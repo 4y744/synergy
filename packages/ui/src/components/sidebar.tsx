@@ -765,7 +765,7 @@ const SidebarCard = ({ primary, secondary, image, icon }: SidebarCardProps) => {
         </AvatarFallback>
       </Avatar>
       <div className="grid flex-1 text-left text-sm leading-tight">
-        <span className="truncate font-semibold">{primary}</span>
+        <span className="truncate font-medium">{primary}</span>
         <span className="truncate text-xs">{secondary}</span>
       </div>
       {icon}

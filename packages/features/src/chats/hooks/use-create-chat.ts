@@ -1,20 +1,21 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { createChatMutationOptions } from "../api/create-chat";
-import { NewChat } from "../types/chat";
 import { FirestoreError } from "firebase/firestore";
 
+import { createChatMutationOptions } from "../api/create-chat";
+import { Chat, NewChat } from "../types/chat";
+
 export type UseCreateChatMutationOptions = UseMutationOptions<
-  NewChat,
+  Chat,
   FirestoreError,
   NewChat
 >;
 
 export const useCreateChat = (
   groupId: string,
-  options?: UseCreateChatMutationOptions
+  options?: Partial<UseCreateChatMutationOptions>
 ) => {
   return useMutation({
-    ...createChatMutationOptions(groupId),
     ...options,
+    ...createChatMutationOptions(groupId),
   });
 };

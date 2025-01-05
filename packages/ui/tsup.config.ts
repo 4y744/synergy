@@ -1,9 +1,8 @@
-import { defineConfig } from "tsup";
+import { defineConfig, Options } from "tsup";
+import tsupConfig from "@synergy/configs/tsup";
 
-export default defineConfig({
+export default defineConfig((options: Options) => ({
   entry: ["./index.ts"],
-  format: ["esm"],
-  outDir: "./dist",
-  dts: true,
-  minify: false,
-});
+  ...(tsupConfig as Options),
+  ...options,
+}));

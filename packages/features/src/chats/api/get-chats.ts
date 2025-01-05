@@ -1,42 +1,44 @@
-import { db } from "@synergy/libs/firebase";
 import {
   collection,
   FirestoreError,
   onSnapshot,
   Unsubscribe,
 } from "firebase/firestore";
-import { Chat, ChatSchema } from "../types/chat";
+
 import {
   QueryClient,
   QueryOptions,
   UseQueryOptions,
 } from "@tanstack/react-query";
 
-export const getChats = (
+import { db } from "@synergy/libs/firebase";
+
+import { Chat, ChatSchema } from "../types/chat";
+
+export const subscribeChats = async (
   groupId: string,
   onUpdate: (chats: Chat[]) => void
 ) => {
-  let unsubscribe: Unsubscribe;
-  const chats = new Promise((resolve: (chats: Chat[]) => void) => {
+  let unsubscribe!: Unsubscribe;
+  const chats = await new Promise((resolve: (chats: Chat[]) => void) => {
     unsubscribe = onSnapshot(
       collection(db, "groups", groupId, "chats"),
-      async (snapshot) => {
+      (snapshot) => {
         const chats = snapshot.docs.map((doc) => {
-          const data = doc.data();
-          const chat = ChatSchema.parse({
+          const data = doc.data({ serverTimestamps: "estimate" });
+          return ChatSchema.parse({
             id: doc.id,
             name: data?.name,
             creator: data?.creator,
-            created: new Date(data?.created.seconds),
+            created: data?.created.toDate(),
           });
-          return chat;
         });
         resolve(chats);
         onUpdate(chats);
       }
     );
   });
-  return { chats, unsubscribe: unsubscribe! };
+  return { chats, unsubscribe };
 };
 
 export type GetChatQueryOptions = QueryOptions<
@@ -52,21 +54,21 @@ export const getChatsQueryOptions = (
 ) => {
   return {
     queryKey: ["groups", groupId, "chats"],
-    queryFn: ({ queryKey }) => {
-      const { chats, unsubscribe } = getChats(groupId, (group) => {
+    queryFn: async ({ queryKey }) => {
+      const { chats, unsubscribe } = await subscribeChats(groupId, (group) => {
         queryClient.setQueryData(queryKey, group);
       });
       const remove = queryClient
         .getQueryCache()
         .subscribe(({ query, type }) => {
           if (
-            query.queryKey == queryKey &&
+            query.queryKey.toString() == queryKey.toString() &&
             type == "observerRemoved" &&
             query.getObserversCount() === 0
           ) {
             remove();
             unsubscribe?.();
-            queryClient.invalidateQueries({ queryKey });
+            queryClient.removeQueries({ queryKey });
           }
         });
       return chats;

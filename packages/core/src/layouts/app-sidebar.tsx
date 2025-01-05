@@ -89,30 +89,31 @@ const SidebarGroups = () => {
         <DropdownMenuLabel className="font-semibold text-xs text-muted-foreground">
           Groups
         </DropdownMenuLabel>
-        {groups
-          .filter(({ isPending }) => !isPending)
-          .map(({ data: group }) => (
-            <DropdownMenuItem
-              key={group?.id}
-              asChild
-            >
-              <Link to={`/groups/${group!.id}`}>
-                <Avatar
-                  className={cn(
-                    "h-8 w-8 rounded-lg",
-                    "flex items-center justify-center"
-                  )}
-                >
-                  <AvatarImage />
-                  <AvatarFallback className="rounded-lg">
-                    {abbreviate(group!.name)}
-                  </AvatarFallback>
-                </Avatar>
-                <span>{group!.name}f</span>
-              </Link>
-            </DropdownMenuItem>
-          ))}
-
+        <DropdownMenuGroup>
+          {groups
+            .filter(({ isPending }) => !isPending)
+            .map(({ data: group }) => (
+              <DropdownMenuItem
+                key={group!.id}
+                asChild
+              >
+                <Link to={`/groups/${group!.id}`}>
+                  <Avatar
+                    className={cn(
+                      "h-8 w-8 rounded-lg",
+                      "flex items-center justify-center"
+                    )}
+                  >
+                    <AvatarImage />
+                    <AvatarFallback className="rounded-lg">
+                      {abbreviate(group!.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span>{group!.name}f</span>
+                </Link>
+              </DropdownMenuItem>
+            ))}
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="flex flex-col gap-1">
           <JoinGroupDialog
@@ -228,6 +229,7 @@ const SidebarAdmin = () => {
 
 const SidebarChats = () => {
   const { groupId } = useParams();
+
   const chats = useChats(groupId!);
 
   return (
@@ -280,8 +282,8 @@ const SidebarUser = () => {
         <DropdownMenuGroup>
           <DropdownMenuItem
             onClick={() => {
+              navigate("/");
               signOut();
-              navigate("/groups");
             }}
           >
             Sign out

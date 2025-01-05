@@ -2,6 +2,11 @@
   --background: 0 0% 8%;
   --foreground: 0 0% 100%;
 
+  --border: 0 0% 15%;
+  --input: 0 0% 15%;
+  --ring: 0 0% 83.1%;
+  --radius: 0.5rem;
+
   --card: 0 0% 8%;
   --card-foreground: 0 0% 100%;
 
@@ -22,11 +27,6 @@
 
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 0 0% 98%;
-
-  --border: 0 0% 15%;
-  --input: 0 0% 15%;
-  --ring: 0 0% 83.1%;
-  --radius: 0.5rem;
 
   --sidebar-background: 0 0% 10%;
   --sidebar-foreground: 0 0% 100%;

@@ -23,11 +23,11 @@ export const connectEmulators = (
   storage: FirebaseStorage
 ) => {
   if (
-    !(db.toJSON() as any).settings.host.startsWith("localhost") &&
-    !initEmulators
+    (import.meta as any).env.DEV &&
+    !initEmulators &&
+    !(db.toJSON() as any).settings.host.startsWith("localhost")
   ) {
     initEmulators = true;
-
     connectFirestoreEmulator(
       db,
       "localhost",

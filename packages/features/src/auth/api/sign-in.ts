@@ -14,14 +14,20 @@ export const signIn = async (email: string, password: string) => {
   */
   const credential = await signInWithEmailAndPassword(auth, email, password);
   const userDoc = await getDoc(doc(db, "users", credential.user.uid));
+  const data = userDoc.data({ serverTimestamps: "estimate" });
   return {
     uid: credential.user.uid,
-    username: userDoc.data()?.username,
+    username: data?.username,
     email,
-    created: new Date(userDoc.data()?.created.seconds),
-  } as Auth;
+    created: data?.created.toDate(),
+  };
 };
-export type SignInMutationOptions = MutationOptions<Auth, AuthError, SignIn>;
+
+export type SignInMutationOptions = MutationOptions<
+  Partial<Auth>,
+  AuthError,
+  SignIn
+>;
 
 export const signInMutationConfig = (authStore: AuthStore) => {
   return {
@@ -29,7 +35,7 @@ export const signInMutationConfig = (authStore: AuthStore) => {
     mutationFn: async ({ email, password }) => {
       const auth = await signIn(email, password);
       authStore.getState().signIn(auth);
-      return auth as Auth;
+      return auth;
     },
   } satisfies SignInMutationOptions;
 };

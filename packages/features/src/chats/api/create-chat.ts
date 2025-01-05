@@ -1,4 +1,3 @@
-import { MutationOptions } from "@tanstack/react-query";
 import {
   addDoc,
   collection,
@@ -7,10 +6,17 @@ import {
   getDoc,
   serverTimestamp,
 } from "firebase/firestore";
-import { ChatSchema, NewChat } from "../types/chat";
+import { MutationOptions } from "@tanstack/react-query";
+
 import { db } from "@synergy/libs/firebase";
 
-export const createChat = async (groupId: string, name: string) => {
+import { Chat, ChatSchema, NewChat } from "../types/chat";
+
+export const createChat = async (
+  groupId: string,
+  name: string,
+  createdBy: string
+) => {
   const { id: chatId } = await addDoc(
     collection(db, "groups", groupId, "chats"),
     {
@@ -18,25 +24,28 @@ export const createChat = async (groupId: string, name: string) => {
       created: serverTimestamp(),
     }
   );
+  await addDoc(collection(db, "groups", groupId, "chats", chatId, "messages"), {
+    created: serverTimestamp(),
+    payload: "Welcome to my chat!",
+    createdBy,
+  });
   const chatDoc = await getDoc(doc(db, "groups", groupId, "chats", chatId));
-  const data = chatDoc.data();
-  const chat = ChatSchema.parse({
+  const data = chatDoc.data({ serverTimestamps: "estimate" });
+  return ChatSchema.parse({
     id: chatDoc.id,
     name: data?.name,
-    created: new Date(data?.created.seconds),
+    created: data?.created.toDate(),
   });
-  return chat;
 };
 
 export type CreateChatMutationOptions = MutationOptions<
-  NewChat,
+  Chat,
   FirestoreError,
   NewChat
 >;
 
 export const createChatMutationOptions = (groupId: string) => {
   return {
-    mutationFn: ({ name }) => createChat(groupId, name),
-    onSuccess: (err) => console.log(err),
+    mutationFn: ({ name, createdBy }) => createChat(groupId, name, createdBy),
   } satisfies CreateChatMutationOptions;
 };

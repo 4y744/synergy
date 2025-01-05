@@ -5,6 +5,7 @@
   "license": "GPL-3.0-only",
   "packageManager": "pnpm@9.12.3",
   "scripts": {
+    "dev": "turbo dev --ui tui",
     "web:dev": "pnpm run --filter @synergy/web dev",
     "emulators:start": "firebase emulators:start"
   }

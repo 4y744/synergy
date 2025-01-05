@@ -5,6 +5,7 @@
   "private": true,
   "exports": {
     "./typescript": "./tsconfig.json",
+    "./tsup": "./tsup.config.js",
     "./tailwind": "./tailwind.preset.ts"
   },
   "dependencies": {

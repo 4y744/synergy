@@ -47,7 +47,6 @@ export default () => {
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
-          <SidebarTrigger />
           {groupId ? (
             <Outlet />
           ) : (

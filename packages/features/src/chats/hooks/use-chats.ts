@@ -3,9 +3,10 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import { FirestoreError } from "firebase/firestore";
+
 import { getChatsQueryOptions } from "../api/get-chats";
 import { Chat } from "../types/chat";
-import { FirestoreError } from "firebase/firestore";
 
 export type UseChatsMutationOptions = UseMutationOptions<
   Chat,
@@ -16,16 +17,14 @@ export type UseChatsMutationOptions = UseMutationOptions<
 
 export const useChats = (
   groupId: string,
-  options?: UseChatsMutationOptions
+  options?: Partial<UseChatsMutationOptions>
 ) => {
   const queryClient = useQueryClient();
   return useQuery({
-    ...getChatsQueryOptions(groupId, queryClient),
     ...options,
+    ...getChatsQueryOptions(groupId, queryClient),
     staleTime: Infinity,
-    refetchInterval: Infinity,
     refetchIntervalInBackground: false,
-    refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
 };
