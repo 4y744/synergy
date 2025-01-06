@@ -1,9 +1,9 @@
-import { useChats, UseChatsMutationOptions } from "./use-chats";
+import { useChats, UseChatsOptions } from "./use-chats";
 
 export const useChat = (
   groupId: string,
   chatId: string,
-  options?: Partial<UseChatsMutationOptions>
+  options?: Partial<UseChatsOptions>
 ) => {
   const chats = useChats(groupId, options);
   const { data, ...rest } = chats;

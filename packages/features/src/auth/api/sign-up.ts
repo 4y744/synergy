@@ -13,7 +13,7 @@ export const signUp = async (
   password: string
 ) => {
   /*
-    Firebase Docs - possible error messages.
+    TODO: IMPLEMENT TRANSLATIONS FOR THESE ERRORS
     https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#createuserwithemailandpassword
   */
   const credential = await createUserWithEmailAndPassword(
@@ -35,13 +35,9 @@ export const signUp = async (
     created: data?.created.toDate(),
   };
 };
-export type SignUpMutationOptions = MutationOptions<
-  Partial<Auth>,
-  AuthError,
-  SignUp
->;
+export type SignUpOptions = MutationOptions<Partial<Auth>, AuthError, SignUp>;
 
-export const signUpMutationConfig = (authStore: AuthStore) => {
+export const signUpConfig = (authStore: AuthStore) => {
   return {
     mutationKey: ["auth"],
     mutationFn: async ({ username, email, password }) => {
@@ -49,5 +45,5 @@ export const signUpMutationConfig = (authStore: AuthStore) => {
       authStore.getState().signUp(auth);
       return auth;
     },
-  } satisfies SignUpMutationOptions;
+  } satisfies SignUpOptions;
 };

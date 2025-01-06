@@ -1,0 +1,1 @@
+{"root":["./src/main.tsx","./src/vite-env.d.ts","./src/components/loading-fallback.tsx","./src/core/app.tsx","./src/core/provider.tsx","./src/core/router.tsx","./src/routes/landing.tsx","./src/routes/not-found.tsx","./src/routes/signin.tsx","./src/routes/signup.tsx","./src/routes/groups/[groupid].tsx","./src/routes/groups/chats/[chatid].tsx"],"version":"5.7.2"}

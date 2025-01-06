@@ -1,10 +1,10 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { FirestoreError } from "firebase/firestore";
 
-import { createMessageMutationOptions } from "../api/create-message";
+import { createMessageOptions } from "../api/create-message";
 import { NewMessage } from "../types/message";
 
-export type UseCreateMessageMutationOptions = UseMutationOptions<
+export type UseCreateMessageOptions = UseMutationOptions<
   string,
   FirestoreError,
   NewMessage
@@ -13,10 +13,10 @@ export type UseCreateMessageMutationOptions = UseMutationOptions<
 export const useCreateMessage = (
   groupId: string,
   chatId: string,
-  options?: Partial<UseCreateMessageMutationOptions>
+  options?: Partial<UseCreateMessageOptions>
 ) => {
   return useMutation({
     ...options,
-    ...createMessageMutationOptions(groupId, chatId),
+    ...createMessageOptions(groupId, chatId),
   });
 };

@@ -59,23 +59,27 @@ export const getMessages = async (
         );
       }
 
-      unsubscribe = onSnapshot(q, (snapshot) => {
-        const messages = snapshot.docs.map((doc) => {
-          const data = doc.data({ serverTimestamps: "estimate" });
-          return MessageSchema.parse({
-            id: doc.id,
-            payload: data?.payload,
-            createdBy: data?.createdBy,
-            created: data?.created.toDate(),
-          } satisfies Message);
-        });
-        const messagesPage = {
-          messages,
-          nextPage: snapshot.docs[snapshot.docs.length - 1],
-        };
-        resolve(messagesPage);
-        onUpdate?.(messagesPage);
-      });
+      unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          const messages = snapshot.docs.map((doc) => {
+            const data = doc.data({ serverTimestamps: "estimate" });
+            return MessageSchema.parse({
+              id: doc.id,
+              payload: data?.payload,
+              createdBy: data?.createdBy,
+              created: data?.created.toDate(),
+            } satisfies Message);
+          });
+          const messagesPage = {
+            messages,
+            nextPage: snapshot.docs[snapshot.docs.length - 1],
+          };
+          resolve(messagesPage);
+          onUpdate?.(messagesPage);
+        },
+        () => unsubscribe()
+      );
     }
   );
   return { messages, unsubscribe };
@@ -86,7 +90,7 @@ export type MessagesPage = {
   nextPage: DocumentSnapshot;
 };
 
-export type GetMessagesQueryOptions = UseInfiniteQueryOptions<
+export type GetMessagesOptions = UseInfiniteQueryOptions<
   MessagesPage,
   FirestoreError,
   MessagesPage,
@@ -95,11 +99,11 @@ export type GetMessagesQueryOptions = UseInfiniteQueryOptions<
   DocumentSnapshot | undefined
 >;
 
-export const getMessagesQueryOptions = (
+export const getMessagesOptions = (
   groupId: string,
   chatId: string,
   queryClient: QueryClient
-): GetMessagesQueryOptions => {
+): GetMessagesOptions => {
   return {
     queryKey: ["groups", groupId, "chats", chatId, "messages"],
     queryFn: async ({ queryKey, pageParam }) => {
@@ -125,22 +129,20 @@ export const getMessagesQueryOptions = (
           );
         }
       );
-      // const remove = queryClient
-      //   .getQueryCache()
-      //   .subscribe(({ query, type }) => {
-      //     if (
-      //       query.queryKey.toString() == queryKey.toString() &&
-      //       type == "observerRemoved" &&
-      //       query.getObserversCount() === 0
-      //     ) {
-      //       remove();
-      //       unsubscribe?.();
-      //       queryClient.removeQueries({ queryKey });
-      //     }
-      //   });
+      const remove = queryClient
+        .getQueryCache()
+        .subscribe(({ query, type }) => {
+          if (
+            query.queryKey.toString() == queryKey.toString() &&
+            type == "removed"
+          ) {
+            remove();
+            unsubscribe?.();
+          }
+        });
       return messages;
     },
     getNextPageParam: (prevPage) => prevPage.nextPage,
     initialPageParam: undefined,
-  } satisfies GetMessagesQueryOptions;
+  } satisfies GetMessagesOptions;
 };

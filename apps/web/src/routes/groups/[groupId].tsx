@@ -5,7 +5,6 @@ import { CustomLoaderData } from "~/core/router";
 import {
   SidebarInset,
   SidebarProvider,
-  SidebarTrigger,
   Muted,
   ThemeProvider,
 } from "@synergy/ui";

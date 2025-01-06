@@ -15,16 +15,16 @@ export const findGroups = async (uid: string) => {
   return memberDocs.map((doc) => doc.ref.parent.parent!.id);
 };
 
-export type FindGroupsQueryOptions = QueryOptions<
+export type FindGroupsOptions = QueryOptions<
   string[],
   FirestoreError,
   string[],
   string[]
 >;
 
-export const findGroupsQueryOptions = (uid: string) => {
+export const findGroupsOptions = (uid: string) => {
   return {
     queryKey: ["groups"],
     queryFn: () => findGroups(uid),
-  } satisfies FindGroupsQueryOptions;
+  } satisfies FindGroupsOptions;
 };

@@ -11,32 +11,33 @@ export const getGroup = async (
 ) => {
   let unsubscribe!: Unsubscribe;
   const group = await new Promise((resolve: (group: Group) => void) => {
-    unsubscribe = onSnapshot(doc(db, "groups", groupId), (snapshot) => {
-      const data = snapshot.data({ serverTimestamps: "estimate" });
-      const group = GroupSchema.parse({
-        id: snapshot.id,
-        name: data?.name,
-        creator: data?.creator,
-        created: data?.created.toDate(),
-      });
-      resolve(group);
-      onUpdate(group);
-    });
+    unsubscribe = onSnapshot(
+      doc(db, "groups", groupId),
+      (snapshot) => {
+        const data = snapshot.data({ serverTimestamps: "estimate" });
+        const group = GroupSchema.parse({
+          id: snapshot.id,
+          name: data?.name,
+          creator: data?.creator,
+          created: data?.created.toDate(),
+        });
+        resolve(group);
+        onUpdate(group);
+      },
+      () => unsubscribe()
+    );
   });
   return { group, unsubscribe };
 };
 
-export type GroupQueryOptions = QueryOptions<
+export type GetGroupOptions = QueryOptions<
   Group,
   FirestoreError,
   Group,
   string[]
 >;
 
-export const getGroupQueryOptions = (
-  groupId: string,
-  queryClient: QueryClient
-) => {
+export const getGroupOptions = (groupId: string, queryClient: QueryClient) => {
   return {
     queryKey: ["groups", groupId],
     queryFn: async ({ queryKey }) => {
@@ -46,17 +47,12 @@ export const getGroupQueryOptions = (
       const remove = queryClient
         .getQueryCache()
         .subscribe(({ query, type }) => {
-          if (
-            query.queryKey == queryKey &&
-            type == "observerRemoved" &&
-            query.getObserversCount() === 0
-          ) {
+          if (query.queryKey == queryKey && type == "removed") {
             remove();
             unsubscribe?.();
-            queryClient.invalidateQueries({ queryKey });
           }
         });
       return group;
     },
-  } satisfies GroupQueryOptions;
+  } satisfies GetGroupOptions;
 };

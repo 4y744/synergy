@@ -6,22 +6,22 @@ import {
 import { DocumentSnapshot } from "firebase/firestore";
 
 import {
-  GetMessagesQueryOptions,
-  getMessagesQueryOptions,
+  GetMessagesOptions,
+  getMessagesOptions,
   MessagesPage,
 } from "../api/get-messages";
 
-export type UseGetMessagesQueryOptions = GetMessagesQueryOptions;
+export type UseGetMessagesOptions = GetMessagesOptions;
 
 export const useMessages = (
   groupId: string,
   chatId: string,
-  options?: Partial<UseGetMessagesQueryOptions>
+  options?: Partial<UseGetMessagesOptions>
 ) => {
   const queryClient = useQueryClient();
   const { data, ...rest } = useInfiniteQuery({
     ...options,
-    ...getMessagesQueryOptions(groupId, chatId, queryClient),
+    ...getMessagesOptions(groupId, chatId, queryClient),
     staleTime: Infinity,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,

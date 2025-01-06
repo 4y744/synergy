@@ -26,19 +26,16 @@ export const createMessage = async (
   return id;
 };
 
-export type CreateMessageMutationOptions = MutationOptions<
+export type CreateMessageOptions = MutationOptions<
   string,
   FirestoreError,
   NewMessage
 >;
 
-export const createMessageMutationOptions = (
-  groupId: string,
-  chatId: string
-) => {
+export const createMessageOptions = (groupId: string, chatId: string) => {
   return {
     mutationFn: ({ payload, createdBy }) => {
       return createMessage(groupId, chatId, payload, createdBy);
     },
-  } satisfies CreateMessageMutationOptions;
+  } satisfies CreateMessageOptions;
 };

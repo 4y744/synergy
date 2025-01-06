@@ -1,13 +1,10 @@
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 
-import { getGroupQueryOptions } from "../api/get-group";
+import { getGroupOptions } from "../api/get-group";
 import { useFindGroups } from "./use-find-groups";
-import { UseGroupQueryOptions } from "./use-group";
+import { UseGroupOptions } from "./use-group";
 
-export const useGroups = (
-  uid: string,
-  options?: Partial<UseGroupQueryOptions>
-) => {
+export const useGroups = (uid: string, options?: Partial<UseGroupOptions>) => {
   const { data: groupIds } = useFindGroups(uid, {
     initialData: [],
   });
@@ -16,11 +13,11 @@ export const useGroups = (
     queries: groupIds!.map((groupId) => {
       return {
         ...options,
-        ...getGroupQueryOptions(groupId, queryClient),
+        ...getGroupOptions(groupId, queryClient),
         staleTime: Infinity,
         refetchIntervalInBackground: false,
         refetchOnWindowFocus: false,
-      } satisfies UseGroupQueryOptions;
+      } satisfies UseGroupOptions;
     }),
   });
 };

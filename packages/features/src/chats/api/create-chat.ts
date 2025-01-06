@@ -38,14 +38,10 @@ export const createChat = async (
   });
 };
 
-export type CreateChatMutationOptions = MutationOptions<
-  Chat,
-  FirestoreError,
-  NewChat
->;
+export type CreateChatOptions = MutationOptions<Chat, FirestoreError, NewChat>;
 
-export const createChatMutationOptions = (groupId: string) => {
+export const createChatOptions = (groupId: string) => {
   return {
     mutationFn: ({ name, createdBy }) => createChat(groupId, name, createdBy),
-  } satisfies CreateChatMutationOptions;
+  } satisfies CreateChatOptions;
 };

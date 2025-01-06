@@ -1,15 +1,16 @@
-import { AuthError, signInWithEmailAndPassword } from "firebase/auth";
 import { MutationOptions } from "@tanstack/react-query";
-import { Auth } from "../types/auth";
-import { SignIn } from "../types/sign-in";
-import { AuthStore } from "../stores/auth-store";
+import { AuthError, signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 import { auth, db } from "@synergy/libs/firebase";
-import { doc, getDoc } from "firebase/firestore";
+
+import { AuthStore } from "../stores/auth-store";
+import { Auth } from "../types/auth";
+import { SignIn } from "../types/sign-in";
 
 export const signIn = async (email: string, password: string) => {
   /*
-    Firebase Docs - possible error messages.
+    TODO: IMPLEMENT TRANSLATIONS FOR THESE ERRORS
     https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#signinwithemailandpassword
   */
   const credential = await signInWithEmailAndPassword(auth, email, password);
@@ -23,13 +24,9 @@ export const signIn = async (email: string, password: string) => {
   };
 };
 
-export type SignInMutationOptions = MutationOptions<
-  Partial<Auth>,
-  AuthError,
-  SignIn
->;
+export type SignInOptions = MutationOptions<Partial<Auth>, AuthError, SignIn>;
 
-export const signInMutationConfig = (authStore: AuthStore) => {
+export const signInConfig = (authStore: AuthStore) => {
   return {
     mutationKey: ["auth"],
     mutationFn: async ({ email, password }) => {
@@ -37,5 +34,5 @@ export const signInMutationConfig = (authStore: AuthStore) => {
       authStore.getState().signIn(auth);
       return auth;
     },
-  } satisfies SignInMutationOptions;
+  } satisfies SignInOptions;
 };

@@ -5,10 +5,10 @@ import {
 } from "@tanstack/react-query";
 import { FirestoreError } from "firebase/firestore";
 
-import { getChatsQueryOptions } from "../api/get-chats";
+import { getChatsOptions } from "../api/get-chats";
 import { Chat } from "../types/chat";
 
-export type UseChatsMutationOptions = UseMutationOptions<
+export type UseChatsOptions = UseMutationOptions<
   Chat,
   FirestoreError,
   Chat,
@@ -17,12 +17,12 @@ export type UseChatsMutationOptions = UseMutationOptions<
 
 export const useChats = (
   groupId: string,
-  options?: Partial<UseChatsMutationOptions>
+  options?: Partial<UseChatsOptions>
 ) => {
   const queryClient = useQueryClient();
   return useQuery({
     ...options,
-    ...getChatsQueryOptions(groupId, queryClient),
+    ...getChatsOptions(groupId, queryClient),
     staleTime: Infinity,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,

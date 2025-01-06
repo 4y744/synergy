@@ -1,9 +1,9 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { FirestoreError } from "firebase/firestore";
 
-import { findGroupsQueryOptions } from "../api/find-groups";
+import { findGroupsOptions } from "../api/find-groups";
 
-export type UseFindGroupsQueryOptions = UseQueryOptions<
+export type UseFindGroupsOptions = UseQueryOptions<
   string[],
   FirestoreError,
   string[],
@@ -12,13 +12,13 @@ export type UseFindGroupsQueryOptions = UseQueryOptions<
 
 export const useFindGroups = (
   uid: string,
-  options?: Partial<UseFindGroupsQueryOptions>
+  options?: Partial<UseFindGroupsOptions>
 ) => {
   return useQuery({
     ...options,
-    ...findGroupsQueryOptions(uid),
+    ...findGroupsOptions(uid),
     staleTime: Infinity,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,
-  } satisfies UseFindGroupsQueryOptions);
+  } satisfies UseFindGroupsOptions);
 };

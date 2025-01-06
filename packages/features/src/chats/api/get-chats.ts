@@ -5,11 +5,7 @@ import {
   Unsubscribe,
 } from "firebase/firestore";
 
-import {
-  QueryClient,
-  QueryOptions,
-  UseQueryOptions,
-} from "@tanstack/react-query";
+import { QueryClient, QueryOptions } from "@tanstack/react-query";
 
 import { db } from "@synergy/libs/firebase";
 
@@ -35,23 +31,21 @@ export const subscribeChats = async (
         });
         resolve(chats);
         onUpdate(chats);
-      }
+      },
+      () => unsubscribe()
     );
   });
   return { chats, unsubscribe };
 };
 
-export type GetChatQueryOptions = QueryOptions<
-  Chat,
+export type GetChatOptions = QueryOptions<
+  Chat[],
   FirestoreError,
-  Chat,
+  Chat[],
   string[]
 >;
 
-export const getChatsQueryOptions = (
-  groupId: string,
-  queryClient: QueryClient
-) => {
+export const getChatsOptions = (groupId: string, queryClient: QueryClient) => {
   return {
     queryKey: ["groups", groupId, "chats"],
     queryFn: async ({ queryKey }) => {
@@ -63,15 +57,13 @@ export const getChatsQueryOptions = (
         .subscribe(({ query, type }) => {
           if (
             query.queryKey.toString() == queryKey.toString() &&
-            type == "observerRemoved" &&
-            query.getObserversCount() === 0
+            type == "removed"
           ) {
             remove();
             unsubscribe?.();
-            queryClient.removeQueries({ queryKey });
           }
         });
       return chats;
     },
-  } satisfies UseQueryOptions;
+  } satisfies GetChatOptions;
 };
