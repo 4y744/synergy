@@ -38,7 +38,7 @@ export const subscribeChats = async (
   return { chats, unsubscribe };
 };
 
-export type GetChatOptions = QueryOptions<
+export type GetChatsOptions = QueryOptions<
   Chat[],
   FirestoreError,
   Chat[],
@@ -65,5 +65,5 @@ export const getChatsOptions = (groupId: string, queryClient: QueryClient) => {
         });
       return chats;
     },
-  } satisfies GetChatOptions;
+  } satisfies GetChatsOptions;
 };

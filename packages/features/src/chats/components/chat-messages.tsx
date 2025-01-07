@@ -46,7 +46,7 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
     const boundaryRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-      // Load buffer page then load initial messages.
+      // Load buffer page then load initial page.
       fetchNextPage().then(() => {
         const obserer = new IntersectionObserver(([obserer]) => {
           if (obserer.isIntersecting) {

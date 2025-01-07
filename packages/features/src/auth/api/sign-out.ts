@@ -5,8 +5,8 @@ import { auth } from "@synergy/libs/firebase";
 
 import { AuthStore } from "../stores/auth-store";
 
-export const signOut = async () => {
-  await firebaseSignOut(auth);
+export const signOut = () => {
+  return firebaseSignOut(auth);
 };
 
 export type SignOutOptions = MutationOptions<void, AuthError, void>;

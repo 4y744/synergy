@@ -12,5 +12,5 @@ export const useSignOut = (options?: UseSignOutOptions) => {
   return useMutation({
     ...options,
     ...signOutOptions(authStore),
-  });
+  } satisfies UseSignOutOptions);
 };

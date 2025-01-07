@@ -18,5 +18,5 @@ export const useCreateMessage = (
   return useMutation({
     ...options,
     ...createMessageOptions(groupId, chatId),
-  });
+  } satisfies UseCreateMessageOptions);
 };

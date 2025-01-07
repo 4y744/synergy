@@ -47,7 +47,10 @@ export const getGroupOptions = (groupId: string, queryClient: QueryClient) => {
       const remove = queryClient
         .getQueryCache()
         .subscribe(({ query, type }) => {
-          if (query.queryKey == queryKey && type == "removed") {
+          if (
+            query.queryKey.toString() == queryKey.toString() &&
+            type == "removed"
+          ) {
             remove();
             unsubscribe?.();
           }

@@ -10,9 +10,9 @@ export type CustomRoute<CustomLoaderData> = {
 };
 
 export const createCustomRoute = <CustomLoaderData>(data: CustomLoaderData) => {
-  return (importRoute: () => Promise<CustomRoute<CustomLoaderData>>) => {
+  return (importFn: () => Promise<CustomRoute<CustomLoaderData>>) => {
     return async () => {
-      const { default: Component, loader } = await importRoute();
+      const { default: Component, loader } = await importFn();
       return {
         Component,
         loader: async (args: LoaderFunctionArgs) => {

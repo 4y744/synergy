@@ -25,7 +25,7 @@ export const useMessages = (
     staleTime: Infinity,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,
-  });
+  } satisfies UseGetMessagesOptions);
   // Tsup refuses to make DTS files if getMessageQueryOptions's
   // return value isn't explicitly annotated.
   // But annotating it somehow makes data get

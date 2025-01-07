@@ -18,5 +18,5 @@ export const useSignUp = (options?: UseSignUpOptions) => {
   return useMutation({
     ...options,
     ...signUpConfig(authStore),
-  });
+  } satisfies UseSignUpOptions);
 };

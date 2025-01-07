@@ -1,17 +1,17 @@
 import {
-  UseMutationOptions,
   useQuery,
   useQueryClient,
+  UseQueryOptions,
 } from "@tanstack/react-query";
 import { FirestoreError } from "firebase/firestore";
 
 import { getChatsOptions } from "../api/get-chats";
 import { Chat } from "../types/chat";
 
-export type UseChatsOptions = UseMutationOptions<
-  Chat,
+export type UseChatsOptions = UseQueryOptions<
+  Chat[],
   FirestoreError,
-  Chat,
+  Chat[],
   string[]
 >;
 
@@ -26,5 +26,5 @@ export const useChats = (
     staleTime: Infinity,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,
-  });
+  } satisfies UseChatsOptions);
 };

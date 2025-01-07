@@ -33,7 +33,6 @@ export type CreateGroupOptions = MutationOptions<
 
 export const createGroupOptions = (queryClient: QueryClient) => {
   return {
-    mutationKey: ["groups", "create"],
     mutationFn: ({ name, uid }) => createGroup(name, uid),
     onSuccess: async (groupId) => {
       await queryClient.fetchQuery(getGroupOptions(groupId, queryClient));
