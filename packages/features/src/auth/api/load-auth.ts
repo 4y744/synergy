@@ -13,4 +13,5 @@ export const loadAuth = async (authStore: AuthStore) => {
       { fireImmediately: true }
     );
   });
+  return authStore.getState();
 };

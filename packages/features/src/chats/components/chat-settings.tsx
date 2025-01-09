@@ -83,11 +83,11 @@ const CreateChatButton = ({ groupId }: CreateChatButtonProps) => {
   );
 };
 
-type ChatsSettingsProps = Readonly<{
+type ChatSettingsProps = Readonly<{
   groupId: string;
 }>;
 
-export const ChatsSettings = ({ groupId }: ChatsSettingsProps) => {
+export const ChatSettings = ({ groupId }: ChatSettingsProps) => {
   return (
     <>
       <Table>

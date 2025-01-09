@@ -1,6 +1,8 @@
+import { SubmitHandler, useForm } from "react-hook-form";
+
 import {
-  Button,
   Input,
+  Button,
   Form,
   FormControl,
   FormField,
@@ -8,37 +10,37 @@ import {
   FormLabel,
   FormMessage,
   Dialog,
-  DialogContent,
   DialogTrigger,
+  DialogContent,
   DialogTitle,
 } from "@synergy/ui";
 
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Invite } from "../types/invite";
-import { InviteSchema } from "../types/invite";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useCreateGroup } from "../hooks/use-create-group";
+import { NewGroup, NewGroupSchema } from "../types/group";
+
 import { ReactNode, useState } from "react";
 
-type JoinGroupDialogProps = Readonly<{
-  children?: ReactNode;
-  className?: string;
+type CreateGroupProps = Readonly<{
   uid: string;
+  children?: ReactNode;
 }>;
 
-export const JoinGroupDialog = ({
-  children,
-  className,
-}: JoinGroupDialogProps) => {
+export const CreateGroup = ({ uid, children }: CreateGroupProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const form = useForm<Invite>({
-    resolver: zodResolver(InviteSchema),
+  const { mutate: createGroup } = useCreateGroup();
+  const form = useForm<NewGroup>({
+    resolver: zodResolver(NewGroupSchema),
     defaultValues: {
-      url: "",
+      name: "",
+      uid,
     },
   });
 
-  const onSubmit: SubmitHandler<Invite> = () => {
+  const onSubmit: SubmitHandler<NewGroup> = (data) => {
+    createGroup(data);
     setIsOpen(false);
   };
 
@@ -48,34 +50,34 @@ export const JoinGroupDialog = ({
       onOpenChange={(open) => setIsOpen(open)}
     >
       <DialogTrigger
-        className={className}
+        className="w-full"
         asChild
       >
         {children}
       </DialogTrigger>
       <DialogContent>
-        <DialogTitle>Join group</DialogTitle>
+        <DialogTitle>Create group</DialogTitle>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4"
           >
             <FormField
-              name="url"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Invite link</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="https://synergy.app/my-invite-link"
+                      placeholder="School project"
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">Join</Button>
+            <Button type="submit">Create</Button>
           </form>
         </Form>
       </DialogContent>

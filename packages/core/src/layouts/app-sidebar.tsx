@@ -40,10 +40,10 @@ import { abbreviate, cn } from "@synergy/utils";
 import { useAuth, useSignOut } from "@synergy/features/auth";
 
 import {
-  CreateGroupDialog,
+  CreateGroup,
   GroupInvite,
   GroupSettings,
-  JoinGroupDialog,
+  JoinGroup,
   MembersList,
   useGroups,
 } from "@synergy/features/groups";
@@ -64,12 +64,12 @@ const SidebarGroups = () => {
 
   return groups.length == 0 || !selectedGroup ? (
     <>
-      <JoinGroupDialog uid={uid}>
+      <JoinGroup uid={uid}>
         <Button className="w-full">Join a group</Button>
-      </JoinGroupDialog>
-      <CreateGroupDialog uid={uid}>
+      </JoinGroup>
+      <CreateGroup uid={uid}>
         <Button className="w-full">Create a group</Button>
-      </CreateGroupDialog>
+      </CreateGroup>
     </>
   ) : (
     <DropdownMenu>
@@ -116,18 +116,12 @@ const SidebarGroups = () => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="flex flex-col gap-1">
-          <JoinGroupDialog
-            className="w-full"
-            uid={uid}
-          >
+          <JoinGroup uid={uid}>
             <Button className="w-full">Join a group</Button>
-          </JoinGroupDialog>
-          <CreateGroupDialog
-            className="w-full"
-            uid={uid}
-          >
+          </JoinGroup>
+          <CreateGroup uid={uid}>
             <Button className="w-full">Create a group</Button>
-          </CreateGroupDialog>
+          </CreateGroup>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -143,24 +137,12 @@ const SidebarAdmin = () => {
       <SidebarGroupContent>
         <SidebarMenu>
           <SidebarMenuItem>
-            <Dialog>
-              <DialogTrigger
-                className="w-full"
-                asChild
-              >
-                <SidebarMenuButton>
-                  <MailPlus />
-                  <span>Invite</span>
-                </SidebarMenuButton>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogTitle>Invite</DialogTitle>
-                <DialogDescription>
-                  Use the link below to invite people to your group.
-                </DialogDescription>
-                <GroupInvite groupId={groupId!} />
-              </DialogContent>
-            </Dialog>
+            <GroupInvite groupId={groupId!}>
+              <SidebarMenuButton>
+                <MailPlus />
+                <span>Invite</span>
+              </SidebarMenuButton>
+            </GroupInvite>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <Dialog>

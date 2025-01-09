@@ -43,12 +43,14 @@ export const getMessages = async (
 
       if (last) {
         q = query(
-          collection(db, "groups", groupId, "chats", chatId, "messages"),
+          messagesCollection,
           orderBy("created", "desc"),
           startAfter(last),
           limit(50)
         );
       } else {
+        //TODO: Try retreive the 50th (or last if < 50) element and use that as a reference point.
+        //Might be possible with startAfter(50), limit(1) or something like that.
         const { docs } = await getDocs(
           query(messagesCollection, orderBy("created", "desc"), limit(1))
         );

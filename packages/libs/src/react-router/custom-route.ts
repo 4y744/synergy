@@ -1,3 +1,5 @@
+//TODO: Find a better way to do this.
+
 import { LoaderFunctionArgs } from "react-router-dom";
 
 export type CustomLoader<CustomLoaderData> = (

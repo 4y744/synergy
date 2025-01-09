@@ -5,7 +5,7 @@ export * from "./api/get-messages";
 export * from "./api/load-chats";
 export * from "./components/chat-input";
 export * from "./components/chat-messages";
-export * from "./components/chats-settings";
+export * from "./components/chat-settings";
 export * from "./hooks/use-chat";
 export * from "./hooks/use-chats";
 export * from "./hooks/use-create-chat";
