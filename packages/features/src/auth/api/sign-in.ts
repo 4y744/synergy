@@ -26,7 +26,7 @@ export const signIn = async (email: string, password: string) => {
 
 export type SignInOptions = MutationOptions<Partial<Auth>, AuthError, SignIn>;
 
-export const signInConfig = (authStore: AuthStore) => {
+export const signInOptions = (authStore: AuthStore) => {
   return {
     mutationFn: async ({ email, password }) => {
       const auth = await signIn(email, password);

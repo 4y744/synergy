@@ -1,4 +1,4 @@
-import { ChatInput, ChatMessages } from "@synergy/features/chats";
+import { Messages, CreateMessage } from "@synergy/features/messages";
 import { SidebarTrigger, useIsMobile } from "@synergy/ui";
 import { useRef } from "react";
 import { useParams } from "react-router-dom";
@@ -16,13 +16,13 @@ export const ChatView = () => {
           <SidebarTrigger />
         </div>
       )}
-      <ChatMessages
+      <Messages
         className="h-[calc(100%-56px)]"
         groupId={groupId!}
         chatId={chatId!}
         ref={messagesRef}
       />
-      <ChatInput
+      <CreateMessage
         className="absolute bottom-0 w-full p-2"
         groupId={groupId!}
         chatId={chatId!}

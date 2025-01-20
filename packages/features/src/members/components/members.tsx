@@ -1,5 +1,10 @@
 import {
   Button,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
   Table,
   TableBody,
   TableCell,
@@ -11,6 +16,7 @@ import {
   TooltipTrigger,
 } from "@synergy/ui";
 import { UserXIcon } from "lucide-react";
+import { ReactNode } from "react";
 
 const mockUsers = [
   {
@@ -27,11 +33,11 @@ const mockUsers = [
   },
 ];
 
-type MembersListProps = Readonly<{
+type MembersProps = Readonly<{
   groupId: string;
 }>;
 
-export const MembersList = ({ groupId }: MembersListProps) => {
+export const Members = ({ groupId }: MembersProps) => {
   groupId;
   return (
     <Table>
@@ -61,5 +67,22 @@ export const MembersList = ({ groupId }: MembersListProps) => {
         ))}
       </TableBody>
     </Table>
+  );
+};
+
+type MembersDialogProps = Readonly<{
+  children: ReactNode;
+}>;
+
+export const MembersDialog = ({ children }: MembersDialogProps) => {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent>
+        <DialogTitle>Memebers</DialogTitle>
+        <DialogDescription>Manage the members of your group.</DialogDescription>
+        <Members groupId="" />
+      </DialogContent>
+    </Dialog>
   );
 };

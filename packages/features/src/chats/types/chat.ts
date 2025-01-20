@@ -6,11 +6,10 @@ export const ChatSchema = z.object({
   created: z.date(),
 });
 
-export const NewChatShema = z.object({
+export const NewChatSchema = z.object({
   name: z.string().min(6, "form/chat-too-short").max(50, "form/chat-too-long"),
-  createdBy: z.string(),
 });
 
 export type Chat = z.infer<typeof ChatSchema>;
 
-export type NewChat = z.infer<typeof NewChatShema>;
+export type NewChat = z.infer<typeof NewChatSchema>;

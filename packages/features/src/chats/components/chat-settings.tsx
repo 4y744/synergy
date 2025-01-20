@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Button,
   Form,
@@ -20,32 +21,36 @@ import {
 import { Plus } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useCreateChat } from "../hooks/use-create-chat";
-import { NewChat, NewChatShema } from "../types/chat";
+import { NewChat, NewChatSchema } from "../types/chat";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuth } from "~/auth";
+import { useChats } from "../hooks/use-chats";
 
 type CreateChatButtonProps = Readonly<{
   groupId: string;
 }>;
 
 const CreateChatButton = ({ groupId }: CreateChatButtonProps) => {
-  const { uid } = useAuth();
   const { mutate: createChat } = useCreateChat(groupId);
 
+  const [isOpen, setIsOpen] = useState(false);
+
   const form = useForm<NewChat>({
-    resolver: zodResolver(NewChatShema),
+    resolver: zodResolver(NewChatSchema),
     defaultValues: {
       name: "",
-      createdBy: uid,
     },
   });
 
   const onSubmit: SubmitHandler<NewChat> = (data) => {
     createChat(data);
+    setIsOpen(false);
   };
 
   return (
-    <Popover>
+    <Popover
+      open={isOpen}
+      onOpenChange={(open) => setIsOpen(open)}
+    >
       <PopoverTrigger asChild>
         <Button className="w-full">
           <Plus />
@@ -88,6 +93,8 @@ type ChatSettingsProps = Readonly<{
 }>;
 
 export const ChatSettings = ({ groupId }: ChatSettingsProps) => {
+  const { data: chats } = useChats(groupId);
+
   return (
     <>
       <Table>
@@ -98,10 +105,12 @@ export const ChatSettings = ({ groupId }: ChatSettingsProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell>chat1</TableCell>
-            <TableCell>date</TableCell>
-          </TableRow>
+          {chats?.map((chat) => (
+            <TableRow key={chat.id}>
+              <TableCell>{chat.name}</TableCell>
+              <TableCell>{chat.created.toLocaleDateString()}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
       <CreateChatButton groupId={groupId} />

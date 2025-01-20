@@ -19,6 +19,7 @@ import {
 } from "firebase/firestore";
 
 import { db } from "@synergy/libs/firebase";
+import { registerQuerySubscription } from "@synergy/libs/react-query";
 
 import { Message, MessageSchema } from "../types/message";
 
@@ -131,17 +132,7 @@ export const getMessagesOptions = (
           );
         }
       );
-      const remove = queryClient
-        .getQueryCache()
-        .subscribe(({ query, type }) => {
-          if (
-            query.queryKey.toString() == queryKey.toString() &&
-            type == "removed"
-          ) {
-            remove();
-            unsubscribe?.();
-          }
-        });
+      registerQuerySubscription(queryClient, queryKey, unsubscribe);
       return messages;
     },
     getNextPageParam: (prevPage) => prevPage.nextPage,

@@ -8,15 +8,11 @@ import {
 } from "firebase/firestore";
 import { MutationOptions } from "@tanstack/react-query";
 
-import { db } from "@synergy/libs/firebase";
+import { auth, db } from "@synergy/libs/firebase";
 
 import { Chat, ChatSchema, NewChat } from "../types/chat";
 
-export const createChat = async (
-  groupId: string,
-  name: string,
-  createdBy: string
-) => {
+export const createChat = async (groupId: string, name: string) => {
   const { id: chatId } = await addDoc(
     collection(db, "groups", groupId, "chats"),
     {
@@ -27,7 +23,7 @@ export const createChat = async (
   await addDoc(collection(db, "groups", groupId, "chats", chatId, "messages"), {
     created: serverTimestamp(),
     payload: "Welcome to my chat!",
-    createdBy,
+    createdBy: auth.currentUser!.uid,
   });
   const chatDoc = await getDoc(doc(db, "groups", groupId, "chats", chatId));
   const data = chatDoc.data({ serverTimestamps: "estimate" });
@@ -42,6 +38,6 @@ export type CreateChatOptions = MutationOptions<Chat, FirestoreError, NewChat>;
 
 export const createChatOptions = (groupId: string) => {
   return {
-    mutationFn: ({ name, createdBy }) => createChat(groupId, name, createdBy),
+    mutationFn: ({ name }) => createChat(groupId, name),
   } satisfies CreateChatOptions;
 };

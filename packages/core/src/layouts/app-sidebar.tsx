@@ -41,14 +41,14 @@ import { useAuth, useSignOut } from "@synergy/features/auth";
 
 import {
   CreateGroup,
-  GroupInvite,
   GroupSettings,
-  JoinGroup,
-  MembersList,
   useGroups,
 } from "@synergy/features/groups";
 
-import { ChatsSettings, useChats } from "@synergy/features/chats";
+import { ChatSettings, useChats } from "@synergy/features/chats";
+import { MembersDialog } from "@synergy/features/members";
+
+import { InviteDialog, InvitesDialog } from "@synergy/features/invites";
 
 const SidebarGroups = () => {
   const { groupId } = useParams();
@@ -64,10 +64,10 @@ const SidebarGroups = () => {
 
   return groups.length == 0 || !selectedGroup ? (
     <>
-      <JoinGroup uid={uid}>
+      <InviteDialog>
         <Button className="w-full">Join a group</Button>
-      </JoinGroup>
-      <CreateGroup uid={uid}>
+      </InviteDialog>
+      <CreateGroup>
         <Button className="w-full">Create a group</Button>
       </CreateGroup>
     </>
@@ -116,10 +116,10 @@ const SidebarGroups = () => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="flex flex-col gap-1">
-          <JoinGroup uid={uid}>
+          <InviteDialog>
             <Button className="w-full">Join a group</Button>
-          </JoinGroup>
-          <CreateGroup uid={uid}>
+          </InviteDialog>
+          <CreateGroup>
             <Button className="w-full">Create a group</Button>
           </CreateGroup>
         </DropdownMenuGroup>
@@ -137,34 +137,20 @@ const SidebarAdmin = () => {
       <SidebarGroupContent>
         <SidebarMenu>
           <SidebarMenuItem>
-            <GroupInvite groupId={groupId!}>
+            <InvitesDialog groupId={groupId!}>
               <SidebarMenuButton>
                 <MailPlus />
                 <span>Invite</span>
               </SidebarMenuButton>
-            </GroupInvite>
+            </InvitesDialog>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <Dialog>
-              <DialogTrigger
-                className="w-full"
-                asChild
-              >
-                <SidebarMenuButton>
-                  <Users />
-                  <span>Members</span>
-                </SidebarMenuButton>
-              </DialogTrigger>
-              <DialogContent
-                onOpenAutoFocus={(event) => event.preventDefault()}
-              >
-                <DialogTitle>Members</DialogTitle>
-                <DialogDescription>
-                  Manage members of the group.
-                </DialogDescription>
-                <MembersList groupId="" />
-              </DialogContent>
-            </Dialog>
+            <MembersDialog>
+              <SidebarMenuButton>
+                <Users />
+                <span>Members</span>
+              </SidebarMenuButton>
+            </MembersDialog>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <Dialog>
@@ -174,30 +160,24 @@ const SidebarAdmin = () => {
                   <span>Settings</span>
                 </SidebarMenuButton>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl">
+              <DialogContent className="max-w-3xl">
                 <DialogTitle>Group settings</DialogTitle>
                 <DialogDescription>
                   Manage your group's settings.
                 </DialogDescription>
                 <Tabs
-                  className="mt-2 h-[512px] w-[512px] flex gap-2"
+                  className="mt-2 h-[512px] w-full flex gap-[25px]"
                   defaultValue="general"
                 >
                   <TabsList className="flex flex-col items-start w-fit">
                     <TabsTrigger value="general">General</TabsTrigger>
                     <TabsTrigger value="chats">Chats</TabsTrigger>
                   </TabsList>
-                  <TabsContent
-                    className="flex flex-col gap-2"
-                    value="general"
-                  >
+                  <TabsContent value="general">
                     <GroupSettings />
                   </TabsContent>
-                  <TabsContent
-                    className="flex flex-col gap-2"
-                    value="chats"
-                  >
-                    <ChatsSettings groupId={groupId!} />
+                  <TabsContent value="chats">
+                    <ChatSettings groupId={groupId!} />
                   </TabsContent>
                 </Tabs>
               </DialogContent>

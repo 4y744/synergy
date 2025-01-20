@@ -3,5 +3,4 @@ module.exports = {
   outDir: "./dist",
   dts: true,
   minify: false,
-  clean: true,
 };

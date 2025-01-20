@@ -1,7 +1,8 @@
 import { ComponentProps, forwardRef, useEffect, useRef } from "react";
 import { useMessages } from "../hooks/use-messages";
-import { cn } from "@synergy/utils";
+import { abbreviate, cn } from "@synergy/utils";
 import { Avatar, AvatarFallback, Muted } from "@synergy/ui";
+import { useUser } from "~/users";
 import { Message } from "../types/message";
 
 /**
@@ -33,6 +34,31 @@ const sqiushMessages = (messages: Message[]) => {
   return squished.toReversed();
 };
 
+type MessageGroupProps = Readonly<Message>;
+
+const MessageGroup = ({ payload, created, createdBy }: MessageGroupProps) => {
+  const { data, isPending } = useUser(createdBy);
+
+  if (isPending) {
+    return <>TODO: ADD SKELETON</>;
+  }
+
+  return (
+    <div className="flex gap-2 py-2">
+      <Avatar className="ml-2">
+        <AvatarFallback>{abbreviate(data!.username)}</AvatarFallback>
+      </Avatar>
+      <div className="select-text">
+        <div className="flex items-center gap-2">
+          <span className="font-medium">{data!.username}</span>
+          <Muted className="text-xs">{created.toLocaleString()}</Muted>
+        </div>
+        <span className="whitespace-pre-line text-sm">{payload}</span>
+      </div>
+    </div>
+  );
+};
+
 type ChatMessagesProps = Readonly<
   ComponentProps<"div"> & {
     groupId: string;
@@ -40,7 +66,7 @@ type ChatMessagesProps = Readonly<
   }
 >;
 
-export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
+export const Messages = forwardRef<HTMLDivElement, ChatMessagesProps>(
   ({ groupId, chatId, className, ...props }, ref) => {
     const { fetchNextPage, data } = useMessages(groupId, chatId);
     const boundaryRef = useRef<HTMLDivElement>(null);
@@ -72,19 +98,11 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
       >
         {messages && (
           <>
-            {sqiushMessages(messages).map(({ id, payload, created }) => (
-              <div
-                className="flex gap-2 py-2"
-                key={id}
-              >
-                <Avatar className="ml-2">
-                  <AvatarFallback>AB</AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col gap-1 select-text">
-                  <Muted className="text-xs">{created.toLocaleString()}</Muted>
-                  <span className="whitespace-pre-line text-sm">{payload}</span>
-                </div>
-              </div>
+            {sqiushMessages(messages).map((message, key) => (
+              <MessageGroup
+                key={key}
+                {...message}
+              />
             ))}
           </>
         )}

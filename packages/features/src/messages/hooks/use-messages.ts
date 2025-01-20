@@ -11,12 +11,12 @@ import {
   MessagesPage,
 } from "../api/get-messages";
 
-export type UseGetMessagesOptions = GetMessagesOptions;
+export type UseMessagesOptions = GetMessagesOptions;
 
 export const useMessages = (
   groupId: string,
   chatId: string,
-  options?: Partial<UseGetMessagesOptions>
+  options?: Partial<UseMessagesOptions>
 ) => {
   const queryClient = useQueryClient();
   const { data, ...rest } = useInfiniteQuery({
@@ -25,7 +25,7 @@ export const useMessages = (
     staleTime: Infinity,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,
-  } satisfies UseGetMessagesOptions);
+  } satisfies UseMessagesOptions);
   // Tsup refuses to make DTS files if getMessageQueryOptions's
   // return value isn't explicitly annotated.
   // But annotating it somehow makes data get

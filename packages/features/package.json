@@ -19,6 +19,22 @@
     "./groups": {
       "import": "./dist/groups/index.mjs",
       "types": "./dist/groups/index.d.mts"
+    },
+    "./invites": {
+      "import": "./dist/invites/index.mjs",
+      "types": "./dist/invites/index.d.mts"
+    },
+    "./members": {
+      "import": "./dist/members/index.mjs",
+      "types": "./dist/members/index.d.mts"
+    },
+    "./messages": {
+      "import": "./dist/messages/index.mjs",
+      "types": "./dist/messages/index.d.mts"
+    },
+    "./users": {
+      "import": "./dist/users/index.mjs",
+      "types": "./dist/users/index.d.mts"
     }
   },
   "dependencies": {

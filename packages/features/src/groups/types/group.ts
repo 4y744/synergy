@@ -12,7 +12,6 @@ export const NewGroupSchema = z.object({
     .string()
     .min(6, "form/group-too-short")
     .max(50, "form/group-too-long"),
-  uid: z.string(),
 });
 
 export type Group = z.infer<typeof GroupSchema>;

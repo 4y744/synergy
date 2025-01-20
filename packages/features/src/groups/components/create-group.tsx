@@ -23,11 +23,10 @@ import { NewGroup, NewGroupSchema } from "../types/group";
 import { ReactNode, useState } from "react";
 
 type CreateGroupProps = Readonly<{
-  uid: string;
   children?: ReactNode;
 }>;
 
-export const CreateGroup = ({ uid, children }: CreateGroupProps) => {
+export const CreateGroup = ({ children }: CreateGroupProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { mutate: createGroup } = useCreateGroup();
@@ -35,7 +34,6 @@ export const CreateGroup = ({ uid, children }: CreateGroupProps) => {
     resolver: zodResolver(NewGroupSchema),
     defaultValues: {
       name: "",
-      uid,
     },
   });
 

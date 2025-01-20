@@ -4,9 +4,8 @@ import { Input, Form, FormControl, FormField, FormItem } from "@synergy/ui";
 
 import { cn } from "@synergy/utils";
 
-import { useChat } from "../hooks/use-chat";
-import { useCreateMessage } from "../hooks/use-create-message";
-import { NewMessage, NewMessageSchema } from "../types/message";
+import { useCreateMessage } from "../../messages/hooks/use-create-message";
+import { NewMessage, NewMessageSchema } from "../../messages/types/message";
 import { useAuth } from "~/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ComponentProps, forwardRef } from "react";
@@ -18,10 +17,9 @@ type ChatInputProps = Readonly<
   }
 >;
 
-export const ChatInput = forwardRef<HTMLFormElement, ChatInputProps>(
+export const CreateMessage = forwardRef<HTMLFormElement, ChatInputProps>(
   ({ chatId, groupId, onSubmit, ...props }, ref) => {
     const { uid } = useAuth();
-    const chat = useChat(groupId, chatId);
     const { mutate: createMessage } = useCreateMessage(groupId, chatId);
 
     const form = useForm<NewMessage>({
@@ -58,7 +56,7 @@ export const ChatInput = forwardRef<HTMLFormElement, ChatInputProps>(
                       "bg-sidebar border-border h-10 w-full",
                       "focus-visible:ring-0"
                     )}
-                    placeholder={`Send a message to #${chat.data?.name}`}
+                    placeholder={`Send a message...`}
                   />
                 </FormControl>
               </FormItem>

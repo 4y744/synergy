@@ -8,10 +8,11 @@ import {
 import { QueryClient, QueryOptions } from "@tanstack/react-query";
 
 import { db } from "@synergy/libs/firebase";
+import { registerQuerySubscription } from "@synergy/libs/react-query";
 
 import { Chat, ChatSchema } from "../types/chat";
 
-export const subscribeChats = async (
+export const getChats = async (
   groupId: string,
   onUpdate: (chats: Chat[]) => void
 ) => {
@@ -49,20 +50,10 @@ export const getChatsOptions = (groupId: string, queryClient: QueryClient) => {
   return {
     queryKey: ["groups", groupId, "chats"],
     queryFn: async ({ queryKey }) => {
-      const { chats, unsubscribe } = await subscribeChats(groupId, (group) => {
+      const { chats, unsubscribe } = await getChats(groupId, (group) => {
         queryClient.setQueryData(queryKey, group);
       });
-      const remove = queryClient
-        .getQueryCache()
-        .subscribe(({ query, type }) => {
-          if (
-            query.queryKey.toString() == queryKey.toString() &&
-            type == "removed"
-          ) {
-            remove();
-            unsubscribe?.();
-          }
-        });
+      registerQuerySubscription(queryClient, queryKey, unsubscribe);
       return chats;
     },
   } satisfies GetChatsOptions;

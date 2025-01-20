@@ -1,9 +1,11 @@
-import { doc, FirestoreError, onSnapshot } from "firebase/firestore";
-import { GroupSchema } from "../types/group";
-import { db } from "@synergy/libs/firebase";
-import { Group } from "../types/group";
-import { QueryClient, QueryOptions } from "@tanstack/react-query";
 import { Unsubscribe } from "firebase/auth";
+import { doc, FirestoreError, onSnapshot } from "firebase/firestore";
+import { QueryClient, QueryOptions } from "@tanstack/react-query";
+
+import { db } from "@synergy/libs/firebase";
+import { registerQuerySubscription } from "@synergy/libs/react-query";
+
+import { Group, GroupSchema } from "../types/group";
 
 export const getGroup = async (
   groupId: string,
@@ -44,17 +46,7 @@ export const getGroupOptions = (groupId: string, queryClient: QueryClient) => {
       const { group, unsubscribe } = await getGroup(groupId, (group) => {
         queryClient.setQueryData(queryKey, group);
       });
-      const remove = queryClient
-        .getQueryCache()
-        .subscribe(({ query, type }) => {
-          if (
-            query.queryKey.toString() == queryKey.toString() &&
-            type == "removed"
-          ) {
-            remove();
-            unsubscribe?.();
-          }
-        });
+      registerQuerySubscription(queryClient, queryKey, unsubscribe);
       return group;
     },
   } satisfies GetGroupOptions;
