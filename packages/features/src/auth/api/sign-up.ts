@@ -1,17 +1,13 @@
-import { AuthError, createUserWithEmailAndPassword } from "firebase/auth";
 import { MutationOptions } from "@tanstack/react-query";
-import { Auth } from "../types/auth";
-import { SignUp } from "../types/sign-up";
-import { AuthStore } from "../stores/auth-store";
-
-import { auth, db } from "@synergy/libs/firebase";
+import { AuthError, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 
-export const signUp = async (
-  username: string,
-  email: string,
-  password: string
-) => {
+import { auth, db } from "@synergy/libs/firebase";
+
+import { Auth } from "../types/auth";
+import { SignUp } from "../types/sign-up";
+
+const signUp = async (username: string, email: string, password: string) => {
   /*
     TODO: IMPLEMENT TRANSLATIONS FOR THESE ERRORS
     https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#createuserwithemailandpassword
@@ -24,7 +20,7 @@ export const signUp = async (
   const userDocRef = doc(db, "users", credential.user.uid);
   await setDoc(userDocRef, {
     username,
-    created: serverTimestamp(),
+    createdAt: serverTimestamp(),
   });
   const userDoc = await getDoc(userDocRef);
   const data = userDoc.data({ serverTimestamps: "estimate" });
@@ -32,17 +28,16 @@ export const signUp = async (
     uid: credential.user.uid,
     username,
     email,
-    created: data?.created.toDate(),
+    createdAt: data?.createdAt.toDate(),
   };
 };
-export type SignUpOptions = MutationOptions<Partial<Auth>, AuthError, SignUp>;
 
-export const signUpOptions = (authStore: AuthStore) => {
+type SignUpOptions = MutationOptions<Partial<Auth>, AuthError, SignUp>;
+
+export const signUpOptions = () => {
   return {
-    mutationFn: async ({ username, email, password }) => {
-      const auth = await signUp(username, email, password);
-      authStore.getState().signUp(auth);
-      return auth;
+    mutationFn: ({ username, email, password }) => {
+      return signUp(username, email, password);
     },
   } satisfies SignUpOptions;
 };

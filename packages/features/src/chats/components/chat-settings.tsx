@@ -108,7 +108,7 @@ export const ChatSettings = ({ groupId }: ChatSettingsProps) => {
           {chats?.map((chat) => (
             <TableRow key={chat.id}>
               <TableCell>{chat.name}</TableCell>
-              <TableCell>{chat.created.toLocaleDateString()}</TableCell>
+              <TableCell>{chat.createdAt.toLocaleDateString()}</TableCell>
             </TableRow>
           ))}
         </TableBody>

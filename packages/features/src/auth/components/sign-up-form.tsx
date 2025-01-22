@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
 
@@ -23,12 +22,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { SignUp, SignUpSchema } from "../types/sign-up";
 import { useSignUp } from "../hooks/use-sign-up";
+import { ComponentProps } from "react";
+import { cn } from "@synergy/utils";
+import { useNavigate } from "@tanstack/react-router";
 
-export const SignUpForm = () => {
+type SignUpProps = Readonly<ComponentProps<"div">>;
+
+export const SignUpForm = ({ className, ...props }: SignUpProps) => {
+  const navigate = useNavigate();
   const { mutate: signUp, isPending } = useSignUp({
-    onSuccess: () => {
-      navigate("/groups");
-    },
+    onSuccess: () => navigate({ to: "/groups" }),
     onError: (error) => {
       form.setError("confirmPassword", {
         message: error.code,
@@ -44,12 +47,14 @@ export const SignUpForm = () => {
       confirmPassword: "",
     },
   });
-  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<SignUp> = (data) => signUp(data);
 
   return (
-    <Card className="border-none shadow-none w-96">
+    <Card
+      className={cn("border-none shadow-none w-96", className)}
+      {...props}
+    >
       <CardHeader>
         <CardTitle>Sign up</CardTitle>
         <CardDescription>Create an account.</CardDescription>
@@ -140,7 +145,7 @@ export const SignUpForm = () => {
         <Button
           variant="link"
           className="w-full"
-          onClick={() => navigate("/signin")}
+          onClick={() => navigate({ to: "/signin" })}
         >
           Already have an account? Sign in!
         </Button>

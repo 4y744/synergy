@@ -8,7 +8,7 @@ import { FirestoreError } from "firebase/firestore";
 import { createGroupOptions } from "../api/create-group";
 import { NewGroup } from "../types/group";
 
-export type UseCreateGroupOptions = UseMutationOptions<
+type UseCreateGroupOptions = UseMutationOptions<
   string,
   FirestoreError,
   NewGroup

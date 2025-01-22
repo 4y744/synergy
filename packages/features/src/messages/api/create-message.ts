@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import { NewMessage } from "../types/message";
 
-export const createMessage = async (
+const createMessage = async (
   groupId: string,
   chatId: string,
   payload: string,
@@ -18,7 +18,7 @@ export const createMessage = async (
   const { id } = await addDoc(
     collection(db, "groups", groupId, "chats", chatId, "messages"),
     {
-      created: serverTimestamp(),
+      createdAt: serverTimestamp(),
       payload,
       createdBy,
     }
@@ -26,11 +26,7 @@ export const createMessage = async (
   return id;
 };
 
-export type CreateMessageOptions = MutationOptions<
-  string,
-  FirestoreError,
-  NewMessage
->;
+type CreateMessageOptions = MutationOptions<string, FirestoreError, NewMessage>;
 
 export const createMessageOptions = (groupId: string, chatId: string) => {
   return {

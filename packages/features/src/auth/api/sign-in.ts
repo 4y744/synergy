@@ -4,11 +4,10 @@ import { doc, getDoc } from "firebase/firestore";
 
 import { auth, db } from "@synergy/libs/firebase";
 
-import { AuthStore } from "../stores/auth-store";
 import { Auth } from "../types/auth";
 import { SignIn } from "../types/sign-in";
 
-export const signIn = async (email: string, password: string) => {
+const signIn = async (email: string, password: string) => {
   /*
     TODO: IMPLEMENT TRANSLATIONS FOR THESE ERRORS
     https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#signinwithemailandpassword
@@ -20,18 +19,16 @@ export const signIn = async (email: string, password: string) => {
     uid: credential.user.uid,
     username: data?.username,
     email,
-    created: data?.created.toDate(),
+    createdAt: data?.createdAt.toDate(),
   };
 };
 
-export type SignInOptions = MutationOptions<Partial<Auth>, AuthError, SignIn>;
+type SignInOptions = MutationOptions<Partial<Auth>, AuthError, SignIn>;
 
-export const signInOptions = (authStore: AuthStore) => {
+export const signInOptions = () => {
   return {
-    mutationFn: async ({ email, password }) => {
-      const auth = await signIn(email, password);
-      authStore.getState().signIn(auth);
-      return auth;
+    mutationFn: ({ email, password }) => {
+      return signIn(email, password);
     },
   } satisfies SignInOptions;
 };

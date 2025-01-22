@@ -1,4 +1,4 @@
-import { db } from "@synergy/libs/firebase";
+import { auth, db } from "@synergy/libs/firebase";
 import { QueryOptions } from "@tanstack/react-query";
 import {
   collectionGroup,
@@ -8,23 +8,26 @@ import {
   where,
 } from "firebase/firestore";
 
-export const findGroups = async (uid: string) => {
+const findGroups = async () => {
   const { docs: memberDocs } = await getDocs(
-    query(collectionGroup(db, "members"), where("uid", "==", uid))
+    query(
+      collectionGroup(db, "members"),
+      where("uid", "==", auth.currentUser!.uid)
+    )
   );
   return memberDocs.map((doc) => doc.ref.parent.parent!.id);
 };
 
-export type FindGroupsOptions = QueryOptions<
+type FindGroupsOptions = QueryOptions<
   string[],
   FirestoreError,
   string[],
   string[]
 >;
 
-export const findGroupsOptions = (uid: string) => {
+export const findGroupsOptions = () => {
   return {
     queryKey: ["groups"],
-    queryFn: () => findGroups(uid),
+    queryFn: () => findGroups(),
   } satisfies FindGroupsOptions;
 };

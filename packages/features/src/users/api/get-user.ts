@@ -11,7 +11,7 @@ import { registerQuerySubscription } from "@synergy/libs/react-query";
 
 import { User, UserSchema } from "../types/user";
 
-export const getUser = async (uid: string, onUpdate?: (user: User) => void) => {
+const getUser = async (uid: string, onUpdate?: (user: User) => void) => {
   let unsubscribe!: Unsubscribe;
   const user = await new Promise((resolve: (user: User) => void) => {
     unsubscribe = onSnapshot(
@@ -21,7 +21,7 @@ export const getUser = async (uid: string, onUpdate?: (user: User) => void) => {
         const user = UserSchema.parse({
           uid,
           username: data?.username,
-          created: data?.created.toDate(),
+          createdAt: data?.createdAt.toDate(),
         });
         resolve(user);
         onUpdate?.(user);
@@ -32,7 +32,7 @@ export const getUser = async (uid: string, onUpdate?: (user: User) => void) => {
   return { user, unsubscribe };
 };
 
-export type GetUserOptions = QueryOptions<User, FirestoreError, User, string[]>;
+type GetUserOptions = QueryOptions<User, FirestoreError, User, string[]>;
 
 export const getUserOptions = (uid: string, queryClient: QueryClient) => {
   return {

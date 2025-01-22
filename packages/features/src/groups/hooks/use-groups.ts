@@ -4,8 +4,8 @@ import { getGroupOptions } from "../api/get-group";
 import { useFindGroups } from "./use-find-groups";
 import { UseGroupOptions } from "./use-group";
 
-export const useGroups = (uid: string, options?: Partial<UseGroupOptions>) => {
-  const { data: groupIds } = useFindGroups(uid, {
+export const useGroups = (options?: Partial<UseGroupOptions>) => {
+  const { data: groupIds } = useFindGroups({
     initialData: [],
   });
   const queryClient = useQueryClient();

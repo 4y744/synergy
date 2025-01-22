@@ -3,16 +3,12 @@ import {
   useQueryClient,
   UseQueryOptions,
 } from "@tanstack/react-query";
-import { User } from "../types/user";
 import { FirestoreError } from "firebase/firestore";
-import { getUserOptions } from "../api/get-user";
 
-export type UseUserOptions = UseQueryOptions<
-  User,
-  FirestoreError,
-  User,
-  string[]
->;
+import { getUserOptions } from "../api/get-user";
+import { User } from "../types/user";
+
+type UseUserOptions = UseQueryOptions<User, FirestoreError, User, string[]>;
 
 export const useUser = (uid: string, options?: Partial<UseUserOptions>) => {
   const queryClient = useQueryClient();

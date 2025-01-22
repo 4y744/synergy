@@ -3,20 +3,17 @@ import { FirestoreError } from "firebase/firestore";
 
 import { findGroupsOptions } from "../api/find-groups";
 
-export type UseFindGroupsOptions = UseQueryOptions<
+type UseFindGroupsOptions = UseQueryOptions<
   string[],
   FirestoreError,
   string[],
   string[]
 >;
 
-export const useFindGroups = (
-  uid: string,
-  options?: Partial<UseFindGroupsOptions>
-) => {
+export const useFindGroups = (options?: Partial<UseFindGroupsOptions>) => {
   return useQuery({
     ...options,
-    ...findGroupsOptions(uid),
+    ...findGroupsOptions(),
     staleTime: Infinity,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,

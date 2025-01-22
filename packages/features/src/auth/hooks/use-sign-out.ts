@@ -1,16 +1,19 @@
-import { useContext } from "react";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { AuthError } from "firebase/auth";
 
 import { signOutOptions } from "../api/sign-out";
-import { AuthContext } from "../components/auth-provider";
+import { useAuth } from "./use-auth";
 
-export type UseSignOutOptions = UseMutationOptions<void, AuthError, void>;
+type UseSignOutOptions = UseMutationOptions<void, AuthError, void>;
 
-export const useSignOut = (options?: UseSignOutOptions) => {
-  const authStore = useContext(AuthContext);
+export const useSignOut = ({ onSuccess, ...rest }: UseSignOutOptions = {}) => {
+  const { signOut } = useAuth();
   return useMutation({
-    ...options,
-    ...signOutOptions(authStore),
+    ...rest,
+    onSuccess: (...args) => {
+      signOut();
+      onSuccess?.(...args);
+    },
+    ...signOutOptions(),
   } satisfies UseSignOutOptions);
 };

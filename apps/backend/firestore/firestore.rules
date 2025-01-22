@@ -15,9 +15,9 @@ service cloud.firestore {
     // Users
     match /users/{userId} {
       allow create: if (
-        request.resource.data.created == request.time
+        request.resource.data.createdAt == request.time
         && request.auth.uid == userId
-        && request.resource.data.keys().hasOnly(["uid", "created", "username"])
+        && request.resource.data.keys().hasOnly(["uid", "createdAt", "username"])
       );
       allow update: if (
         request.auth.uid == userId

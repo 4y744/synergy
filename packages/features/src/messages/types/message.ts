@@ -2,7 +2,7 @@ import z from "zod";
 
 export const MessageSchema = z.object({
   id: z.string(),
-  created: z.date(),
+  createdAt: z.date(),
   payload: z.string(),
   createdBy: z.string(),
 });

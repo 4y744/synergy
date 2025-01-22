@@ -8,7 +8,7 @@ import { FirestoreError } from "firebase/firestore";
 import { getInvitesOptions } from "../api/get-invites";
 import { Invite } from "../types/invite";
 
-export type UseInvitesOptions = UseQueryOptions<
+type UseInvitesOptions = UseQueryOptions<
   Invite[],
   FirestoreError,
   Invite[],

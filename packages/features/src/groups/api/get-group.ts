@@ -7,10 +7,7 @@ import { registerQuerySubscription } from "@synergy/libs/react-query";
 
 import { Group, GroupSchema } from "../types/group";
 
-export const getGroup = async (
-  groupId: string,
-  onUpdate: (group: Group) => void
-) => {
+const getGroup = async (groupId: string, onUpdate: (group: Group) => void) => {
   let unsubscribe!: Unsubscribe;
   const group = await new Promise((resolve: (group: Group) => void) => {
     unsubscribe = onSnapshot(
@@ -21,23 +18,18 @@ export const getGroup = async (
           id: snapshot.id,
           name: data?.name,
           creator: data?.creator,
-          created: data?.created.toDate(),
+          createdAt: data?.createdAt.toDate(),
         });
         resolve(group);
         onUpdate(group);
       },
-      () => unsubscribe()
+      unsubscribe
     );
   });
   return { group, unsubscribe };
 };
 
-export type GetGroupOptions = QueryOptions<
-  Group,
-  FirestoreError,
-  Group,
-  string[]
->;
+type GetGroupOptions = QueryOptions<Group, FirestoreError, Group, string[]>;
 
 export const getGroupOptions = (groupId: string, queryClient: QueryClient) => {
   return {

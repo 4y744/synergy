@@ -11,7 +11,7 @@ import {
   MessagesPage,
 } from "../api/get-messages";
 
-export type UseMessagesOptions = GetMessagesOptions;
+type UseMessagesOptions = GetMessagesOptions;
 
 export const useMessages = (
   groupId: string,

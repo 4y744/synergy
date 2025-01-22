@@ -13,12 +13,12 @@ import { auth, db } from "@synergy/libs/firebase";
 import { NewGroup } from "../types/group";
 import { getGroupOptions } from "./get-group";
 
-export const createGroup = async (name: string) => {
+const createGroup = async (name: string) => {
   const uid = auth.currentUser!.uid;
   const { id: groupId } = await addDoc(collection(db, "groups"), {
     name,
     creator: uid,
-    created: serverTimestamp(),
+    createdAt: serverTimestamp(),
   });
   await setDoc(doc(db, "groups", groupId, "members", uid), {
     uid: uid,
@@ -26,11 +26,7 @@ export const createGroup = async (name: string) => {
   return groupId;
 };
 
-export type CreateGroupOptions = MutationOptions<
-  string,
-  FirestoreError,
-  NewGroup
->;
+type CreateGroupOptions = MutationOptions<string, FirestoreError, NewGroup>;
 
 export const createGroupOptions = (queryClient: QueryClient) => {
   return {

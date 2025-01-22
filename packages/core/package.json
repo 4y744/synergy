@@ -18,6 +18,8 @@
     "@synergy/libs": "workspace:*",
     "@synergy/ui": "workspace:*",
     "@synergy/utils": "workspace:*",
+    "@tanstack/react-query": "^5.60.5",
+    "@tanstack/react-router": "^1.97.8",
     "lucide-react": "^0.460.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

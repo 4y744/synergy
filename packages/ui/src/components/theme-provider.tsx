@@ -5,10 +5,10 @@ import { useStore } from "zustand";
 
 export const ThemeContext = createContext<ThemeStore>({} as ThemeStore);
 
-export type ThemeProviderProps = {
+export type ThemeProviderProps = Readonly<{
   children?: ReactNode;
   defaultTheme?: Theme;
-};
+}>;
 
 export const ThemeProvider = ({
   children,

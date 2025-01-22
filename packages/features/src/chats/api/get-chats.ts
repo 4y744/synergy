@@ -12,10 +12,7 @@ import { registerQuerySubscription } from "@synergy/libs/react-query";
 
 import { Chat, ChatSchema } from "../types/chat";
 
-export const getChats = async (
-  groupId: string,
-  onUpdate: (chats: Chat[]) => void
-) => {
+const getChats = async (groupId: string, onUpdate: (chats: Chat[]) => void) => {
   let unsubscribe!: Unsubscribe;
   const chats = await new Promise((resolve: (chats: Chat[]) => void) => {
     unsubscribe = onSnapshot(
@@ -27,24 +24,19 @@ export const getChats = async (
             id: doc.id,
             name: data?.name,
             creator: data?.creator,
-            created: data?.created.toDate(),
+            createdAt: data?.createdAt.toDate(),
           });
         });
         resolve(chats);
         onUpdate(chats);
       },
-      () => unsubscribe()
+      unsubscribe
     );
   });
   return { chats, unsubscribe };
 };
 
-export type GetChatsOptions = QueryOptions<
-  Chat[],
-  FirestoreError,
-  Chat[],
-  string[]
->;
+type GetChatsOptions = QueryOptions<Chat[], FirestoreError, Chat[], string[]>;
 
 export const getChatsOptions = (groupId: string, queryClient: QueryClient) => {
   return {

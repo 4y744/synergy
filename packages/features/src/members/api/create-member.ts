@@ -12,7 +12,7 @@ import {
 import { NewMember } from "../types/member";
 import { getGroupOptions } from "~/groups";
 
-export const createMember = async (inviteId: string) => {
+const createMember = async (inviteId: string) => {
   const { docs: invitesDocs } = await getDocs(
     query(collectionGroup(db, "invites"), where("inviteId", "==", inviteId))
   );
@@ -24,11 +24,7 @@ export const createMember = async (inviteId: string) => {
   return groupId;
 };
 
-export type CreateMemberOptions = MutationOptions<
-  string,
-  FirestoreError,
-  NewMember
->;
+type CreateMemberOptions = MutationOptions<string, FirestoreError, NewMember>;
 
 export const createMemberOptions = (queryClient: QueryClient) => {
   return {

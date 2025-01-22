@@ -23,7 +23,7 @@ import { registerQuerySubscription } from "@synergy/libs/react-query";
 
 import { Message, MessageSchema } from "../types/message";
 
-export const getMessages = async (
+const getMessages = async (
   groupId: string,
   chatId: string,
   last: DocumentSnapshot | undefined,
@@ -45,7 +45,7 @@ export const getMessages = async (
       if (last) {
         q = query(
           messagesCollection,
-          orderBy("created", "desc"),
+          orderBy("createdAt", "desc"),
           startAfter(last),
           limit(50)
         );
@@ -53,11 +53,11 @@ export const getMessages = async (
         //TODO: Try retreive the 50th (or last if < 50) element and use that as a reference point.
         //Might be possible with startAfter(50), limit(1) or something like that.
         const { docs } = await getDocs(
-          query(messagesCollection, orderBy("created", "desc"), limit(1))
+          query(messagesCollection, orderBy("createdAt", "desc"), limit(1))
         );
         q = query(
           messagesCollection,
-          orderBy("created", "desc"),
+          orderBy("createdAt", "desc"),
           endAt(docs[0])
         );
       }
@@ -71,7 +71,7 @@ export const getMessages = async (
               id: doc.id,
               payload: data?.payload,
               createdBy: data?.createdBy,
-              created: data?.created.toDate(),
+              createdAt: data?.createdAt.toDate(),
             } satisfies Message);
           });
           const messagesPage = {
@@ -81,7 +81,7 @@ export const getMessages = async (
           resolve(messagesPage);
           onUpdate?.(messagesPage);
         },
-        () => unsubscribe()
+        unsubscribe
       );
     }
   );

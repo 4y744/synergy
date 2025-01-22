@@ -1,66 +1,32 @@
-import { useContext, useMemo } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useContext } from "react";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 
-import { LoadingFallback } from "~/components/loading-fallback";
+import { type RouterContext } from "@synergy/core";
+import { AuthContext } from "@synergy/features/auth";
 
-import { AuthContext, AuthStore } from "@synergy/features/auth";
-import { createCustomRoute } from "@synergy/libs/react-router";
+import { routeTree } from "~/routeTree.gen";
 
-export type CustomLoaderData = {
-  authStore: AuthStore;
-  queryClient: QueryClient;
-};
+const router = createRouter({
+  routeTree,
+  defaultPreload: "intent",
+  context: {} as RouterContext,
+});
 
-export const createRouter = (
-  authStore: AuthStore,
-  queryClient: QueryClient
-) => {
-  const customRoute = createCustomRoute<CustomLoaderData>({
-    authStore,
-    queryClient,
-  });
-
-  return createBrowserRouter([
-    {
-      path: "",
-      lazy: customRoute(() => import("~/routes/landing")),
-    },
-    {
-      path: "signin",
-      lazy: customRoute(() => import("~/routes/signin")),
-    },
-    {
-      path: "signup",
-      lazy: customRoute(() => import("~/routes/signup")),
-    },
-    {
-      path: "groups/:groupId?",
-      lazy: customRoute(() => import("~/routes/groups/[groupId]")),
-      children: [
-        {
-          path: "chats/:chatId",
-          lazy: customRoute(() => import("~/routes/groups/chats/[chatId]")),
-        },
-      ],
-    },
-    {
-      path: "*",
-      lazy: customRoute(() => import("~/routes/not-found")),
-    },
-  ]);
-};
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
 
 export const AppRouter = () => {
   const queryClient = useQueryClient();
   const authStore = useContext(AuthContext);
 
-  const router = useMemo(() => createRouter(authStore, queryClient), []);
-
   return (
     <RouterProvider
       router={router}
-      fallbackElement={<LoadingFallback />}
+      context={{ queryClient, authStore }}
     />
   );
 };

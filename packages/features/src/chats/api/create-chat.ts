@@ -12,16 +12,16 @@ import { auth, db } from "@synergy/libs/firebase";
 
 import { Chat, ChatSchema, NewChat } from "../types/chat";
 
-export const createChat = async (groupId: string, name: string) => {
+const createChat = async (groupId: string, name: string) => {
   const { id: chatId } = await addDoc(
     collection(db, "groups", groupId, "chats"),
     {
       name,
-      created: serverTimestamp(),
+      createdAt: serverTimestamp(),
     }
   );
   await addDoc(collection(db, "groups", groupId, "chats", chatId, "messages"), {
-    created: serverTimestamp(),
+    createdAt: serverTimestamp(),
     payload: "Welcome to my chat!",
     createdBy: auth.currentUser!.uid,
   });
@@ -30,11 +30,11 @@ export const createChat = async (groupId: string, name: string) => {
   return ChatSchema.parse({
     id: chatDoc.id,
     name: data?.name,
-    created: data?.created.toDate(),
+    createdAt: data?.createdAt.toDate(),
   });
 };
 
-export type CreateChatOptions = MutationOptions<Chat, FirestoreError, NewChat>;
+type CreateChatOptions = MutationOptions<Chat, FirestoreError, NewChat>;
 
 export const createChatOptions = (groupId: string) => {
   return {

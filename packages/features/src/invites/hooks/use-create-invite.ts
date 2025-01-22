@@ -4,7 +4,7 @@ import { FirestoreError } from "firebase/firestore";
 import { createInviteOptions } from "../api/create-invite";
 import { NewInvite } from "../types/invite";
 
-export type UseCreateInviteOptions = UseMutationOptions<
+type UseCreateInviteOptions = UseMutationOptions<
   string,
   FirestoreError,
   NewInvite

@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "@tanstack/react-router";
 import { ChevronsUpDown, Hash, MailPlus, Settings, Users } from "lucide-react";
 
 import {
@@ -51,10 +51,8 @@ import { MembersDialog } from "@synergy/features/members";
 import { InviteDialog, InvitesDialog } from "@synergy/features/invites";
 
 const SidebarGroups = () => {
-  const { groupId } = useParams();
-
-  const { uid } = useAuth();
-  const groups = useGroups(uid);
+  const { groupId } = useParams({ strict: false });
+  const groups = useGroups();
 
   if (!groupId && groups.length > 0) {
     return <Navigate to={`/groups/${groups[0]?.data?.id}`} />;
@@ -129,15 +127,14 @@ const SidebarGroups = () => {
 };
 
 const SidebarAdmin = () => {
-  const { groupId } = useParams();
-
+  const { groupId } = useParams({ strict: false });
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Administration</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
           <SidebarMenuItem>
-            <InvitesDialog groupId={groupId!}>
+            <InvitesDialog groupId={groupId}>
               <SidebarMenuButton>
                 <MailPlus />
                 <span>Invite</span>
@@ -177,7 +174,7 @@ const SidebarAdmin = () => {
                     <GroupSettings />
                   </TabsContent>
                   <TabsContent value="chats">
-                    <ChatSettings groupId={groupId!} />
+                    <ChatSettings groupId={groupId} />
                   </TabsContent>
                 </Tabs>
               </DialogContent>
@@ -190,9 +187,8 @@ const SidebarAdmin = () => {
 };
 
 const SidebarChats = () => {
-  const { groupId } = useParams();
-
-  const chats = useChats(groupId!);
+  const { groupId } = useParams({ strict: false });
+  const chats = useChats(groupId);
 
   return (
     <SidebarGroup>
@@ -244,7 +240,7 @@ const SidebarUser = () => {
         <DropdownMenuGroup>
           <DropdownMenuItem
             onClick={() => {
-              navigate("/");
+              navigate({ to: "/" });
               signOut();
             }}
           >
@@ -257,8 +253,7 @@ const SidebarUser = () => {
 };
 
 export const AppSidebar = () => {
-  const { groupId } = useParams();
-
+  const { groupId } = useParams({ strict: false });
   return (
     <Sidebar>
       <SidebarHeader>

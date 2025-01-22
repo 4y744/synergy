@@ -4,11 +4,7 @@ import { FirestoreError } from "firebase/firestore";
 import { createChatOptions } from "../api/create-chat";
 import { Chat, NewChat } from "../types/chat";
 
-export type UseCreateChatOptions = UseMutationOptions<
-  Chat,
-  FirestoreError,
-  NewChat
->;
+type UseCreateChatOptions = UseMutationOptions<Chat, FirestoreError, NewChat>;
 
 export const useCreateChat = (
   groupId: string,

@@ -1,10 +1,18 @@
+import { loadChats } from "@synergy/features/chats";
 import { Messages, CreateMessage } from "@synergy/features/messages";
 import { SidebarTrigger, useIsMobile } from "@synergy/ui";
+import { useParams } from "@tanstack/react-router";
 import { useRef } from "react";
-import { useParams } from "react-router-dom";
+import { Loader } from "~/types/router";
 
-export const ChatView = () => {
-  const { groupId, chatId } = useParams();
+const chatLoader: Loader = async ({ context, params }) => {
+  const { queryClient } = context;
+  await loadChats(params.groupId, queryClient);
+};
+
+const ChatView = () => {
+  const { groupId, chatId } = useParams({ strict: false });
+
   const messagesRef = useRef<HTMLDivElement>(null);
 
   const isMobile = useIsMobile();
@@ -34,4 +42,9 @@ export const ChatView = () => {
       />
     </div>
   );
+};
+
+export const chatRouteOptions = {
+  beforeLoad: chatLoader,
+  component: ChatView,
 };

@@ -3,7 +3,7 @@ import { MutationOptions } from "@tanstack/react-query";
 import { collection, doc, FirestoreError, setDoc } from "firebase/firestore";
 import { NewInvite } from "../types/invite";
 
-export const createInvite = async (groupId: string, expiresAt: Date) => {
+const createInvite = async (groupId: string, expiresAt: Date) => {
   const inviteDocRef = doc(collection(db, "groups", groupId, "invites"));
   await setDoc(inviteDocRef, {
     expiresAt,
@@ -12,11 +12,7 @@ export const createInvite = async (groupId: string, expiresAt: Date) => {
   return inviteDocRef.id;
 };
 
-export type CreateInviteOptions = MutationOptions<
-  string,
-  FirestoreError,
-  NewInvite
->;
+type CreateInviteOptions = MutationOptions<string, FirestoreError, NewInvite>;
 
 export const createInviteOptions = (groupId: string) => {
   return {

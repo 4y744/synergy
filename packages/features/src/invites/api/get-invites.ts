@@ -7,7 +7,7 @@ import { db } from "@synergy/libs/firebase";
 import { Invite, InviteSchema } from "../types/invite";
 import { registerQuerySubscription } from "@synergy/libs/react-query";
 
-export const getInvites = async (
+const getInvites = async (
   groupId: string,
   onUpdate: (invites: Invite[]) => void
 ) => {
@@ -26,7 +26,7 @@ export const getInvites = async (
         resolve(invites);
         onUpdate(invites);
       },
-      () => unsubscribe()
+      unsubscribe
     );
   });
   return { invites, unsubscribe };

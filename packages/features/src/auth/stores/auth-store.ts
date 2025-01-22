@@ -14,7 +14,7 @@ export const createAuthStore = () => {
     subscribeWithSelector((set) => ({
       uid: "",
       username: "",
-      created: new Date(0),
+      createdAt: new Date(0),
       email: "",
       isSignedIn: false,
       isInitialized: false,
@@ -30,8 +30,6 @@ export const createAuthStore = () => {
       signOut: () => {
         set({
           uid: "",
-          username: "",
-          created: new Date(0),
           email: "",
           isSignedIn: false,
         });

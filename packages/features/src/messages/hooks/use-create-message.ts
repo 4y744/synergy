@@ -4,7 +4,7 @@ import { FirestoreError } from "firebase/firestore";
 import { createMessageOptions } from "../api/create-message";
 import { NewMessage } from "../types/message";
 
-export type UseCreateMessageOptions = UseMutationOptions<
+type UseCreateMessageOptions = UseMutationOptions<
   string,
   FirestoreError,
   NewMessage

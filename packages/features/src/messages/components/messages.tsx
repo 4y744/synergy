@@ -23,7 +23,8 @@ const sqiushMessages = (messages: Message[]) => {
     const prevMessage = squished[squished.length - 1];
     if (
       message.createdBy == prevMessage.createdBy &&
-      message.created.getTime() < prevMessage.created.getTime() + 5 * 60 * 1000
+      message.createdAt.getTime() <
+        prevMessage.createdAt.getTime() + 5 * 60 * 1000
     ) {
       prevMessage.payload = `${prevMessage.payload}\n${message.payload}`;
     } else {
@@ -36,7 +37,7 @@ const sqiushMessages = (messages: Message[]) => {
 
 type MessageGroupProps = Readonly<Message>;
 
-const MessageGroup = ({ payload, created, createdBy }: MessageGroupProps) => {
+const MessageGroup = ({ payload, createdAt, createdBy }: MessageGroupProps) => {
   const { data, isPending } = useUser(createdBy);
 
   if (isPending) {
@@ -51,7 +52,7 @@ const MessageGroup = ({ payload, created, createdBy }: MessageGroupProps) => {
       <div className="select-text">
         <div className="flex items-center gap-2">
           <span className="font-medium">{data!.username}</span>
-          <Muted className="text-xs">{created.toLocaleString()}</Muted>
+          <Muted className="text-xs">{createdAt.toLocaleString()}</Muted>
         </div>
         <span className="whitespace-pre-line text-sm">{payload}</span>
       </div>
