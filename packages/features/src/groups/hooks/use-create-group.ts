@@ -6,7 +6,7 @@ import {
 import { FirestoreError } from "firebase/firestore";
 
 import { createGroupOptions } from "../api/create-group";
-import { NewGroup } from "../types/group";
+import { NewGroup } from "../types/new-group";
 
 type UseCreateGroupOptions = UseMutationOptions<
   string,
@@ -16,8 +16,9 @@ type UseCreateGroupOptions = UseMutationOptions<
 
 export const useCreateGroup = (options?: Partial<UseCreateGroupOptions>) => {
   const queryClient = useQueryClient();
-  return useMutation({
+  const mutation = useMutation({
     ...options,
     ...createGroupOptions(queryClient),
   } satisfies UseCreateGroupOptions);
+  return { ...mutation };
 };

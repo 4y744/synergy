@@ -10,14 +10,14 @@ import { MutationOptions, QueryClient } from "@tanstack/react-query";
 
 import { auth, db } from "@synergy/libs/firebase";
 
-import { NewGroup } from "../types/group";
+import { NewGroup } from "../types/new-group";
 import { getGroupOptions } from "./get-group";
 
 const createGroup = async (name: string) => {
   const uid = auth.currentUser!.uid;
   const { id: groupId } = await addDoc(collection(db, "groups"), {
     name,
-    creator: uid,
+    createdBy: uid,
     createdAt: serverTimestamp(),
   });
   await setDoc(doc(db, "groups", groupId, "members", uid), {

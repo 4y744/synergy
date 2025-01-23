@@ -1,6 +1,8 @@
-import { db } from "@synergy/libs/firebase";
 import { MutationOptions } from "@tanstack/react-query";
 import { collection, doc, FirestoreError, setDoc } from "firebase/firestore";
+
+import { db } from "@synergy/libs/firebase";
+
 import { NewInvite } from "../types/invite";
 
 const createInvite = async (groupId: string, expiresAt: Date) => {

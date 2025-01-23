@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import {
   Button,
   Dialog,
@@ -16,7 +17,6 @@ import {
   TooltipTrigger,
 } from "@synergy/ui";
 import { UserXIcon } from "lucide-react";
-import { ReactNode } from "react";
 
 const mockUsers = [
   {

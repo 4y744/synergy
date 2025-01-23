@@ -1,12 +1,17 @@
 import { ComponentProps, forwardRef, useEffect, useRef } from "react";
-import { useMessages } from "../hooks/use-messages";
-import { abbreviate, cn } from "@synergy/utils";
+
 import { Avatar, AvatarFallback, Muted } from "@synergy/ui";
-import { useUser } from "~/users";
+import { abbreviate, cn } from "@synergy/utils";
+
+import { useMessages } from "../hooks/use-messages";
 import { Message } from "../types/message";
 
+// Cross-feature imports violate https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure.md,
+// but it should be okay, because "users: is not that complicated of a feature.
+import { useUser } from "~/users";
+
 /**
- * Combines messages based on creator and creation time.
+ * Combines messages based on createdBy and creation time.
  * @param messages
  * @returns
  */

@@ -1,4 +1,10 @@
 import { useState } from "react";
+
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Plus } from "lucide-react";
+
 import {
   Button,
   Form,
@@ -18,12 +24,10 @@ import {
   TableHeader,
   TableRow,
 } from "@synergy/ui";
-import { Plus } from "lucide-react";
-import { SubmitHandler, useForm } from "react-hook-form";
+
+import { useChats } from "../hooks/use-chats";
 import { useCreateChat } from "../hooks/use-create-chat";
 import { NewChat, NewChatSchema } from "../types/chat";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useChats } from "../hooks/use-chats";
 
 type CreateChatButtonProps = Readonly<{
   groupId: string;

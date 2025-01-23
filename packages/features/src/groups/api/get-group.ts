@@ -17,7 +17,7 @@ const getGroup = async (groupId: string, onUpdate: (group: Group) => void) => {
         const group = GroupSchema.parse({
           id: snapshot.id,
           name: data?.name,
-          creator: data?.creator,
+          createdBy: data?.createdBy,
           createdAt: data?.createdAt.toDate(),
         });
         resolve(group);

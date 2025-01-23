@@ -1,7 +1,8 @@
-import { db } from "@synergy/libs/firebase";
 import { MutationOptions } from "@tanstack/react-query";
 import { deleteDoc, doc } from "firebase/firestore";
 import { FirebaseStorage } from "firebase/storage";
+
+import { db } from "@synergy/libs/firebase";
 
 const deleteInvite = async (groupId: string, inviteId: string) => {
   await deleteDoc(doc(db, "groups", groupId, "invites", inviteId));

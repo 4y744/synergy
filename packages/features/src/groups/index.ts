@@ -3,7 +3,6 @@ export * from "../invites/api/create-invite";
 export * from "./api/find-groups";
 export * from "./api/get-group";
 export * from "../invites/api/get-invites";
-export * from "./api/load-groups";
 export * from "./components/create-group";
 export * from "./components/group-settings";
 export * from "../invites/components/invites";

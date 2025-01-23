@@ -1,8 +1,10 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
+
 import { doc, getDoc } from "firebase/firestore";
+import { useQueryClient } from "@tanstack/react-query";
+
 import { AuthStore, createAuthStore } from "../stores/auth-store";
 import { auth, db } from "@synergy/libs/firebase";
-import { useQueryClient } from "@tanstack/react-query";
 
 export const AuthContext = createContext<AuthStore>({} as AuthStore);
 

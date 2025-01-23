@@ -1,14 +1,13 @@
+import { ComponentProps, forwardRef } from "react";
+
 import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input, Form, FormControl, FormField, FormItem } from "@synergy/ui";
-
 import { cn } from "@synergy/utils";
 
-import { useCreateMessage } from "../../messages/hooks/use-create-message";
-import { NewMessage, NewMessageSchema } from "../../messages/types/message";
-import { useAuth } from "~/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ComponentProps, forwardRef } from "react";
+import { useCreateMessage } from "../hooks/use-create-message";
+import { NewMessage, NewMessageSchema } from "../types/message";
 
 type ChatInputProps = Readonly<
   ComponentProps<"form"> & {
@@ -16,16 +15,13 @@ type ChatInputProps = Readonly<
     chatId: string;
   }
 >;
-
 export const CreateMessage = forwardRef<HTMLFormElement, ChatInputProps>(
   ({ chatId, groupId, onSubmit, ...props }, ref) => {
-    const { uid } = useAuth();
     const { mutate: createMessage } = useCreateMessage(groupId, chatId);
 
     const form = useForm<NewMessage>({
       resolver: zodResolver(NewMessageSchema),
       defaultValues: {
-        createdBy: uid,
         payload: "",
       },
     });

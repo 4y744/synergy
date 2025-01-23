@@ -9,7 +9,7 @@ service cloud.firestore {
     }
 
     function isAdmin(groupId, uid){
-      return get(/databases/$(database)/documents/groups/$(groupId)).data.creator == uid;
+      return get(/databases/$(database)/documents/groups/$(groupId)).data.createdBy == uid;
     }
 
     // Users
@@ -33,14 +33,14 @@ service cloud.firestore {
     match /groups/{groupId} {
       allow create: if (
         request.auth.uid != null
-        && request.resource.data.creator == request.auth.uid
+        && request.resource.data.createdBy == request.auth.uid
       );
       allow update, delete: if (
-        resource.data.creator == request.auth.uid
+        resource.data.createdBy == request.auth.uid
       )
       allow get, list: if (
         isMember(groupId, request.auth.uid)
-        || resource.data.creator == request.auth.uid
+        || resource.data.createdBy == request.auth.uid
       );
     }
 
@@ -85,7 +85,7 @@ service cloud.firestore {
         isMember(groupId, request.auth.uid)
       );
       allow update, delete: if (
-        resource.data.creator == request.auth.uid
+        resource.data.createdBy == request.auth.uid
         || isAdmin(groupId, request.auth.uid) 
       )
       allow get, list: if (

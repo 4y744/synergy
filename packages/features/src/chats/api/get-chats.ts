@@ -23,7 +23,7 @@ const getChats = async (groupId: string, onUpdate: (chats: Chat[]) => void) => {
           return ChatSchema.parse({
             id: doc.id,
             name: data?.name,
-            creator: data?.creator,
+            createdBy: data?.createdBy,
             createdAt: data?.createdAt.toDate(),
           });
         });

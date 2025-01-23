@@ -1,16 +1,36 @@
 import { useContext } from "react";
-import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { Loader2Icon } from "lucide-react";
+
+import {
+  createRootRoute,
+  createRouter,
+  RouterProvider,
+} from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { type RouterContext } from "@synergy/core";
+import { routeTree as appRouteTree } from "@synergy/core";
 import { AuthContext } from "@synergy/features/auth";
+import { Page } from "@synergy/ui";
 
-import { routeTree } from "~/routeTree.gen";
+import { routeTree as rootRouteTree } from "~/routeTree.gen";
 
+// Merge base routes and @synergy/core routes.
 const router = createRouter({
-  routeTree,
+  routeTree: createRootRoute().addChildren([
+    Object.assign({ id: "base" }, rootRouteTree),
+    Object.assign({ id: "app" }, appRouteTree),
+  ]),
   defaultPreload: "intent",
-  context: {} as RouterContext,
+  defaultPendingComponent: () => {
+    return (
+      <Page centered>
+        <Loader2Icon
+          className="animate-spin"
+          size={48}
+        />
+      </Page>
+    );
+  },
 });
 
 declare module "@tanstack/react-router" {

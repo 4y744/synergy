@@ -1,6 +1,12 @@
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
-import { RouterContext } from "@synergy/core";
+import { AuthStore } from "@synergy/features/auth";
+import { QueryClient } from "@tanstack/react-query";
 
-export const Route = createRootRouteWithContext<RouterContext>()({
+type RouteContext = {
+  queryClient: QueryClient;
+  authStore: AuthStore;
+};
+
+export const Route = createRootRouteWithContext<RouteContext>()({
   component: () => <Outlet />,
 });

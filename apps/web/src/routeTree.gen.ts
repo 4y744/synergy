@@ -11,49 +11,14 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SignupImport } from './routes/signup'
-import { Route as SigninImport } from './routes/signin'
-import { Route as GroupsImport } from './routes/groups'
 import { Route as IndexImport } from './routes/index'
-import { Route as GroupsGroupIdImport } from './routes/groups/$groupId'
-import { Route as GroupsGroupIdChatsChatIdImport } from './routes/groups/$groupId/chats/$chatId'
 
 // Create/Update Routes
-
-const SignupRoute = SignupImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const SigninRoute = SigninImport.update({
-  id: '/signin',
-  path: '/signin',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const GroupsRoute = GroupsImport.update({
-  id: '/groups',
-  path: '/groups',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any)
-
-const GroupsGroupIdRoute = GroupsGroupIdImport.update({
-  id: '/$groupId',
-  path: '/$groupId',
-  getParentRoute: () => GroupsRoute,
-} as any)
-
-const GroupsGroupIdChatsChatIdRoute = GroupsGroupIdChatsChatIdImport.update({
-  id: '/chats/$chatId',
-  path: '/chats/$chatId',
-  getParentRoute: () => GroupsGroupIdRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -67,137 +32,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/groups': {
-      id: '/groups'
-      path: '/groups'
-      fullPath: '/groups'
-      preLoaderRoute: typeof GroupsImport
-      parentRoute: typeof rootRoute
-    }
-    '/signin': {
-      id: '/signin'
-      path: '/signin'
-      fullPath: '/signin'
-      preLoaderRoute: typeof SigninImport
-      parentRoute: typeof rootRoute
-    }
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupImport
-      parentRoute: typeof rootRoute
-    }
-    '/groups/$groupId': {
-      id: '/groups/$groupId'
-      path: '/$groupId'
-      fullPath: '/groups/$groupId'
-      preLoaderRoute: typeof GroupsGroupIdImport
-      parentRoute: typeof GroupsImport
-    }
-    '/groups/$groupId/chats/$chatId': {
-      id: '/groups/$groupId/chats/$chatId'
-      path: '/chats/$chatId'
-      fullPath: '/groups/$groupId/chats/$chatId'
-      preLoaderRoute: typeof GroupsGroupIdChatsChatIdImport
-      parentRoute: typeof GroupsGroupIdImport
-    }
   }
 }
 
 // Create and export the route tree
 
-interface GroupsGroupIdRouteChildren {
-  GroupsGroupIdChatsChatIdRoute: typeof GroupsGroupIdChatsChatIdRoute
-}
-
-const GroupsGroupIdRouteChildren: GroupsGroupIdRouteChildren = {
-  GroupsGroupIdChatsChatIdRoute: GroupsGroupIdChatsChatIdRoute,
-}
-
-const GroupsGroupIdRouteWithChildren = GroupsGroupIdRoute._addFileChildren(
-  GroupsGroupIdRouteChildren,
-)
-
-interface GroupsRouteChildren {
-  GroupsGroupIdRoute: typeof GroupsGroupIdRouteWithChildren
-}
-
-const GroupsRouteChildren: GroupsRouteChildren = {
-  GroupsGroupIdRoute: GroupsGroupIdRouteWithChildren,
-}
-
-const GroupsRouteWithChildren =
-  GroupsRoute._addFileChildren(GroupsRouteChildren)
-
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/groups': typeof GroupsRouteWithChildren
-  '/signin': typeof SigninRoute
-  '/signup': typeof SignupRoute
-  '/groups/$groupId': typeof GroupsGroupIdRouteWithChildren
-  '/groups/$groupId/chats/$chatId': typeof GroupsGroupIdChatsChatIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/groups': typeof GroupsRouteWithChildren
-  '/signin': typeof SigninRoute
-  '/signup': typeof SignupRoute
-  '/groups/$groupId': typeof GroupsGroupIdRouteWithChildren
-  '/groups/$groupId/chats/$chatId': typeof GroupsGroupIdChatsChatIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/groups': typeof GroupsRouteWithChildren
-  '/signin': typeof SigninRoute
-  '/signup': typeof SignupRoute
-  '/groups/$groupId': typeof GroupsGroupIdRouteWithChildren
-  '/groups/$groupId/chats/$chatId': typeof GroupsGroupIdChatsChatIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/groups'
-    | '/signin'
-    | '/signup'
-    | '/groups/$groupId'
-    | '/groups/$groupId/chats/$chatId'
+  fullPaths: '/'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/groups'
-    | '/signin'
-    | '/signup'
-    | '/groups/$groupId'
-    | '/groups/$groupId/chats/$chatId'
-  id:
-    | '__root__'
-    | '/'
-    | '/groups'
-    | '/signin'
-    | '/signup'
-    | '/groups/$groupId'
-    | '/groups/$groupId/chats/$chatId'
+  to: '/'
+  id: '__root__' | '/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  GroupsRoute: typeof GroupsRouteWithChildren
-  SigninRoute: typeof SigninRoute
-  SignupRoute: typeof SignupRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  GroupsRoute: GroupsRouteWithChildren,
-  SigninRoute: SigninRoute,
-  SignupRoute: SignupRoute,
 }
 
 export const routeTree = rootRoute
@@ -210,37 +77,11 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/groups",
-        "/signin",
-        "/signup"
+        "/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/groups": {
-      "filePath": "groups.tsx",
-      "children": [
-        "/groups/$groupId"
-      ]
-    },
-    "/signin": {
-      "filePath": "signin.tsx"
-    },
-    "/signup": {
-      "filePath": "signup.tsx"
-    },
-    "/groups/$groupId": {
-      "filePath": "groups/$groupId.tsx",
-      "parent": "/groups",
-      "children": [
-        "/groups/$groupId/chats/$chatId"
-      ]
-    },
-    "/groups/$groupId/chats/$chatId": {
-      "filePath": "groups/$groupId/chats/$chatId.tsx",
-      "parent": "/groups/$groupId"
     }
   }
 }

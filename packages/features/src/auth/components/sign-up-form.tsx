@@ -1,4 +1,9 @@
+import { ComponentProps } from "react";
+import { useNavigate } from "@tanstack/react-router";
+
 import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Loader2 } from "lucide-react";
 
 import {
@@ -17,14 +22,10 @@ import {
   Input,
   Button,
 } from "@synergy/ui";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { SignUp, SignUpSchema } from "../types/sign-up";
-import { useSignUp } from "../hooks/use-sign-up";
-import { ComponentProps } from "react";
 import { cn } from "@synergy/utils";
-import { useNavigate } from "@tanstack/react-router";
+
+import { useSignUp } from "../hooks/use-sign-up";
+import { SignUp, SignUpSchema } from "../types/sign-up";
 
 type SignUpProps = Readonly<ComponentProps<"div">>;
 

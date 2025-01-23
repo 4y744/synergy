@@ -1,4 +1,3 @@
-import { auth, db } from "@synergy/libs/firebase";
 import { MutationOptions, QueryClient } from "@tanstack/react-query";
 import {
   collectionGroup,
@@ -9,6 +8,9 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
+
+import { auth, db } from "@synergy/libs/firebase";
+
 import { NewMember } from "../types/member";
 import { getGroupOptions } from "~/groups";
 

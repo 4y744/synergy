@@ -1,4 +1,9 @@
+import { ComponentProps } from "react";
+import { useNavigate } from "@tanstack/react-router";
+
 import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Loader2 } from "lucide-react";
 
 import {
@@ -17,14 +22,11 @@ import {
   Input,
   Button,
 } from "@synergy/ui";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { SignIn, SignInSchema } from "../types/sign-in";
-import { useSignIn } from "../hooks/use-sign-in";
-import { ComponentProps } from "react";
 import { cn } from "@synergy/utils";
-import { useNavigate } from "@tanstack/react-router";
+
+import { useSignIn } from "../hooks/use-sign-in";
+import { SignIn, SignInSchema } from "../types/sign-in";
+
 type SignInProps = Readonly<ComponentProps<"div">>;
 
 export const SignInForm = ({ className, ...props }: SignInProps) => {

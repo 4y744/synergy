@@ -1,6 +1,7 @@
 import { createStore } from "zustand";
-import { Auth } from "../types/auth";
 import { subscribeWithSelector } from "zustand/middleware";
+
+import { Auth } from "../types/auth";
 
 export type AuthState = Auth & {
   signIn: (auth: Partial<Auth>) => void;

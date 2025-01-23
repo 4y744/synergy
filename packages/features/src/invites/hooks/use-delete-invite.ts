@@ -1,5 +1,6 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { FirestoreError } from "firebase/firestore";
+
 import { deleteInviteOptions } from "../api/delete-invite";
 
 type UseDeleteInviteOptions = UseMutationOptions<void, FirestoreError, string>;

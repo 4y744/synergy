@@ -1,3 +1,5 @@
+import { ComponentProps, ReactNode, useState } from "react";
+
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import {
@@ -15,21 +17,20 @@ import {
   DialogTitle,
 } from "@synergy/ui";
 
+import { useCreateGroup } from "../hooks/use-create-group";
+import { NewGroup, NewGroupSchema } from "../types/new-group";
+import { cn } from "@synergy/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useCreateGroup } from "../hooks/use-create-group";
-import { NewGroup, NewGroupSchema } from "../types/group";
+type CreateGroupProps = Readonly<ComponentProps<"form">>;
 
-import { ReactNode, useState } from "react";
-
-type CreateGroupProps = Readonly<{
-  children?: ReactNode;
-}>;
-
-export const CreateGroup = ({ children }: CreateGroupProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
+export const CreateGroupForm = ({
+  onSubmit,
+  className,
+  ...props
+}: CreateGroupProps) => {
   const { mutate: createGroup } = useCreateGroup();
+
   const form = useForm<NewGroup>({
     resolver: zodResolver(NewGroupSchema),
     defaultValues: {
@@ -37,10 +38,47 @@ export const CreateGroup = ({ children }: CreateGroupProps) => {
     },
   });
 
-  const onSubmit: SubmitHandler<NewGroup> = (data) => {
+  const _onSubmit: SubmitHandler<NewGroup> = (data) => {
     createGroup(data);
-    setIsOpen(false);
   };
+
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={(event) => {
+          onSubmit?.(event);
+          form.handleSubmit(_onSubmit);
+        }}
+        className={cn("space-y-4", className)}
+        {...props}
+      >
+        <FormField
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="School project"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Create</Button>
+      </form>
+    </Form>
+  );
+};
+
+type CreateGroupDialogProps = Readonly<{
+  children?: ReactNode;
+}>;
+
+export const CreateGroupDialog = ({ children }: CreateGroupDialogProps) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Dialog
@@ -55,29 +93,7 @@ export const CreateGroup = ({ children }: CreateGroupProps) => {
       </DialogTrigger>
       <DialogContent>
         <DialogTitle>Create group</DialogTitle>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4"
-          >
-            <FormField
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="School project"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Create</Button>
-          </form>
-        </Form>
+        <CreateGroupForm onSubmit={() => setIsOpen(false)} />
       </DialogContent>
     </Dialog>
   );

@@ -26,9 +26,11 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
+  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarProvider,
   Tabs,
   TabsContent,
   TabsList,
@@ -49,16 +51,24 @@ import { ChatSettings, useChats } from "@synergy/features/chats";
 import { MembersDialog } from "@synergy/features/members";
 
 import { InviteDialog, InvitesDialog } from "@synergy/features/invites";
+import { ReactNode } from "react";
 
 const SidebarGroups = () => {
-  const { groupId } = useParams({ strict: false });
+  const params = useParams({ strict: false });
   const groups = useGroups();
 
-  if (!groupId && groups.length > 0) {
-    return <Navigate to={`/groups/${groups[0]?.data?.id}`} />;
+  if (!params.groupId && groups.length > 0) {
+    return (
+      <Navigate
+        to="/groups/$groupId"
+        params={{ groupId: groups[0]?.data?.id! }}
+      />
+    );
   }
 
-  const selectedGroup = groups.find(({ data }) => data?.id == groupId)?.data;
+  const selectedGroup = groups.find(
+    ({ data }) => data?.id == params.groupId
+  )?.data;
 
   return groups.length == 0 || !selectedGroup ? (
     <>
@@ -95,7 +105,10 @@ const SidebarGroups = () => {
                 key={group!.id}
                 asChild
               >
-                <Link to={`/groups/${group!.id}`}>
+                <Link
+                  to="/groups/$groupId"
+                  params={{ groupId: params.groupId! }}
+                >
                   <Avatar
                     className={cn(
                       "h-8 w-8 rounded-lg",
@@ -127,14 +140,14 @@ const SidebarGroups = () => {
 };
 
 const SidebarAdmin = () => {
-  const { groupId } = useParams({ strict: false });
+  const params = useParams({ strict: false });
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Administration</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
           <SidebarMenuItem>
-            <InvitesDialog groupId={groupId}>
+            <InvitesDialog groupId={params.groupId!}>
               <SidebarMenuButton>
                 <MailPlus />
                 <span>Invite</span>
@@ -174,7 +187,7 @@ const SidebarAdmin = () => {
                     <GroupSettings />
                   </TabsContent>
                   <TabsContent value="chats">
-                    <ChatSettings groupId={groupId} />
+                    <ChatSettings groupId={params.groupId!} />
                   </TabsContent>
                 </Tabs>
               </DialogContent>
@@ -187,8 +200,8 @@ const SidebarAdmin = () => {
 };
 
 const SidebarChats = () => {
-  const { groupId } = useParams({ strict: false });
-  const chats = useChats(groupId);
+  const params = useParams({ strict: false });
+  const chats = useChats(params.groupId!);
 
   return (
     <SidebarGroup>
@@ -198,7 +211,10 @@ const SidebarChats = () => {
           {chats.data?.map((chat) => (
             <SidebarMenuItem key={chat.id}>
               <SidebarMenuButton asChild>
-                <Link to={`/groups/${groupId}/chats/${chat.id}`}>
+                <Link
+                  to="/groups/$groupId/chats/$chatId"
+                  params={{ groupId: params.groupId!, chatId: chat.id }}
+                >
                   <Hash />
                   {chat.name}
                 </Link>
@@ -240,7 +256,7 @@ const SidebarUser = () => {
         <DropdownMenuGroup>
           <DropdownMenuItem
             onClick={() => {
-              navigate({ to: "/" });
+              navigate({ to: ".." });
               signOut();
             }}
           >
@@ -271,5 +287,16 @@ export const AppSidebar = () => {
         <SidebarUser />
       </SidebarFooter>
     </Sidebar>
+  );
+};
+
+type SidebarLayoutProps = Readonly<{ children?: ReactNode }>;
+
+export const SidebarLayout = ({ children }: SidebarLayoutProps) => {
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>{children}</SidebarInset>
+    </SidebarProvider>
   );
 };

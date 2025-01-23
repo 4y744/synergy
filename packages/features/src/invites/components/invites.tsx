@@ -1,4 +1,6 @@
 import { ReactNode, useState } from "react";
+import { CopyIcon, Trash2 } from "lucide-react";
+
 import {
   Button,
   Calendar,
@@ -17,11 +19,12 @@ import {
   TableHeader,
   TableRow,
 } from "@synergy/ui";
+
 import { copyToClipboard } from "@synergy/utils";
+
 import { useCreateInvite } from "../hooks/use-create-invite";
-import { useInvites } from "../hooks/use-invites";
-import { CopyIcon, Trash2 } from "lucide-react";
 import { useDeleteInvite } from "../hooks/use-delete-invite";
+import { useInvites } from "../hooks/use-invites";
 
 type InvitesProps = Readonly<{
   groupId: string;

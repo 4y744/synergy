@@ -9,7 +9,6 @@ export const MessageSchema = z.object({
 
 export const NewMessageSchema = z.object({
   payload: z.string().min(1),
-  createdBy: z.string(),
 });
 
 export type Message = z.infer<typeof MessageSchema>;

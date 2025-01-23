@@ -1,3 +1,10 @@
+import { ComponentProps, ReactNode, useState } from "react";
+
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Loader2 } from "lucide-react";
+
 import { useCreateMember } from "~/members/hooks/use-create-member";
 import {
   Button,
@@ -13,12 +20,9 @@ import {
   FormMessage,
   Input,
 } from "@synergy/ui";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Invite, InviteSchema } from "~/groups";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ComponentProps, ReactNode, useState } from "react";
 import { cn, isValidURL } from "@synergy/utils";
-import { Loader2 } from "lucide-react";
+
+import { Invite, InviteSchema } from "../types/invite";
 
 type InviteFormProps = Readonly<
   ComponentProps<"form"> & {
