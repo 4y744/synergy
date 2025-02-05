@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@synergy/core": "workspace:*",
+    "@synergy/app": "workspace:*",
     "@synergy/libs": "workspace:*",
     "@synergy/ui": "workspace:*",
     "@tanstack/react-query": "^5.60.5",

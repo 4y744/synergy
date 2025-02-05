@@ -1,7 +1,7 @@
 {
   "name": "@synergy/features",
   "version": "1.0.0",
-  "license": "ISC",
+  "license": "GPL-3.0-only",
   "private": true,
   "scripts": {
     "build": "tsup",

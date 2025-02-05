@@ -2,12 +2,12 @@ import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { FirestoreError } from "firebase/firestore";
 
 import { createMessageOptions } from "../api/create-message";
-import { NewMessage } from "../types/message";
+import { CreateMessageInput } from "../types/create-message";
 
 type UseCreateMessageOptions = UseMutationOptions<
   string,
   FirestoreError,
-  NewMessage
+  CreateMessageInput
 >;
 
 export const useCreateMessage = (

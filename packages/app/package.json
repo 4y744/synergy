@@ -1,0 +1,40 @@
+{
+  "name": "@synergy/app",
+  "version": "1.0.0",
+  "license": "GPL-3.0-only",
+  "private": true,
+  "scripts": {
+    "build:router": "tsr generate",
+    "dev:router": "tsr watch",
+    "build:tsup": "tsup",
+    "dev:tsup": "tsup --watch",
+    "build": "pnpm run /^build:/",
+    "dev": "pnpm run /^dev:/"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.mts"
+    }
+  },
+  "dependencies": {
+    "@synergy/features": "workspace:*",
+    "@synergy/libs": "workspace:*",
+    "@synergy/ui": "workspace:*",
+    "@synergy/utils": "workspace:*",
+    "@tanstack/react-query": "^5.60.5",
+    "@tanstack/react-router": "^1.97.8",
+    "lucide-react": "^0.460.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.10"
+  },
+  "devDependencies": {
+    "@synergy/configs": "workspace:*",
+    "@tanstack/router-cli": "^1.97.14",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "tsup": "8.0.0",
+    "typescript": "^5.5.3"
+  }
+}

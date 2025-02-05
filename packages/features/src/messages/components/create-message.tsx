@@ -7,7 +7,10 @@ import { Input, Form, FormControl, FormField, FormItem } from "@synergy/ui";
 import { cn } from "@synergy/utils";
 
 import { useCreateMessage } from "../hooks/use-create-message";
-import { NewMessage, NewMessageSchema } from "../types/message";
+import {
+  CreateMessageInput,
+  createMessageInputSchema,
+} from "../types/create-message";
 
 type ChatInputProps = Readonly<
   ComponentProps<"form"> & {
@@ -15,18 +18,18 @@ type ChatInputProps = Readonly<
     chatId: string;
   }
 >;
-export const CreateMessage = forwardRef<HTMLFormElement, ChatInputProps>(
+export const CreateMessageForm = forwardRef<HTMLFormElement, ChatInputProps>(
   ({ chatId, groupId, onSubmit, ...props }, ref) => {
     const { mutate: createMessage } = useCreateMessage(groupId, chatId);
 
-    const form = useForm<NewMessage>({
-      resolver: zodResolver(NewMessageSchema),
+    const form = useForm<CreateMessageInput>({
+      resolver: zodResolver(createMessageInputSchema),
       defaultValues: {
         payload: "",
       },
     });
 
-    const _onSubmit: SubmitHandler<NewMessage> = (data) => {
+    const _onSubmit: SubmitHandler<CreateMessageInput> = (data) => {
       createMessage(data);
       form.reset();
     };

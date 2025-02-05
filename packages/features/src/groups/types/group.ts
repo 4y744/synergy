@@ -1,10 +1,10 @@
 import z from "zod";
 
-export const GroupSchema = z.object({
+export const groupSchema = z.object({
   id: z.string(),
   name: z.string(),
   createdBy: z.string(),
   createdAt: z.date(),
 });
 
-export type Group = z.infer<typeof GroupSchema>;
+export type Group = z.infer<typeof groupSchema>;

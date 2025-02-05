@@ -6,12 +6,12 @@ import {
 import { FirestoreError } from "firebase/firestore";
 
 import { createMemberOptions } from "../api/create-member";
-import { NewMember } from "../types/member";
+import { CreateMemberInput } from "../types/create-member";
 
 type UseCreateMemberOptions = UseMutationOptions<
   string,
   FirestoreError,
-  NewMember
+  CreateMemberInput
 >;
 
 export const useCreateMember = (options?: Partial<UseCreateMemberOptions>) => {

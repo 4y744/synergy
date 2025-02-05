@@ -8,30 +8,32 @@ import {
 
 import { auth, db } from "@synergy/libs/firebase";
 
-import { NewMessage } from "../types/message";
+import { CreateMessageInput } from "../types/create-message";
 
 const createMessage = async (
   groupId: string,
   chatId: string,
-  payload: string
+  data: CreateMessageInput
 ) => {
   const { id } = await addDoc(
     collection(db, "groups", groupId, "chats", chatId, "messages"),
     {
+      ...data,
       createdAt: serverTimestamp(),
-      payload,
       createdBy: auth.currentUser!.uid,
     }
   );
   return id;
 };
 
-type CreateMessageOptions = MutationOptions<string, FirestoreError, NewMessage>;
+type CreateMessageOptions = MutationOptions<
+  string,
+  FirestoreError,
+  CreateMessageInput
+>;
 
 export const createMessageOptions = (groupId: string, chatId: string) => {
   return {
-    mutationFn: ({ payload }) => {
-      return createMessage(groupId, chatId, payload);
-    },
+    mutationFn: (data) => createMessage(groupId, chatId, data),
   } satisfies CreateMessageOptions;
 };

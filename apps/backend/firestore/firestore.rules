@@ -53,7 +53,8 @@ service cloud.firestore {
         )
       );
       allow update, delete: if (
-        request.auth.uid == memberId
+        request.auth.uid == memberId ||
+        isAdmin(groupId, request.auth.uid)
       );
       allow get, list: if (
         isMember(groupId, request.auth.uid)

@@ -1,7 +1,7 @@
 import z from "zod";
 
-export const NewMemberSchema = z.object({
-  inviteId: z.string(),
+export const memberSchema = z.object({
+  uid: z.string(),
 });
 
-export type NewMember = z.infer<typeof NewMemberSchema>;
+export type Member = z.infer<typeof memberSchema>;

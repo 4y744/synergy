@@ -4,27 +4,31 @@ import { collection, FirestoreError, onSnapshot } from "firebase/firestore";
 
 import { db } from "@synergy/libs/firebase";
 
-import { Invite, InviteSchema } from "../types/invite";
+import { Invite, inviteSchema } from "../types/invite";
 import { registerQuerySubscription } from "@synergy/libs/react-query";
 
 const getInvites = async (
   groupId: string,
-  onUpdate: (invites: Invite[]) => void
+  options?: {
+    onUpdate?: (invites: Invite[]) => void;
+  }
 ) => {
   let unsubscribe!: Unsubscribe;
   const invites = await new Promise((resolve: (invites: Invite[]) => void) => {
     unsubscribe = onSnapshot(
       collection(db, "groups", groupId, "invites"),
       (snapshot) => {
-        const invites = snapshot.docs.map((doc) => {
-          const data = doc.data({ serverTimestamps: "estimate" });
-          return InviteSchema.parse({
-            id: doc.id,
-            expiresAt: data?.expiresAt.toDate(),
-          });
-        });
+        const invites = inviteSchema.array().parse(
+          snapshot.docs.map((doc) => {
+            const data = doc.data({ serverTimestamps: "estimate" });
+            return {
+              id: doc.id,
+              expiresAt: data?.expiresAt.toDate(),
+            } satisfies Invite;
+          })
+        );
         resolve(invites);
-        onUpdate(invites);
+        options?.onUpdate?.(invites);
       },
       unsubscribe
     );
@@ -46,8 +50,10 @@ export const getInvitesOptions = (
   return {
     queryKey: ["groups", groupId, "invites"],
     queryFn: async ({ queryKey }) => {
-      const { invites, unsubscribe } = await getInvites(groupId, (invites) => {
-        queryClient.setQueryData(queryKey, invites);
+      const { invites, unsubscribe } = await getInvites(groupId, {
+        onUpdate: (invites) => {
+          queryClient.setQueryData(queryKey, invites);
+        },
       });
       registerQuerySubscription(queryClient, queryKey, unsubscribe);
       return invites;

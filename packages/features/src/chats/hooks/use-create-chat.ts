@@ -2,9 +2,13 @@ import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { FirestoreError } from "firebase/firestore";
 
 import { createChatOptions } from "../api/create-chat";
-import { Chat, NewChat } from "../types/chat";
+import { CreateChatInput } from "../types/create-chat";
 
-type UseCreateChatOptions = UseMutationOptions<Chat, FirestoreError, NewChat>;
+type UseCreateChatOptions = UseMutationOptions<
+  void,
+  FirestoreError,
+  CreateChatInput
+>;
 
 export const useCreateChat = (
   groupId: string,

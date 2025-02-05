@@ -3,23 +3,25 @@ import { collection, doc, FirestoreError, setDoc } from "firebase/firestore";
 
 import { db } from "@synergy/libs/firebase";
 
-import { NewInvite } from "../types/invite";
+import { CreateInviteInput } from "../types/create-invite";
 
-const createInvite = async (groupId: string, expiresAt: Date) => {
+const createInvite = async (groupId: string, data: CreateInviteInput) => {
   const inviteDocRef = doc(collection(db, "groups", groupId, "invites"));
   await setDoc(inviteDocRef, {
-    expiresAt,
+    ...data,
     inviteId: inviteDocRef.id,
   });
   return inviteDocRef.id;
 };
 
-type CreateInviteOptions = MutationOptions<string, FirestoreError, NewInvite>;
+type CreateInviteOptions = MutationOptions<
+  string,
+  FirestoreError,
+  CreateInviteInput
+>;
 
 export const createInviteOptions = (groupId: string) => {
   return {
-    mutationFn: ({ expiresAt }) => {
-      return createInvite(groupId, expiresAt);
-    },
+    mutationFn: (data) => createInvite(groupId, data),
   } satisfies CreateInviteOptions;
 };

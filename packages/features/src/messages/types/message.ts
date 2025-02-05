@@ -1,16 +1,10 @@
 import z from "zod";
 
-export const MessageSchema = z.object({
+export const messageSchema = z.object({
   id: z.string(),
   createdAt: z.date(),
   payload: z.string(),
   createdBy: z.string(),
 });
 
-export const NewMessageSchema = z.object({
-  payload: z.string().min(1),
-});
-
-export type Message = z.infer<typeof MessageSchema>;
-
-export type NewMessage = z.infer<typeof NewMessageSchema>;
+export type Message = z.infer<typeof messageSchema>;

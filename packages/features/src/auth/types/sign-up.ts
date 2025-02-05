@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const SignUpSchema = z
+export const signUpInputSchema = z
   .object({
     username: z
       .string()
@@ -22,4 +22,4 @@ export const SignUpSchema = z
     }
   );
 
-export type SignUp = z.infer<typeof SignUpSchema>;
+export type SignUpInput = z.infer<typeof signUpInputSchema>;

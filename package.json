@@ -6,9 +6,9 @@
   "packageManager": "pnpm@9.12.3",
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo dev --ui tui",
-    "deploy": "firebase deploy",
+    "dev": "turbo dev",
     "web:dev": "pnpm run --filter @synergy/web dev",
-    "emulators:start": "firebase emulators:start"
+    "emulators:start": "firebase emulators:start",
+    "deploy": "firebase deploy"
   }
 }

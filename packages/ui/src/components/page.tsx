@@ -21,7 +21,7 @@ export const Page = forwardRef(
     return (
       <div
         className={cn(
-          "w-screen min-h-screen",
+          "min-w-full min-h-screen space-y-2 md:p-8 p-4",
           { "flex flex-col justify-center items-center": centered },
           className
         )}

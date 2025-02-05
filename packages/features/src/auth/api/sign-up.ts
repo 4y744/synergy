@@ -5,39 +5,41 @@ import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { auth, db } from "@synergy/libs/firebase";
 
 import { Auth } from "../types/auth";
-import { SignUp } from "../types/sign-up";
+import { SignUpInput } from "../types/sign-up";
 
-const signUp = async (username: string, email: string, password: string) => {
+const signUp = async (data: SignUpInput) => {
   /*
     TODO: IMPLEMENT TRANSLATIONS FOR THESE ERRORS
     https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#createuserwithemailandpassword
   */
   const credential = await createUserWithEmailAndPassword(
     auth,
-    email,
-    password
+    data.email,
+    data.password
   );
   const userDocRef = doc(db, "users", credential.user.uid);
   await setDoc(userDocRef, {
-    username,
+    username: data.username,
     createdAt: serverTimestamp(),
   });
   const userDoc = await getDoc(userDocRef);
-  const data = userDoc.data({ serverTimestamps: "estimate" });
+  const { username, createdAt } = {
+    ...userDoc.data({
+      serverTimestamps: "estimate",
+    }),
+  };
   return {
     uid: credential.user.uid,
     username,
-    email,
-    createdAt: data?.createdAt.toDate(),
+    email: credential.user.email!,
+    createdAt: createdAt.toDate(),
   };
 };
 
-type SignUpOptions = MutationOptions<Partial<Auth>, AuthError, SignUp>;
+type SignUpOptions = MutationOptions<Partial<Auth>, AuthError, SignUpInput>;
 
 export const signUpOptions = () => {
   return {
-    mutationFn: ({ username, email, password }) => {
-      return signUp(username, email, password);
-    },
+    mutationFn: (data) => signUp(data),
   } satisfies SignUpOptions;
 };

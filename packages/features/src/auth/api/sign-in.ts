@@ -5,30 +5,36 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "@synergy/libs/firebase";
 
 import { Auth } from "../types/auth";
-import { SignIn } from "../types/sign-in";
+import { SignInInput } from "../types/sign-in";
 
-const signIn = async (email: string, password: string) => {
+const signIn = async (data: SignInInput) => {
   /*
     TODO: IMPLEMENT TRANSLATIONS FOR THESE ERRORS
     https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#signinwithemailandpassword
   */
-  const credential = await signInWithEmailAndPassword(auth, email, password);
+  const credential = await signInWithEmailAndPassword(
+    auth,
+    data.email,
+    data.password
+  );
   const userDoc = await getDoc(doc(db, "users", credential.user.uid));
-  const data = userDoc.data({ serverTimestamps: "estimate" });
+  const { username, createdAt } = {
+    ...userDoc.data({
+      serverTimestamps: "estimate",
+    }),
+  };
   return {
     uid: credential.user.uid,
-    username: data?.username,
-    email,
-    createdAt: data?.createdAt.toDate(),
+    username,
+    email: credential.user.email!,
+    createdAt: createdAt.toDate(),
   };
 };
 
-type SignInOptions = MutationOptions<Partial<Auth>, AuthError, SignIn>;
+type SignInOptions = MutationOptions<Partial<Auth>, AuthError, SignInInput>;
 
 export const signInOptions = () => {
   return {
-    mutationFn: ({ email, password }) => {
-      return signIn(email, password);
-    },
+    mutationFn: (data) => signIn(data),
   } satisfies SignInOptions;
 };

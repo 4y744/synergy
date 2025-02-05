@@ -2,12 +2,12 @@ import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { FirestoreError } from "firebase/firestore";
 
 import { createInviteOptions } from "../api/create-invite";
-import { NewInvite } from "../types/invite";
+import { CreateInviteInput } from "../types/create-invite";
 
 type UseCreateInviteOptions = UseMutationOptions<
   string,
   FirestoreError,
-  NewInvite
+  CreateInviteInput
 >;
 
 export const useCreateInvite = (

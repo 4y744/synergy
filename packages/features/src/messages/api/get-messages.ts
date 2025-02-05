@@ -21,13 +21,15 @@ import {
 import { db } from "@synergy/libs/firebase";
 import { registerQuerySubscription } from "@synergy/libs/react-query";
 
-import { Message, MessageSchema } from "../types/message";
+import { Message, messageSchema } from "../types/message";
 
 const getMessages = async (
   groupId: string,
   chatId: string,
   last: DocumentSnapshot | undefined,
-  onUpdate?: (messages: MessagesPage) => void
+  options?: {
+    onUpdate?: (messages: MessagesPage) => void;
+  }
 ) => {
   let unsubscribe!: Unsubscribe;
   const messages = await new Promise(
@@ -50,7 +52,7 @@ const getMessages = async (
           limit(50)
         );
       } else {
-        //TODO: Try retreive the 50th (or last if < 50) element and use that as a reference point.
+        //TODO: Try to retreive the 50th (or last if < 50) element and use that as a reference point.
         //Might be possible with startAfter(50), limit(1) or something like that.
         const { docs } = await getDocs(
           query(messagesCollection, orderBy("createdAt", "desc"), limit(1))
@@ -65,21 +67,24 @@ const getMessages = async (
       unsubscribe = onSnapshot(
         q,
         (snapshot) => {
-          const messages = snapshot.docs.map((doc) => {
-            const data = doc.data({ serverTimestamps: "estimate" });
-            return MessageSchema.parse({
-              id: doc.id,
-              payload: data?.payload,
-              createdBy: data?.createdBy,
-              createdAt: data?.createdAt.toDate(),
-            } satisfies Message);
-          });
+          const messages = messageSchema.array().parse(
+            snapshot.docs.map((doc) => {
+              const data = doc.data({ serverTimestamps: "estimate" });
+              return {
+                id: doc.id,
+                payload: data?.payload,
+                createdBy: data?.createdBy,
+                createdAt: data?.createdAt.toDate(),
+              } satisfies Message;
+            })
+          );
+
           const messagesPage = {
             messages,
             nextPage: snapshot.docs[snapshot.docs.length - 1],
           };
           resolve(messagesPage);
-          onUpdate?.(messagesPage);
+          options?.onUpdate?.(messagesPage);
         },
         unsubscribe
       );
@@ -114,22 +119,25 @@ export const getMessagesOptions = (
         groupId,
         chatId,
         pageParam,
-        (messagesPage) => {
-          queryClient.setQueryData(
-            queryKey,
-            (
-              data: InfiniteData<MessagesPage, DocumentSnapshot | undefined>
-            ) => {
-              if (!data) {
-                return undefined;
+        {
+          onUpdate: (messagesPage) => {
+            queryClient.setQueryData(
+              queryKey,
+              (
+                data: InfiniteData<MessagesPage, DocumentSnapshot | undefined>
+              ) => {
+                if (!data) {
+                  return undefined;
+                }
+                data.pages = data.pages.map((page) => {
+                  const isMatch =
+                    page.nextPage?.id == messagesPage.nextPage?.id;
+                  return isMatch ? messagesPage : page;
+                });
+                return data;
               }
-              data.pages = data.pages.map((page) => {
-                const isMatch = page.nextPage?.id == messagesPage.nextPage?.id;
-                return isMatch ? messagesPage : page;
-              });
-              return data;
-            }
-          );
+            );
+          },
         }
       );
       registerQuerySubscription(queryClient, queryKey, unsubscribe);

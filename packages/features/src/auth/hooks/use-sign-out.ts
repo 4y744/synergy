@@ -1,8 +1,8 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { AuthError } from "firebase/auth";
 
-import { signOutOptions } from "../api/sign-out";
 import { useAuth } from "./use-auth";
+import { signOutOptions } from "../api/sign-out";
 
 type UseSignOutOptions = UseMutationOptions<void, AuthError, void>;
 

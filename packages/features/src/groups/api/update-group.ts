@@ -3,19 +3,20 @@ import { MutationOptions } from "@tanstack/react-query";
 
 import { db } from "@synergy/libs/firebase";
 
-import { UpdateGroup } from "../types/update-group";
+import { UpdateGroupInput } from "../types/update-group";
 
-const updateGroup = async (delta: UpdateGroup) => {
-  const { id, ...rest } = delta;
-  await updateDoc(doc(db, "groups", id), rest);
+const updateGroup = (groupId: string, data: UpdateGroupInput) => {
+  return updateDoc(doc(db, "groups", groupId), data);
 };
 
-type UpdateGroupOptions = MutationOptions<void, FirestoreError, UpdateGroup>;
+type UpdateGroupOptions = MutationOptions<
+  void,
+  FirestoreError,
+  UpdateGroupInput
+>;
 
-export const updateGroupOptions = () => {
+export const updateGroupOptions = (groupId: string) => {
   return {
-    mutationFn: async (delta) => {
-      await updateGroup(delta);
-    },
+    mutationFn: (data) => updateGroup(groupId, data),
   } satisfies UpdateGroupOptions;
 };

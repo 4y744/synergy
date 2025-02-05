@@ -1,6 +1,8 @@
 import { ComponentProps, ReactNode, useState } from "react";
+import { Loader2 } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   Input,
@@ -16,30 +18,37 @@ import {
   DialogContent,
   DialogTitle,
 } from "@synergy/ui";
+import { cn } from "@synergy/utils";
 
 import { useCreateGroup } from "../hooks/use-create-group";
-import { NewGroup, NewGroupSchema } from "../types/new-group";
-import { cn } from "@synergy/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  CreateGroupInput,
+  createGroupInputSchema,
+} from "../types/create-group";
 
-type CreateGroupProps = Readonly<ComponentProps<"form">>;
+type CreateGroupProps = Readonly<
+  ComponentProps<"form"> & {
+    onSuccess?: (groupId: string) => void;
+  }
+>;
 
 export const CreateGroupForm = ({
+  onSuccess,
   onSubmit,
   className,
   ...props
 }: CreateGroupProps) => {
-  const { mutate: createGroup } = useCreateGroup();
+  const { mutateAsync: createGroup, isPending } = useCreateGroup({ onSuccess });
 
-  const form = useForm<NewGroup>({
-    resolver: zodResolver(NewGroupSchema),
+  const form = useForm<CreateGroupInput>({
+    resolver: zodResolver(createGroupInputSchema),
     defaultValues: {
       name: "",
     },
   });
 
-  const _onSubmit: SubmitHandler<NewGroup> = (data) => {
-    createGroup(data);
+  const _onSubmit: SubmitHandler<CreateGroupInput> = (data) => {
+    return createGroup(data);
   };
 
   return (
@@ -47,7 +56,7 @@ export const CreateGroupForm = ({
       <form
         onSubmit={(event) => {
           onSubmit?.(event);
-          form.handleSubmit(_onSubmit);
+          form.handleSubmit(_onSubmit)(event);
         }}
         className={cn("space-y-4", className)}
         {...props}
@@ -67,7 +76,19 @@ export const CreateGroupForm = ({
             </FormItem>
           )}
         />
-        <Button type="submit">Create</Button>
+        <Button
+          type="submit"
+          disabled={isPending}
+        >
+          {isPending ? (
+            <>
+              <Loader2 className="animate-spin" />
+              Creating
+            </>
+          ) : (
+            <>Create</>
+          )}
+        </Button>
       </form>
     </Form>
   );
@@ -85,15 +106,10 @@ export const CreateGroupDialog = ({ children }: CreateGroupDialogProps) => {
       open={isOpen}
       onOpenChange={(open) => setIsOpen(open)}
     >
-      <DialogTrigger
-        className="w-full"
-        asChild
-      >
-        {children}
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogTitle>Create group</DialogTitle>
-        <CreateGroupForm onSubmit={() => setIsOpen(false)} />
+        <CreateGroupForm onSuccess={() => setIsOpen(false)} />
       </DialogContent>
     </Dialog>
   );

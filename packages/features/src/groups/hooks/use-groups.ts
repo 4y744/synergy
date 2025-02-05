@@ -17,6 +17,7 @@ export const useGroups = (options?: Partial<UseGroupOptions>) => {
         staleTime: Infinity,
         refetchIntervalInBackground: false,
         refetchOnWindowFocus: false,
+        throwOnError: false,
       } satisfies UseGroupOptions;
     }),
   });

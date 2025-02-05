@@ -4,14 +4,14 @@ import { FirebaseStorage } from "firebase/storage";
 
 import { db } from "@synergy/libs/firebase";
 
-const deleteInvite = async (groupId: string, inviteId: string) => {
-  await deleteDoc(doc(db, "groups", groupId, "invites", inviteId));
+const deleteInvite = (groupId: string, inviteId: string) => {
+  return deleteDoc(doc(db, "groups", groupId, "invites", inviteId));
 };
 
-type DeleteInviteOptions = MutationOptions<void, FirebaseStorage, string>;
+type DeleteInviteOptions = MutationOptions<void, FirebaseStorage, void>;
 
-export const deleteInviteOptions = (groupId: string) => {
+export const deleteInviteOptions = (groupId: string, inviteId: string) => {
   return {
-    mutationFn: (inviteId) => deleteInvite(groupId, inviteId),
+    mutationFn: () => deleteInvite(groupId, inviteId),
   } satisfies DeleteInviteOptions;
 };

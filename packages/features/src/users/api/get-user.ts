@@ -9,22 +9,27 @@ import {
 import { db } from "@synergy/libs/firebase";
 import { registerQuerySubscription } from "@synergy/libs/react-query";
 
-import { User, UserSchema } from "../types/user";
+import { User, userSchema } from "../types/user";
 
-const getUser = async (uid: string, onUpdate?: (user: User) => void) => {
+const getUser = async (
+  uid: string,
+  options?: {
+    onUpdate?: (user: User) => void;
+  }
+) => {
   let unsubscribe!: Unsubscribe;
   const user = await new Promise((resolve: (user: User) => void) => {
     unsubscribe = onSnapshot(
       doc(db, "users", uid),
       (snapshot) => {
         const data = snapshot.data({ serverTimestamps: "estimate" });
-        const user = UserSchema.parse({
+        const user = userSchema.parse({
           uid,
           username: data?.username,
           createdAt: data?.createdAt.toDate(),
-        });
+        } satisfies User);
         resolve(user);
-        onUpdate?.(user);
+        options?.onUpdate?.(user);
       },
       unsubscribe
     );
@@ -38,8 +43,10 @@ export const getUserOptions = (uid: string, queryClient: QueryClient) => {
   return {
     queryKey: ["users", uid],
     queryFn: async ({ queryKey }) => {
-      const { user, unsubscribe } = await getUser(uid, (user) => {
-        queryClient.setQueryData(queryKey, user);
+      const { user, unsubscribe } = await getUser(uid, {
+        onUpdate: (user) => {
+          queryClient.setQueryData(queryKey, user);
+        },
       });
       registerQuerySubscription(queryClient, queryKey, unsubscribe);
       return user;
