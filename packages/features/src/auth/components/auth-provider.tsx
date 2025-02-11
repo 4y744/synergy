@@ -1,10 +1,11 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 
-import { doc, getDoc } from "firebase/firestore";
 import { useQueryClient } from "@tanstack/react-query";
+import { doc, getDoc } from "firebase/firestore";
+
+import { auth, db } from "@synergy/libs/firebase";
 
 import { AuthStore, createAuthStore } from "../stores/auth-store";
-import { auth, db } from "@synergy/libs/firebase";
 
 export const AuthContext = createContext<AuthStore>({} as AuthStore);
 
@@ -15,6 +16,7 @@ type AuthProviderProps = Readonly<{
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [authStore] = useState(createAuthStore());
   const queryClient = useQueryClient();
+
   useEffect(() => {
     auth.authStateReady().then(async () => {
       const { initialize, signIn } = authStore.getState();
@@ -24,8 +26,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const data = snapshot.data();
         signIn({
           uid: user.uid,
-          email: user.email!,
-          ...data,
+          username: data?.username,
         });
       }
       initialize();

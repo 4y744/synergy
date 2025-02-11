@@ -3,6 +3,7 @@ import {
   QueryClient,
   UseInfiniteQueryOptions,
 } from "@tanstack/react-query";
+
 import {
   collection,
   DocumentSnapshot,
@@ -19,9 +20,11 @@ import {
 } from "firebase/firestore";
 
 import { db } from "@synergy/libs/firebase";
+
 import { registerQuerySubscription } from "@synergy/libs/react-query";
 
 import { Message, messageSchema } from "../types/message";
+import { ZodError } from "zod";
 
 const getMessages = async (
   groupId: string,
@@ -29,11 +32,15 @@ const getMessages = async (
   last: DocumentSnapshot | undefined,
   options?: {
     onUpdate?: (messages: MessagesPage) => void;
+    onError?: (error: FirestoreError | ZodError<Message[]>) => void;
   }
 ) => {
   let unsubscribe!: Unsubscribe;
   const messages = await new Promise(
-    async (resolve: (messages: MessagesPage) => void) => {
+    async (
+      resolve: (messages: MessagesPage) => void,
+      reject: (error: ZodError<Message[]>) => void
+    ) => {
       const messagesCollection = collection(
         db,
         "groups",
@@ -67,7 +74,7 @@ const getMessages = async (
       unsubscribe = onSnapshot(
         q,
         (snapshot) => {
-          const messages = messageSchema.array().parse(
+          const messages = messageSchema.array().safeParse(
             snapshot.docs.map((doc) => {
               const data = doc.data({ serverTimestamps: "estimate" });
               return {
@@ -79,14 +86,21 @@ const getMessages = async (
             })
           );
 
-          const messagesPage = {
-            messages,
-            nextPage: snapshot.docs[snapshot.docs.length - 1],
-          };
-          resolve(messagesPage);
-          options?.onUpdate?.(messagesPage);
+          if (messages.success) {
+            const messagesPage = {
+              messages: messages.data.filter(
+                ({ payload }) => payload != "__init__"
+              ),
+              nextPage: snapshot.docs[snapshot.docs.length - 1],
+            };
+            resolve(messagesPage);
+            options?.onUpdate?.(messagesPage);
+          } else {
+            reject(messages.error);
+            options?.onError?.(messages.error);
+          }
         },
-        unsubscribe
+        options?.onError
       );
     }
   );
@@ -108,9 +122,9 @@ export type GetMessagesOptions = UseInfiniteQueryOptions<
 >;
 
 export const getMessagesOptions = (
+  queryClient: QueryClient,
   groupId: string,
-  chatId: string,
-  queryClient: QueryClient
+  chatId: string
 ): GetMessagesOptions => {
   return {
     queryKey: ["groups", groupId, "chats", chatId, "messages"],

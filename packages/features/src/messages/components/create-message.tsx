@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input, Form, FormControl, FormField, FormItem } from "@synergy/ui";
+
 import { cn } from "@synergy/utils";
 
 import { useCreateMessage } from "../hooks/use-create-message";
@@ -18,9 +19,10 @@ type ChatInputProps = Readonly<
     chatId: string;
   }
 >;
+
 export const CreateMessageForm = forwardRef<HTMLFormElement, ChatInputProps>(
   ({ chatId, groupId, onSubmit, ...props }, ref) => {
-    const { mutate: createMessage } = useCreateMessage(groupId, chatId);
+    const { mutateAsync: createMessage } = useCreateMessage(groupId, chatId);
 
     const form = useForm<CreateMessageInput>({
       resolver: zodResolver(createMessageInputSchema),
@@ -30,8 +32,8 @@ export const CreateMessageForm = forwardRef<HTMLFormElement, ChatInputProps>(
     });
 
     const _onSubmit: SubmitHandler<CreateMessageInput> = (data) => {
-      createMessage(data);
       form.reset();
+      return createMessage(data);
     };
 
     return (

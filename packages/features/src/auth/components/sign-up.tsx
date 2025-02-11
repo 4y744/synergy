@@ -1,10 +1,8 @@
 import { ComponentProps } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { Loader2 } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { Loader2 } from "lucide-react";
 
 import {
   Card,
@@ -22,23 +20,34 @@ import {
   Input,
   Button,
 } from "@synergy/ui";
+
 import { cn } from "@synergy/utils";
 
 import { useSignUp } from "../hooks/use-sign-up";
 import { SignUpInput, signUpInputSchema } from "../types/sign-up";
 
-type SignUpFormProps = Readonly<ComponentProps<"div">>;
+type SignUpFormProps = Readonly<
+  ComponentProps<"div"> & {
+    onSuccess?: () => void;
+    onSwitch?: () => void;
+  }
+>;
 
-export const SignUpForm = ({ className, ...props }: SignUpFormProps) => {
-  const navigate = useNavigate();
+export const SignUpForm = ({
+  onSuccess,
+  onSwitch,
+  className,
+  ...props
+}: SignUpFormProps) => {
   const { mutate: signUp, isPending } = useSignUp({
-    onSuccess: () => navigate({ to: "/groups" }),
+    onSuccess,
     onError: (error) => {
       form.setError("confirmPassword", {
         message: error.code,
       });
     },
   });
+
   const form = useForm<SignUpInput>({
     resolver: zodResolver(signUpInputSchema),
     defaultValues: {
@@ -146,7 +155,7 @@ export const SignUpForm = ({ className, ...props }: SignUpFormProps) => {
         <Button
           variant="link"
           className="w-full"
-          onClick={() => navigate({ to: "/signin" })}
+          onClick={() => onSwitch?.()}
         >
           Already have an account? Sign in!
         </Button>

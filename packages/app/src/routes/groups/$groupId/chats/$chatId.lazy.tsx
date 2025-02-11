@@ -1,8 +1,11 @@
 import { useRef } from "react";
+import { HashIcon } from "lucide-react";
 import { createLazyFileRoute, useParams } from "@tanstack/react-router";
 
 import { CreateMessageForm, MessagesList } from "@synergy/features/messages";
-import { SidebarTrigger, useIsMobile } from "@synergy/ui";
+import { useChat } from "@synergy/features/chats";
+
+import { Header } from "~/components/layouts/header";
 
 export const Route = createLazyFileRoute("/groups/$groupId/chats/$chatId")({
   component: () => {
@@ -10,19 +13,19 @@ export const Route = createLazyFileRoute("/groups/$groupId/chats/$chatId")({
       from: "/groups/$groupId/chats/$chatId",
     });
 
+    const { data: chat } = useChat(groupId, chatId);
+
     const messagesRef = useRef<HTMLDivElement>(null);
 
-    const isMobile = useIsMobile();
-
     return (
-      <div className="h-full max-h-screen relative">
-        {isMobile && (
-          <div className="absolute top-0 left-0 w-full h-12 bg-sidebar border-b border-b-border flex items-center px-1">
-            <SidebarTrigger />
-          </div>
-        )}
+      <>
+        <Header>
+          <HashIcon size={16} />
+          {chat?.name}
+        </Header>
         <MessagesList
-          className="h-[calc(100%-56px)]"
+          // Offsets are for Header and ChatMessageForm.
+          className="h-[calc(100%-56px-48px)]"
           groupId={groupId!}
           chatId={chatId!}
           ref={messagesRef}
@@ -37,7 +40,7 @@ export const Route = createLazyFileRoute("/groups/$groupId/chats/$chatId")({
             });
           }}
         />
-      </div>
+      </>
     );
   },
 });

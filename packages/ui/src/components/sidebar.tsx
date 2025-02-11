@@ -1,14 +1,14 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
-import { MenuIcon } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 import { useIsMobile } from "~/hooks/use-mobile";
 import { abbreviate, cn } from "@synergy/utils";
 import { Button } from "./button";
 import { Input } from "./input";
 import { Separator } from "./separator";
-import { Sheet, SheetContent } from "./sheet";
+import { Sheet, SheetContent, SheetTitle } from "./sheet";
 import { Skeleton } from "./skeleton";
 import {
   Tooltip,
@@ -198,6 +198,7 @@ const Sidebar = React.forwardRef<
           onOpenChange={setOpenMobile}
           {...props}
         >
+          <SheetTitle className="hidden" />
           <SheetContent
             data-sidebar="sidebar"
             data-mobile="true"
@@ -269,12 +270,12 @@ const SidebarTrigger = React.forwardRef<
   const { toggleSidebar } = useSidebar();
 
   return (
-    <Button
+    <button
       ref={ref}
       data-sidebar="trigger"
       variant="ghost"
-      size="icon"
-      className={cn("h-10 w-10", className)}
+      size="default"
+      className={cn("hover:bg-secondary rounded-md p-2", className)}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();
@@ -282,9 +283,9 @@ const SidebarTrigger = React.forwardRef<
       {...props}
     >
       {/* TODO: FIX THE SIZE OF THIS */}
-      <MenuIcon />
+      <ArrowLeft size={20} />
       <span className="sr-only">Toggle Sidebar</span>
-    </Button>
+    </button>
   );
 });
 SidebarTrigger.displayName = "SidebarTrigger";

@@ -1,4 +1,5 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+
 import { FirestoreError } from "firebase/firestore";
 
 import { createInviteOptions } from "../api/create-invite";

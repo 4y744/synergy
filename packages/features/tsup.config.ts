@@ -5,6 +5,7 @@ export default defineConfig((options: Options) => ({
   entry: [
     "./src/auth/index.ts",
     "./src/chats/index.ts",
+    "./src/files/index.ts",
     "./src/folders/index.ts",
     "./src/groups/index.ts",
     "./src/invites/index.ts",

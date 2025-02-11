@@ -1,12 +1,18 @@
 import { createLazyFileRoute, Outlet } from "@tanstack/react-router";
-import { SidebarLayout } from "~/components/layouts/sidebar";
+
+import { SidebarInset, SidebarProvider } from "@synergy/ui";
+
+import { AppSidebar } from "~/components/layouts/sidebar";
 
 export const Route = createLazyFileRoute("/groups")({
   component: () => {
     return (
-      <SidebarLayout>
-        <Outlet />
-      </SidebarLayout>
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset>
+          <Outlet />
+        </SidebarInset>
+      </SidebarProvider>
     );
   },
 });

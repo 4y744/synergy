@@ -1,5 +1,6 @@
-import { deleteDoc, doc, FirestoreError } from "firebase/firestore";
 import { MutationOptions } from "@tanstack/react-query";
+
+import { deleteDoc, doc, FirestoreError } from "firebase/firestore";
 
 import { db } from "@synergy/libs/firebase";
 

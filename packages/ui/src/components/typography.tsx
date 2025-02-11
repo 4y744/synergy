@@ -18,7 +18,7 @@ const H1: React.FC<Props> = ({ className, children }) => {
 const H2: React.FC<Props> = ({ className, children }) => {
   return (
     <h2
-      className={`scroll-m-20 pb-2 text-2xl font-semibold tracking-tight first:mt-0 ${className}`}
+      className={`scroll-m-20 text-2xl font-semibold tracking-tight first:mt-0 ${className}`}
     >
       {children}
     </h2>

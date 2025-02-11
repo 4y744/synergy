@@ -7,8 +7,6 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "web:dev": "pnpm run --filter @synergy/web dev",
-    "emulators:start": "firebase emulators:start",
     "deploy": "firebase deploy"
   }
 }

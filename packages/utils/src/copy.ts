@@ -6,11 +6,13 @@
  */
 export const copyToClipboard = (
   str: string,
-  onError?: (reason: string) => void
+  options?: {
+    onError?: (reason: string) => void;
+  }
 ) => {
   try {
     navigator.clipboard.writeText(str);
   } catch (error) {
-    onError?.(error as string);
+    options?.onError?.(error as string);
   }
 };

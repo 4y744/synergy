@@ -20,6 +20,7 @@
   "dependencies": {
     "@synergy/features": "workspace:*",
     "@synergy/libs": "workspace:*",
+    "@synergy/locale": "workspace:*",
     "@synergy/ui": "workspace:*",
     "@synergy/utils": "workspace:*",
     "@tanstack/react-query": "^5.60.5",

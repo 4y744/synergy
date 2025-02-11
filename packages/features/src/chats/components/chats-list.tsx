@@ -1,6 +1,7 @@
-import { MoreHorizontalIcon } from "lucide-react";
+import { HashIcon, MoreHorizontalIcon, PlusIcon } from "lucide-react";
 
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -19,6 +20,7 @@ import {
 import { UpdateChatDialog } from "./update-chat";
 import { DeleteChatDialog } from "./delete-chat";
 import { useChats } from "../hooks/use-chats";
+import { CreateChatDialog } from "./create-chat";
 
 type ChatsListProps = Readonly<{
   groupId: string;
@@ -32,14 +34,24 @@ export const ChatsList = ({ groupId }: ChatsListProps) => {
       <TableHeader>
         <TableRow>
           <TableHead>Name</TableHead>
-          <TableHead>Created at</TableHead>
+          <TableHead className="float-end my-1">
+            <CreateChatDialog groupId={groupId}>
+              <Button>
+                <PlusIcon />
+              </Button>
+            </CreateChatDialog>
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {chats?.map(({ id, name, createdAt }) => (
+        {chats?.map(({ id, name }) => (
           <TableRow key={id}>
-            <TableCell>{name}</TableCell>
-            <TableCell>{createdAt.toLocaleString()}</TableCell>
+            <TableCell>
+              <div className="flex items-center gap-2">
+                <HashIcon size={16} />
+                {name}
+              </div>
+            </TableCell>
             <TableCell className="float-end">
               <DropdownMenu>
                 <DropdownMenuTrigger className="hover:bg-secondary rounded-md focus:outline-none">
@@ -71,7 +83,6 @@ export const ChatsList = ({ groupId }: ChatsListProps) => {
                     >
                       <DropdownMenuItem
                         onSelect={(event) => event.preventDefault()}
-                        className="text-destructive"
                       >
                         Delete
                       </DropdownMenuItem>

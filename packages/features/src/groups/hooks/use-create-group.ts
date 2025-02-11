@@ -1,8 +1,5 @@
-import {
-  useMutation,
-  UseMutationOptions,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+
 import { FirestoreError } from "firebase/firestore";
 
 import { createGroupOptions } from "../api/create-group";
@@ -15,9 +12,8 @@ type UseCreateGroupOptions = UseMutationOptions<
 >;
 
 export const useCreateGroup = (options?: Partial<UseCreateGroupOptions>) => {
-  const queryClient = useQueryClient();
   return useMutation({
     ...options,
-    ...createGroupOptions(queryClient),
+    ...createGroupOptions(),
   } satisfies UseCreateGroupOptions);
 };

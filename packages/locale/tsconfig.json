@@ -1,0 +1,9 @@
+{
+  "extends": "@synergy/configs/typescript",
+  "compilerOptions": {
+    "paths": {
+      "~/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}

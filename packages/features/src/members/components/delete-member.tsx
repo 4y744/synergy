@@ -14,6 +14,7 @@ import {
 } from "@synergy/ui";
 
 import { useDeleteMember } from "../hooks/use-delete-member";
+import { useUser } from "~/users";
 
 type DeleteMemberDialogProps = Readonly<{
   children?: ReactNode;
@@ -33,6 +34,8 @@ export const DeleteMemberDialog = ({
     memberId
   );
 
+  const { data: user } = useUser(memberId);
+
   return (
     <AlertDialog
       open={isOpen}
@@ -43,7 +46,8 @@ export const DeleteMemberDialog = ({
         <AlertDialogHeader>
           <AlertDialogTitle>Kick member?</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to kick this member?
+            Are you sure you want to kick
+            <span className="font-medium"> {user?.username}</span>?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

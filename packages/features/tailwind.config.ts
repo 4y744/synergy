@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  content: ["./src/**/*.{ts,tsx}"],
   presets: [require("@synergy/configs/tailwind")],
 } satisfies Config;

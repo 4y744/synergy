@@ -1,6 +1,7 @@
-import { MoreHorizontalIcon } from "lucide-react";
+import { MoreHorizontalIcon, PlusIcon } from "lucide-react";
 
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -15,16 +16,18 @@ import {
   TableHeader,
   TableRow,
 } from "@synergy/ui";
+
 import { copyToClipboard } from "@synergy/utils";
 
 import { useInvites } from "../hooks/use-invites";
 import { DeleteInviteDialog } from "./delete-invite";
+import { CreateInviteDialog } from "./create-invite";
 
-type InvitesProps = Readonly<{
+type InvitesListProps = Readonly<{
   groupId: string;
 }>;
 
-export const InvitesList = ({ groupId }: InvitesProps) => {
+export const InvitesList = ({ groupId }: InvitesListProps) => {
   const { data: invites } = useInvites(groupId);
 
   return (
@@ -33,6 +36,13 @@ export const InvitesList = ({ groupId }: InvitesProps) => {
         <TableRow>
           <TableHead>Id</TableHead>
           <TableHead>Expiration date</TableHead>
+          <TableHead className="float-end my-1">
+            <CreateInviteDialog groupId={groupId}>
+              <Button>
+                <PlusIcon />
+              </Button>
+            </CreateInviteDialog>
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -40,7 +50,8 @@ export const InvitesList = ({ groupId }: InvitesProps) => {
           <TableRow key={id}>
             <TableCell>{id}</TableCell>
             <TableCell>
-              {expiresAt.getFullYear() < 5000 /* :) */
+              {expiresAt.getFullYear() <
+              5000 /* :), TODO: DO THIS MORE CLEANLY */
                 ? expiresAt.toLocaleString()
                 : "never"}
             </TableCell>
@@ -72,7 +83,6 @@ export const InvitesList = ({ groupId }: InvitesProps) => {
                     >
                       <DropdownMenuItem
                         onSelect={(event) => event.preventDefault()}
-                        className="text-destructive"
                       >
                         Delete
                       </DropdownMenuItem>

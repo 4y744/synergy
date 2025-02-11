@@ -9,7 +9,6 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { routeTree as appRouteTree } from "@synergy/app";
 import { AuthContext } from "@synergy/features/auth";
-import { Page } from "@synergy/ui";
 
 import { routeTree as rootRouteTree } from "~/routeTree.gen";
 
@@ -22,12 +21,12 @@ const router = createRouter({
   defaultPreload: "intent",
   defaultPendingComponent: () => {
     return (
-      <Page centered>
+      <div className="w-full h-screen flex justify-center items-center">
         <Loader2Icon
           className="animate-spin"
           size={48}
         />
-      </Page>
+      </div>
     );
   },
 });

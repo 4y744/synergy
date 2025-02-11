@@ -1,8 +1,5 @@
-import {
-  useMutation,
-  UseMutationOptions,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+
 import { FirestoreError } from "firebase/firestore";
 
 import { deleteGroupOptions } from "../api/delete-group";
@@ -13,9 +10,8 @@ export const useDeleteGroup = (
   groupId: string,
   options?: Partial<UseDeleteGroupOptions>
 ) => {
-  const queryClient = useQueryClient();
   return useMutation({
     ...options,
-    ...deleteGroupOptions(queryClient, groupId),
+    ...deleteGroupOptions(groupId),
   } satisfies UseDeleteGroupOptions);
 };

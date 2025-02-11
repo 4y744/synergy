@@ -1,6 +1,6 @@
-import { Link, Navigate, useNavigate, useParams } from "@tanstack/react-router";
 import {
   ChevronsUpDown,
+  FolderIcon,
   Hash,
   HashIcon,
   MailPlusIcon,
@@ -8,6 +8,8 @@ import {
   SettingsIcon,
   UsersIcon,
 } from "lucide-react";
+
+import { Link, Navigate, useNavigate, useParams } from "@tanstack/react-router";
 
 import {
   Avatar,
@@ -29,55 +31,37 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarProvider,
+  useSidebar,
 } from "@synergy/ui";
 
-import { abbreviate, cn } from "@synergy/utils";
-
 import { useAuth, useSignOut } from "@synergy/features/auth";
-
 import {
   CreateGroupDialog,
   useGroup,
   useGroups,
 } from "@synergy/features/groups";
-
 import { useChats } from "@synergy/features/chats";
-
+import { useFolders } from "@synergy/features/folders";
 import { CreateMemberDialog } from "@synergy/features/members";
-import { ReactNode } from "react";
+
+import { abbreviate, cn } from "@synergy/utils";
+import { useEffect } from "react";
 
 const SidebarGroups = () => {
-  const params = useParams({ strict: false });
-  const groups = useGroups();
+  const { groupId } = useParams({ from: "/groups/$groupId" });
 
-  if (!params.groupId && groups.length > 0) {
-    return (
-      <Navigate
-        to="/groups/$groupId"
-        params={{ groupId: groups[0]?.data?.id! }}
-      />
-    );
+  const groups = useGroups();
+  const selectedGroup = useGroup(groupId);
+
+  if (!groups.find(({ data }) => data?.id == groupId)) {
+    // Reached when the selected group is deleted.
+    return <Navigate to="/groups" />;
   }
 
-  const selectedGroup = groups.find(
-    ({ data }) => data?.id == params.groupId
-  )?.data;
-
-  return groups.length == 0 || !selectedGroup ? (
-    <>
-      <CreateMemberDialog>
-        <Button className="w-full">Join a group</Button>
-      </CreateMemberDialog>
-      <CreateGroupDialog>
-        <Button className="w-full">Create a group</Button>
-      </CreateGroupDialog>
-    </>
-  ) : (
+  return (
     <DropdownMenu>
       <DropdownMenuTrigger
         asChild
@@ -86,7 +70,7 @@ const SidebarGroups = () => {
         {/* Trigger can't take components as direct children for some reason. */}
         <div>
           <SidebarCard
-            primary={selectedGroup.name}
+            primary={selectedGroup.data!.name}
             icon={<ChevronsUpDown />}
           />
         </div>
@@ -105,7 +89,7 @@ const SidebarGroups = () => {
               >
                 <Link
                   to="/groups/$groupId"
-                  params={{ groupId: params.groupId! }}
+                  params={{ groupId: group!.id }}
                 >
                   <Avatar
                     className={cn(
@@ -188,6 +172,17 @@ const SidebarAdmin = () => {
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <Link
+                to="/groups/$groupId/admin/folders"
+                params={{ groupId }}
+              >
+                <FolderIcon />
+                Folders
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link
                 to="/groups/$groupId/admin/settings"
                 params={{ groupId }}
               >
@@ -203,8 +198,12 @@ const SidebarAdmin = () => {
 };
 
 const SidebarChats = () => {
-  const params = useParams({ strict: false });
-  const chats = useChats(params.groupId!);
+  const { groupId } = useParams({ from: "/groups/$groupId" });
+  const chats = useChats(groupId);
+
+  if (chats.data?.length == 0) {
+    return <></>;
+  }
 
   return (
     <SidebarGroup>
@@ -216,7 +215,7 @@ const SidebarChats = () => {
               <SidebarMenuButton asChild>
                 <Link
                   to="/groups/$groupId/chats/$chatId"
-                  params={{ groupId: params.groupId!, chatId: chat.id }}
+                  params={{ groupId, chatId: chat.id }}
                 >
                   <Hash />
                   {chat.name}
@@ -230,10 +229,42 @@ const SidebarChats = () => {
   );
 };
 
+const SidebarFolders = () => {
+  const { groupId } = useParams({ from: "/groups/$groupId" });
+  const folders = useFolders(groupId);
+
+  if (folders.data?.length == 0) {
+    return <></>;
+  }
+
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel>Folders</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {folders.data?.map((folder) => (
+            <SidebarMenuItem key={folder.id}>
+              <SidebarMenuButton asChild>
+                <Link
+                  to="/groups/$groupId/folders/$folderId"
+                  params={{ groupId, folderId: folder.id }}
+                >
+                  <FolderIcon />
+                  {folder.name}
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
+};
+
 const SidebarUser = () => {
   const navigate = useNavigate();
 
-  const { username, email } = useAuth();
+  const { username } = useAuth();
   const { mutate: signOut } = useSignOut();
 
   return (
@@ -246,7 +277,6 @@ const SidebarUser = () => {
         <div>
           <SidebarCard
             primary={username}
-            secondary={email}
             image=""
             icon={<Settings />}
           />
@@ -254,7 +284,10 @@ const SidebarUser = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
         <DropdownMenuLabel>My account</DropdownMenuLabel>
-        <DropdownMenuGroup></DropdownMenuGroup>
+        <DropdownMenuGroup>
+          <DropdownMenuItem>Account</DropdownMenuItem>
+          <DropdownMenuItem>Settings</DropdownMenuItem>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem
@@ -272,17 +305,48 @@ const SidebarUser = () => {
 };
 
 export const AppSidebar = () => {
+  const { isMobile, setOpen } = useSidebar();
+
+  useEffect(() => {
+    if (!isMobile) {
+      setOpen(true);
+    }
+  }, [isMobile]);
+
   const { groupId } = useParams({ strict: false });
+  const groups = useGroups();
+
+  if (!groupId && groups.length > 0 && groups[0]?.data) {
+    return (
+      <Navigate
+        to="/groups/$groupId"
+        params={{ groupId: groups[0].data!.id }}
+      />
+    );
+  }
+
   return (
     <Sidebar>
       <SidebarHeader>
-        <SidebarGroups />
+        {groupId ? (
+          <SidebarGroups />
+        ) : (
+          <>
+            <CreateMemberDialog>
+              <Button className="w-full">Join a group</Button>
+            </CreateMemberDialog>
+            <CreateGroupDialog>
+              <Button className="w-full">Create a group</Button>
+            </CreateGroupDialog>
+          </>
+        )}
       </SidebarHeader>
       <SidebarContent>
         {groupId && (
           <>
             <SidebarAdmin />
             <SidebarChats />
+            <SidebarFolders />
           </>
         )}
       </SidebarContent>
@@ -290,16 +354,5 @@ export const AppSidebar = () => {
         <SidebarUser />
       </SidebarFooter>
     </Sidebar>
-  );
-};
-
-type SidebarLayoutProps = Readonly<{ children?: ReactNode }>;
-
-export const SidebarLayout = ({ children }: SidebarLayoutProps) => {
-  return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>{children}</SidebarInset>
-    </SidebarProvider>
   );
 };

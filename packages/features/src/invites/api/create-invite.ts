@@ -1,4 +1,5 @@
 import { MutationOptions } from "@tanstack/react-query";
+
 import { collection, doc, FirestoreError, setDoc } from "firebase/firestore";
 
 import { db } from "@synergy/libs/firebase";

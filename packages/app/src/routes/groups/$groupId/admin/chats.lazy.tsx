@@ -1,18 +1,24 @@
-import { ChatsList, CreateChatDialog } from "@synergy/features/chats";
-import { Button, H1, Page } from "@synergy/ui";
+import { HashIcon } from "lucide-react";
 import { createLazyFileRoute } from "@tanstack/react-router";
+
+import { ChatsList } from "@synergy/features/chats";
+
+import { Header } from "~/components/layouts/header";
+import { Content } from "~/components/layouts/content";
 
 export const Route = createLazyFileRoute("/groups/$groupId/admin/chats")({
   component: () => {
     const { groupId } = Route.useParams();
     return (
-      <Page>
-        <H1>Chats</H1>
-        <ChatsList groupId={groupId} />
-        <CreateChatDialog groupId={groupId}>
-          <Button>Create a new chat</Button>
-        </CreateChatDialog>
-      </Page>
+      <>
+        <Header>
+          <HashIcon size={16} />
+          Manage chats
+        </Header>
+        <Content>
+          <ChatsList groupId={groupId} />
+        </Content>
+      </>
     );
   },
 });

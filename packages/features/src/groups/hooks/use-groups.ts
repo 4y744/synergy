@@ -10,15 +10,16 @@ export const useGroups = (options?: Partial<UseGroupOptions>) => {
   });
   const queryClient = useQueryClient();
   return useQueries({
-    queries: groupIds!.map((groupId) => {
-      return {
-        ...options,
-        ...getGroupOptions(groupId, queryClient),
-        staleTime: Infinity,
-        refetchIntervalInBackground: false,
-        refetchOnWindowFocus: false,
-        throwOnError: false,
-      } satisfies UseGroupOptions;
-    }),
+    queries:
+      groupIds?.map((groupId) => {
+        return {
+          ...options,
+          ...getGroupOptions(queryClient, groupId),
+          staleTime: Infinity,
+          refetchIntervalInBackground: false,
+          refetchOnWindowFocus: false,
+          throwOnError: false,
+        } satisfies UseGroupOptions;
+      }) || [],
   });
 };

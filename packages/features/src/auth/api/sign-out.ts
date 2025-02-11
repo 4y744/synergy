@@ -11,8 +11,6 @@ type SignOutOptions = MutationOptions<void, AuthError, void>;
 
 export const signOutOptions = () => {
   return {
-    mutationFn: () => {
-      return signOut();
-    },
+    mutationFn: () => signOut(),
   } satisfies SignOutOptions;
 };

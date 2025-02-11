@@ -14,7 +14,7 @@ export const useUser = (uid: string, options?: Partial<UseUserOptions>) => {
   const queryClient = useQueryClient();
   return useQuery({
     ...options,
-    ...getUserOptions(uid, queryClient),
+    ...getUserOptions(queryClient, uid),
     staleTime: Infinity,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,

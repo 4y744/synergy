@@ -18,6 +18,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@synergy/ui";
+
 import { cn } from "@synergy/utils";
 
 import { useCreateGroup } from "../hooks/use-create-group";

@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button, Badge, H1, P, Page, Separator } from "@synergy/ui";
+import { Button, Badge, H1, P, Separator } from "@synergy/ui";
 import { cn } from "@synergy/utils";
-
+import { useTranslation } from "react-i18next";
 export const Route = createFileRoute("/")({
   component: () => {
+    const { t } = useTranslation();
     return (
       <div
         className={cn(
@@ -11,6 +12,7 @@ export const Route = createFileRoute("/")({
           "flex flex-col justify-center items-center"
         )}
       >
+        {t("hello")}
         <div className={cn("flex items-end gap-2")}>
           <h1 className="text-4xl font-bold">synergy</h1>
           <Badge className="h-fit mb-1">v0.1</Badge>
@@ -27,7 +29,7 @@ export const Route = createFileRoute("/")({
   },
   notFoundComponent: () => {
     return (
-      <Page centered>
+      <div className="m-auto">
         <div className={cn("flex items-center gap-5")}>
           <H1>404</H1>
           <Separator orientation="vertical" />
@@ -43,7 +45,7 @@ export const Route = createFileRoute("/")({
         >
           Go to home page
         </Link>
-      </Page>
+      </div>
     );
   },
 });

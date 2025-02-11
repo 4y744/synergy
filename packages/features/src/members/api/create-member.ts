@@ -1,4 +1,5 @@
-import { MutationOptions, QueryClient } from "@tanstack/react-query";
+import { MutationOptions } from "@tanstack/react-query";
+
 import {
   collectionGroup,
   doc,
@@ -12,8 +13,6 @@ import {
 import { auth, db } from "@synergy/libs/firebase";
 
 import { CreateMemberInput } from "../types/create-member";
-
-import { getGroupOptions } from "~/groups";
 
 const createMember = async (data: CreateMemberInput) => {
   const { docs: invitesDocs } = await getDocs(
@@ -36,16 +35,8 @@ type CreateMemberOptions = MutationOptions<
   CreateMemberInput
 >;
 
-export const createMemberOptions = (queryClient: QueryClient) => {
+export const createMemberOptions = () => {
   return {
-    mutationFn: async (data) => {
-      const groupId = await createMember(data);
-      await queryClient.fetchQuery(getGroupOptions(groupId, queryClient));
-      queryClient.setQueryData(["groups"], (prev: string[]) => [
-        ...prev,
-        groupId,
-      ]);
-      return groupId;
-    },
+    mutationFn: (data) => createMember(data),
   } satisfies CreateMemberOptions;
 };

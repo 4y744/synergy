@@ -3,6 +3,7 @@ import {
   useQueryClient,
   UseQueryOptions,
 } from "@tanstack/react-query";
+
 import { FirestoreError } from "firebase/firestore";
 
 import { getInvitesOptions } from "../api/get-invites";
@@ -22,7 +23,7 @@ export const useInvites = (
   const queryClient = useQueryClient();
   return useQuery({
     ...options,
-    ...getInvitesOptions(groupId, queryClient),
+    ...getInvitesOptions(queryClient, groupId),
     staleTime: Infinity,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,

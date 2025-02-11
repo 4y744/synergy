@@ -3,6 +3,7 @@ import {
   useQueryClient,
   UseQueryOptions,
 } from "@tanstack/react-query";
+
 import { FirestoreError } from "firebase/firestore";
 
 import { getGroupOptions } from "../api/get-group";
@@ -22,9 +23,10 @@ export const useGroup = (
   const queryClient = useQueryClient();
   return useQuery({
     ...options,
-    ...getGroupOptions(groupId, queryClient),
+    ...getGroupOptions(queryClient, groupId),
     staleTime: Infinity,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,
+    throwOnError: false,
   } satisfies UseGroupOptions);
 };

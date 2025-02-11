@@ -22,7 +22,7 @@ export const useChats = (
   const queryClient = useQueryClient();
   return useQuery({
     ...options,
-    ...getChatsOptions(groupId, queryClient),
+    ...getChatsOptions(queryClient, groupId),
     staleTime: Infinity,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,

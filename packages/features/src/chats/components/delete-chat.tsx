@@ -42,7 +42,8 @@ export const DeleteChatDialog = ({
         <AlertDialogHeader>
           <AlertDialogTitle>Delete chat?</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete {chat?.name}?
+            Are you sure you want to delete
+            <span className="font-medium"> #{chat?.name}</span>?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

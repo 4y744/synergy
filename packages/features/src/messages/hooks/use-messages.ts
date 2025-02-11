@@ -3,6 +3,7 @@ import {
   useInfiniteQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+
 import { DocumentSnapshot } from "firebase/firestore";
 
 import {
@@ -21,7 +22,7 @@ export const useMessages = (
   const queryClient = useQueryClient();
   const { data, ...rest } = useInfiniteQuery({
     ...options,
-    ...getMessagesOptions(groupId, chatId, queryClient),
+    ...getMessagesOptions(queryClient, groupId, chatId),
     staleTime: Infinity,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,

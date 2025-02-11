@@ -29,7 +29,7 @@ type MemberProps = Readonly<{
 
 const Member = ({ groupId, memberId }: MemberProps) => {
   const { uid } = useAuth();
-  const { data: user } = useUser(uid);
+  const { data: user } = useUser(memberId);
 
   return (
     <TableRow>
@@ -52,7 +52,6 @@ const Member = ({ groupId, memberId }: MemberProps) => {
               >
                 <DropdownMenuItem
                   onSelect={(event) => event.preventDefault()}
-                  className="text-destructive"
                   disabled={memberId == uid}
                 >
                   Kick
@@ -77,6 +76,7 @@ export const MembersList = ({ groupId }: MembersListProps) => {
       <TableHeader>
         <TableRow>
           <TableHead>Name</TableHead>
+          <TableHead />
         </TableRow>
       </TableHeader>
       <TableBody>

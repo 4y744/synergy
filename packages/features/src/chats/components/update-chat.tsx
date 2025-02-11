@@ -18,6 +18,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@synergy/ui";
+
 import { cn } from "@synergy/utils";
 
 import { useUpdateChat } from "../hooks/use-update-chat";
@@ -110,6 +111,8 @@ export const UpdateChatDialog = ({
 }: UpdateChatDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const { data: chat } = useChat(groupId, chatId);
+
   return (
     <Dialog
       open={isOpen}
@@ -117,7 +120,10 @@ export const UpdateChatDialog = ({
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogTitle>Edit chat</DialogTitle>
+        <DialogTitle>
+          Edit
+          <span className="font-medium"> #{chat?.name}</span>
+        </DialogTitle>
         <UpdateChatForm
           groupId={groupId}
           chatId={chatId}

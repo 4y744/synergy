@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getChatsOptions } from "@synergy/features/chats";
+
+import { getMessagesOptions } from "@synergy/features/messages";
 
 export const Route = createFileRoute("/groups/$groupId/chats/$chatId")({
-  beforeLoad: async ({ context, params }) => {
+  beforeLoad: ({ context, params }) => {
     const { queryClient } = context;
-    await queryClient.ensureQueryData(
-      getChatsOptions(params.groupId, queryClient)
-    );
+    const { groupId, chatId } = params;
+    return queryClient.ensureInfiniteQueryData({
+      ...getMessagesOptions(queryClient, groupId, chatId),
+    });
   },
 });

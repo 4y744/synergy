@@ -23,15 +23,12 @@ const signUp = async (data: SignUpInput) => {
     createdAt: serverTimestamp(),
   });
   const userDoc = await getDoc(userDocRef);
-  const { username, createdAt } = {
-    ...userDoc.data({
-      serverTimestamps: "estimate",
-    }),
-  };
+  const { username, createdAt } = userDoc.data({
+    serverTimestamps: "estimate",
+  })!;
   return {
     uid: credential.user.uid,
     username,
-    email: credential.user.email!,
     createdAt: createdAt.toDate(),
   };
 };

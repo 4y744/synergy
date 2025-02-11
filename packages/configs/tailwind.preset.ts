@@ -1,4 +1,4 @@
-import { PresetsConfig } from "tailwindcss/types/config";
+import { type PresetsConfig } from "tailwindcss/types/config";
 
 export default {
   theme: {

@@ -1,40 +1,46 @@
-import { MutationOptions, QueryClient } from "@tanstack/react-query";
+import { MutationOptions } from "@tanstack/react-query";
+
 import {
   collection,
   deleteDoc,
   doc,
   FirestoreError,
   getDocs,
-  query,
 } from "firebase/firestore";
 
 import { db } from "@synergy/libs/firebase";
 
 const deleteGroup = async (groupId: string) => {
+  // Find and delete all members.
   const { docs: memberDocs } = await getDocs(
-    query(collection(db, "groups", groupId, "members"))
+    collection(db, "groups", groupId, "members")
   );
   await Promise.all(
-    memberDocs.map(({ id: memberId }) =>
-      deleteDoc(doc(db, "groups", groupId, "members", memberId))
-    )
+    memberDocs.map(async ({ id: memberId }) => {
+      return deleteDoc(doc(db, "groups", groupId, "members", memberId));
+    })
   );
-  await deleteDoc(doc(db, "groups", groupId));
+  // Find and delete all invites.
+  const { docs: inviteDocs } = await getDocs(
+    collection(db, "groups", groupId, "invites")
+  );
+  await Promise.all(
+    inviteDocs.map(({ id: inviteId }) => {
+      return deleteDoc(doc(db, "groups", groupId, "invites", inviteId));
+    })
+  );
+  // The rest of the subcollections remain,
+  // as Firestore doesn't provide a convenient way to mass delete.
+  // They should not cause any issues though.
+
+  // Finally, delete the group doc.
+  return deleteDoc(doc(db, "groups", groupId));
 };
 
 type DeleteGroupOptions = MutationOptions<void, FirestoreError, void>;
 
-export const deleteGroupOptions = (
-  queryClient: QueryClient,
-  groupId: string
-) => {
+export const deleteGroupOptions = (groupId: string) => {
   return {
-    mutationFn: () => {
-      queryClient.setQueryData(["groups"], (data: string[]) => {
-        return data.filter((value) => value != groupId);
-      });
-      queryClient.removeQueries({ queryKey: ["groups", groupId] });
-      return deleteGroup(groupId);
-    },
+    mutationFn: () => deleteGroup(groupId),
   } satisfies DeleteGroupOptions;
 };

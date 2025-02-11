@@ -16,25 +16,12 @@ export const createAuthStore = () => {
       uid: "",
       username: "",
       createdAt: new Date(0),
-      email: "",
       isSignedIn: false,
       isInitialized: false,
-      initialize: () => {
-        set({ isInitialized: true });
-      },
-      signIn: (auth) => {
-        set({ ...auth, isSignedIn: true });
-      },
-      signUp: (auth) => {
-        set({ ...auth, isSignedIn: true });
-      },
-      signOut: () => {
-        set({
-          uid: "",
-          email: "",
-          isSignedIn: false,
-        });
-      },
+      initialize: () => set({ isInitialized: true }),
+      signIn: (data) => set({ ...data, isSignedIn: true }),
+      signUp: (data) => set({ ...data, isSignedIn: true }),
+      signOut: () => set({ isSignedIn: false }),
     }))
   );
 };

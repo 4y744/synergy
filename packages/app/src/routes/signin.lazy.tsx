@@ -1,14 +1,19 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 
 import { SignInForm } from "@synergy/features/auth";
-import { Page } from "@synergy/ui";
+
+import { Content } from "~/components/layouts/content";
 
 export const Route = createLazyFileRoute("/signin")({
   component: () => {
+    const navigate = Route.useNavigate();
     return (
-      <Page centered>
-        <SignInForm />
-      </Page>
+      <Content isCentered>
+        <SignInForm
+          onSuccess={() => navigate({ to: "/groups" })}
+          onSwitch={() => navigate({ to: "/signup" })}
+        />
+      </Content>
     );
   },
 });

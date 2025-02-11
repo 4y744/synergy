@@ -18,6 +18,7 @@ import {
   FormMessage,
   Input,
 } from "@synergy/ui";
+
 import { cn, isValidURL } from "@synergy/utils";
 
 import {
@@ -55,7 +56,6 @@ export const CreateMemberForm = ({
   });
 
   const _onSubmit: SubmitHandler<CreateMemberInput> = ({ inviteId }) => {
-    console.log(inviteId);
     return createMember({
       inviteId: isValidURL(inviteId)
         ? inviteId.split("/").reverse()[0]

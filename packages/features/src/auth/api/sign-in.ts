@@ -18,15 +18,12 @@ const signIn = async (data: SignInInput) => {
     data.password
   );
   const userDoc = await getDoc(doc(db, "users", credential.user.uid));
-  const { username, createdAt } = {
-    ...userDoc.data({
-      serverTimestamps: "estimate",
-    }),
-  };
+  const { username, createdAt } = userDoc.data({
+    serverTimestamps: "estimate",
+  })!;
   return {
     uid: credential.user.uid,
     username,
-    email: credential.user.email!,
     createdAt: createdAt.toDate(),
   };
 };

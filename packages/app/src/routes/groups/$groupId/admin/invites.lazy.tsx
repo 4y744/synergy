@@ -1,19 +1,24 @@
-import { CreateInviteDialog, InvitesList } from "@synergy/features/invites";
-import { Button, H1, Page } from "@synergy/ui";
+import { MailPlusIcon } from "lucide-react";
 import { createLazyFileRoute } from "@tanstack/react-router";
+
+import { InvitesList } from "@synergy/features/invites";
+
+import { Header } from "~/components/layouts/header";
+import { Content } from "~/components/layouts/content";
 
 export const Route = createLazyFileRoute("/groups/$groupId/admin/invites")({
   component: () => {
     const { groupId } = Route.useParams();
-
     return (
-      <Page>
-        <H1>Invites</H1>
-        <InvitesList groupId={groupId} />
-        <CreateInviteDialog groupId={groupId}>
-          <Button>Create invite</Button>
-        </CreateInviteDialog>
-      </Page>
+      <>
+        <Header>
+          <MailPlusIcon size={16} />
+          Manage invites
+        </Header>
+        <Content>
+          <InvitesList groupId={groupId} />
+        </Content>
+      </>
     );
   },
 });

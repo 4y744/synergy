@@ -1,8 +1,6 @@
 import { ReactNode, useState } from "react";
 import { Loader2 } from "lucide-react";
 
-import { useNavigate } from "@tanstack/react-router";
-
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -28,7 +26,6 @@ export const DeleteGroupDialog = ({
   groupId,
 }: DeleteGroupDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
 
   const { data: group } = useGroup(groupId);
   const { mutateAsync: deleteGroup, isPending } = useDeleteGroup(groupId);
@@ -43,16 +40,14 @@ export const DeleteGroupDialog = ({
         <AlertDialogHeader>
           <AlertDialogTitle>Delete group?</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete {group?.name}?
+            Are you sure you want to delete
+            <span className="font-medium"> {group?.name}</span>?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <Button
-            onClick={() => {
-              navigate({ to: "/groups" });
-              deleteGroup().then(() => setIsOpen(false));
-            }}
+            onClick={() => deleteGroup().then(() => setIsOpen(false))}
             disabled={isPending}
             variant="destructive"
           >
