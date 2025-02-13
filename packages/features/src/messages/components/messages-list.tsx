@@ -1,61 +1,86 @@
 import { ComponentProps, forwardRef, useEffect, useRef } from "react";
 
-import { Avatar, AvatarFallback, Muted } from "@synergy/ui";
+import { Avatar, AvatarFallback, AvatarImage, Muted } from "@synergy/ui";
 import { abbreviate, cn } from "@synergy/utils";
 
 import { useMessages } from "../hooks/use-messages";
 import { Message } from "../types/message";
 
 import { useUser } from "~/users";
+import { Trash2Icon } from "lucide-react";
+import { DeleteMessageDialog } from "./delete-message";
 
 /**
  * Combines messages based on ```createdBy``` and ```createdAt```.
  */
-const sqiushMessages = (messages: Message[]) => {
-  const squished: Message[] = [];
+const squishMessages = (messages: Message[]) => {
+  const squished: Message[][] = [];
 
-  // Reverse to start from last
-  const reversed = messages.toReversed();
-
-  reversed?.forEach((message) => {
+  messages.forEach((message) => {
     if (squished.length == 0) {
-      return squished.push({ ...reversed[0] });
+      return squished.push([{ ...message }]);
     }
-    const prevMessage = squished[squished.length - 1];
+    const last = squished[squished.length - 1];
     if (
-      message.createdBy == prevMessage.createdBy &&
-      message.createdAt.getTime() <
-        prevMessage.createdAt.getTime() + 5 * 60 * 1000
+      message.createdBy == last[0].createdBy &&
+      message.createdAt.getTime() < last[0].createdAt.getTime() + 5 * 60 * 1000
     ) {
-      prevMessage.payload = `${prevMessage.payload}\n${message.payload}`;
+      last.push({ ...message });
     } else {
-      squished.push({ ...message });
+      squished.push([{ ...message }]);
     }
   });
 
-  return squished.toReversed();
+  return squished;
 };
 
-type MessageGroupProps = Readonly<Message>;
+type MessageGroupProps = Readonly<{
+  groupId: string;
+  chatId: string;
+  messages: Message[];
+}>;
 
-const MessageGroup = ({ payload, createdAt, createdBy }: MessageGroupProps) => {
-  const { data, isPending } = useUser(createdBy);
+const MessageGroup = ({ groupId, chatId, messages }: MessageGroupProps) => {
+  const { data: user, isPending } = useUser(messages[0].createdBy);
 
   if (isPending) {
-    return <>TODO: ADD SKELETON</>;
+    return <></>;
   }
 
   return (
-    <div className="flex gap-2 py-2">
-      <Avatar className="ml-2">
-        <AvatarFallback>{abbreviate(data!.username)}</AvatarFallback>
-      </Avatar>
-      <div className="select-text">
-        <div className="flex items-center gap-2">
-          <span className="font-medium">{data!.username}</span>
-          <Muted className="text-xs">{createdAt.toLocaleString()}</Muted>
+    <div className="py-2">
+      <div className="flex gap-2 p-2">
+        <Avatar>
+          <AvatarFallback>{abbreviate(user!.username)}</AvatarFallback>
+          <AvatarImage src={user?.pfp} />
+        </Avatar>
+        <div>
+          <span className="font-medium">{user!.username}</span>
+          <Muted className="text-xs">
+            {messages[0].createdAt.toLocaleString()}
+          </Muted>
         </div>
-        <span className="whitespace-pre-line text-sm">{payload}</span>
+      </div>
+      <div className="flex flex-col-reverse w-full">
+        {messages.map(({ id, payload }) => (
+          <div className="group hover:bg-sidebar w-full min-h-6 pl-14 flex items-center">
+            <span
+              className="whitespace-pre-line text-sm"
+              key={id}
+            >
+              {payload}
+            </span>
+            <DeleteMessageDialog
+              groupId={groupId}
+              chatId={chatId}
+              messageId={id}
+            >
+              <button className="group-hover:block hidden ml-auto mr-2 text-destructive">
+                <Trash2Icon size={16} />
+              </button>
+            </DeleteMessageDialog>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -100,10 +125,12 @@ export const MessagesList = forwardRef<HTMLDivElement, MessagesListProps>(
       >
         {messages && (
           <>
-            {sqiushMessages(messages).map((message, key) => (
+            {squishMessages(messages).map((messages, key) => (
               <MessageGroup
                 key={key}
-                {...message}
+                groupId={groupId}
+                chatId={chatId}
+                messages={messages}
               />
             ))}
           </>

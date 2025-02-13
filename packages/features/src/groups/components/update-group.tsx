@@ -79,7 +79,10 @@ export const UpdateGroupForm = ({
             </FormItem>
           )}
         />
-        <Button type="submit">
+        <Button
+          disabled={isPending}
+          type="submit"
+        >
           {isPending ? (
             <>
               <Loader2 className="animate-spin" />

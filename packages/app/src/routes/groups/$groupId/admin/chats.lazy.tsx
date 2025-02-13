@@ -3,21 +3,21 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 
 import { ChatsList } from "@synergy/features/chats";
 
-import { Header } from "~/components/layouts/header";
-import { Content } from "~/components/layouts/content";
+import { ContentLayout } from "~/components/layouts/content-layout";
+import { Topbar } from "~/components/layouts/topbar";
 
 export const Route = createLazyFileRoute("/groups/$groupId/admin/chats")({
   component: () => {
     const { groupId } = Route.useParams();
     return (
       <>
-        <Header>
-          <HashIcon size={16} />
-          Manage chats
-        </Header>
-        <Content>
+        <Topbar
+          title="Manage chats"
+          icon={<HashIcon size={16} />}
+        />
+        <ContentLayout>
           <ChatsList groupId={groupId} />
-        </Content>
+        </ContentLayout>
       </>
     );
   },

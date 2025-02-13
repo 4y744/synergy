@@ -39,7 +39,11 @@ export const SignInForm = ({
   className,
   ...props
 }: SignInFormProps) => {
-  const { mutate: signIn, isPending } = useSignIn({
+  const {
+    mutate: signIn,
+    isPending,
+    isSuccess,
+  } = useSignIn({
     onSuccess,
     onError: (error) => {
       form.setError("password", {
@@ -107,9 +111,9 @@ export const SignInForm = ({
             <Button
               type="submit"
               className="w-full"
-              disabled={isPending}
+              disabled={isPending || isSuccess}
             >
-              {isPending && <Loader2 className="animate-spin" />}
+              {(isPending || isSuccess) && <Loader2 className="animate-spin" />}
               Sign in
             </Button>
           </form>

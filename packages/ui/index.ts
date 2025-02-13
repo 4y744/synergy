@@ -5,6 +5,7 @@ export * from "~/components/button";
 export * from "~/components/calendar";
 export * from "~/components/card";
 export * from "~/components/collapsible";
+export * from "~/components/context-menu";
 export * from "~/components/dialog";
 export * from "~/components/dropdown-menu";
 export * from "~/components/form";

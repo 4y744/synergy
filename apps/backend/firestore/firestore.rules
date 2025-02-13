@@ -21,7 +21,7 @@ service cloud.firestore {
       );
       allow update: if (
         request.auth.uid == userId
-        && request.resource.data.keys().hasOnly(["username"])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["username", "pfp"])
       );
       allow delete: if (
         request.auth.uid == userId

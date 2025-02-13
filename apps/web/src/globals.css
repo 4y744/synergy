@@ -16,6 +16,9 @@
   html {
     @apply dark;
   }
+  body {
+    pointer-events: auto !important;
+  }
 }
 
 .firebase-emulator-warning {

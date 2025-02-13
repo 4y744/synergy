@@ -38,17 +38,22 @@ export const FilesList = ({ groupId, folderId }: FilesListProps) => {
   return (
     <Table>
       <TableHeader>
-        <TableRow>
+        <TableRow className="align-middle">
           <TableHead>Name</TableHead>
-          <TableHead className="float-end my-1">
-            <CreateFileDialog
-              groupId={groupId}
-              folderId={folderId}
-            >
-              <Button>
-                <FileUpIcon />
-              </Button>
-            </CreateFileDialog>
+          <TableHead className="float-end">
+            <div className="flex items-center h-full">
+              <CreateFileDialog
+                groupId={groupId}
+                folderId={folderId}
+              >
+                <Button
+                  className="w-8 h-8"
+                  variant="ghost"
+                >
+                  <FileUpIcon />
+                </Button>
+              </CreateFileDialog>
+            </div>
           </TableHead>
         </TableRow>
       </TableHeader>

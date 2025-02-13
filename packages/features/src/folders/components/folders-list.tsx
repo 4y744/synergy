@@ -34,12 +34,17 @@ export const FoldersList = ({ groupId }: FoldersListProps) => {
       <TableHeader>
         <TableRow>
           <TableHead>Name</TableHead>
-          <TableHead className="float-end my-1">
-            <CreateFolderDialog groupId={groupId}>
-              <Button>
-                <PlusIcon />
-              </Button>
-            </CreateFolderDialog>
+          <TableHead className="float-end">
+            <div className="flex items-center h-full">
+              <CreateFolderDialog groupId={groupId}>
+                <Button
+                  className="w-8 h-8"
+                  variant="ghost"
+                >
+                  <PlusIcon />
+                </Button>
+              </CreateFolderDialog>
+            </div>
           </TableHead>
         </TableRow>
       </TableHeader>

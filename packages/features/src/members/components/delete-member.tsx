@@ -15,17 +15,20 @@ import {
 
 import { useDeleteMember } from "../hooks/use-delete-member";
 import { useUser } from "~/users";
+import { useGroup } from "~/groups";
 
 type DeleteMemberDialogProps = Readonly<{
   children?: ReactNode;
   groupId: string;
   memberId: string;
+  type: "leave" | "kick";
 }>;
 
 export const DeleteMemberDialog = ({
   children,
   groupId,
   memberId,
+  type,
 }: DeleteMemberDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -34,6 +37,7 @@ export const DeleteMemberDialog = ({
     memberId
   );
 
+  const { data: group } = useGroup(groupId);
   const { data: user } = useUser(memberId);
 
   return (
@@ -44,10 +48,21 @@ export const DeleteMemberDialog = ({
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Kick member?</AlertDialogTitle>
+          <AlertDialogTitle>
+            {type == "kick" ? "Kick member?" : "Leave group?"}
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to kick
-            <span className="font-medium"> {user?.username}</span>?
+            {type == "kick" ? (
+              <>
+                Are you sure you want to kick
+                <span className="font-medium"> {user?.username}</span>?
+              </>
+            ) : (
+              <>
+                Are you sure you want to leave
+                <span className="font-medium"> {group?.name}</span>?
+              </>
+            )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -62,10 +77,10 @@ export const DeleteMemberDialog = ({
             {isPending ? (
               <>
                 <Loader2 className="animate-spin" />
-                Kicking
+                {type == "kick" ? "Kicking" : "Leaving"}
               </>
             ) : (
-              <>Kick</>
+              <>{type == "kick" ? <>Kick</> : <>Leave</>}</>
             )}
           </Button>
         </AlertDialogFooter>

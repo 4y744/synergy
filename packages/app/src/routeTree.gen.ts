@@ -19,17 +19,15 @@ import { Route as GroupsImport } from './routes/groups'
 import { Route as GroupsGroupIdImport } from './routes/groups/$groupId'
 import { Route as GroupsGroupIdFoldersFolderIdImport } from './routes/groups/$groupId/folders/$folderId'
 import { Route as GroupsGroupIdChatsChatIdImport } from './routes/groups/$groupId/chats/$chatId'
+import { Route as GroupsGroupIdAdminMembersImport } from './routes/groups/$groupId/admin/members'
+import { Route as GroupsGroupIdAdminInvitesImport } from './routes/groups/$groupId/admin/invites'
 
 // Create Virtual Routes
 
+const GroupsIndexLazyImport = createFileRoute('/groups/')()
+const GroupsGroupIdIndexLazyImport = createFileRoute('/groups/$groupId/')()
 const GroupsGroupIdAdminSettingsLazyImport = createFileRoute(
   '/groups/$groupId/admin/settings',
-)()
-const GroupsGroupIdAdminMembersLazyImport = createFileRoute(
-  '/groups/$groupId/admin/members',
-)()
-const GroupsGroupIdAdminInvitesLazyImport = createFileRoute(
-  '/groups/$groupId/admin/invites',
 )()
 const GroupsGroupIdAdminFoldersLazyImport = createFileRoute(
   '/groups/$groupId/admin/folders',
@@ -58,11 +56,27 @@ const GroupsRoute = GroupsImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/groups.lazy').then((d) => d.Route))
 
+const GroupsIndexLazyRoute = GroupsIndexLazyImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => GroupsRoute,
+} as any).lazy(() => import('./routes/groups/index.lazy').then((d) => d.Route))
+
 const GroupsGroupIdRoute = GroupsGroupIdImport.update({
   id: '/$groupId',
   path: '/$groupId',
   getParentRoute: () => GroupsRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/groups/$groupId.lazy').then((d) => d.Route),
+)
+
+const GroupsGroupIdIndexLazyRoute = GroupsGroupIdIndexLazyImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => GroupsGroupIdRoute,
+} as any).lazy(() =>
+  import('./routes/groups/$groupId/index.lazy').then((d) => d.Route),
+)
 
 const GroupsGroupIdAdminSettingsLazyRoute =
   GroupsGroupIdAdminSettingsLazyImport.update({
@@ -71,24 +85,6 @@ const GroupsGroupIdAdminSettingsLazyRoute =
     getParentRoute: () => GroupsGroupIdRoute,
   } as any).lazy(() =>
     import('./routes/groups/$groupId/admin/settings.lazy').then((d) => d.Route),
-  )
-
-const GroupsGroupIdAdminMembersLazyRoute =
-  GroupsGroupIdAdminMembersLazyImport.update({
-    id: '/admin/members',
-    path: '/admin/members',
-    getParentRoute: () => GroupsGroupIdRoute,
-  } as any).lazy(() =>
-    import('./routes/groups/$groupId/admin/members.lazy').then((d) => d.Route),
-  )
-
-const GroupsGroupIdAdminInvitesLazyRoute =
-  GroupsGroupIdAdminInvitesLazyImport.update({
-    id: '/admin/invites',
-    path: '/admin/invites',
-    getParentRoute: () => GroupsGroupIdRoute,
-  } as any).lazy(() =>
-    import('./routes/groups/$groupId/admin/invites.lazy').then((d) => d.Route),
   )
 
 const GroupsGroupIdAdminFoldersLazyRoute =
@@ -128,6 +124,22 @@ const GroupsGroupIdChatsChatIdRoute = GroupsGroupIdChatsChatIdImport.update({
   import('./routes/groups/$groupId/chats/$chatId.lazy').then((d) => d.Route),
 )
 
+const GroupsGroupIdAdminMembersRoute = GroupsGroupIdAdminMembersImport.update({
+  id: '/admin/members',
+  path: '/admin/members',
+  getParentRoute: () => GroupsGroupIdRoute,
+} as any).lazy(() =>
+  import('./routes/groups/$groupId/admin/members.lazy').then((d) => d.Route),
+)
+
+const GroupsGroupIdAdminInvitesRoute = GroupsGroupIdAdminInvitesImport.update({
+  id: '/admin/invites',
+  path: '/admin/invites',
+  getParentRoute: () => GroupsGroupIdRoute,
+} as any).lazy(() =>
+  import('./routes/groups/$groupId/admin/invites.lazy').then((d) => d.Route),
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -160,6 +172,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GroupsGroupIdImport
       parentRoute: typeof GroupsImport
     }
+    '/groups/': {
+      id: '/groups/'
+      path: '/'
+      fullPath: '/groups/'
+      preLoaderRoute: typeof GroupsIndexLazyImport
+      parentRoute: typeof GroupsImport
+    }
+    '/groups/$groupId/': {
+      id: '/groups/$groupId/'
+      path: '/'
+      fullPath: '/groups/$groupId/'
+      preLoaderRoute: typeof GroupsGroupIdIndexLazyImport
+      parentRoute: typeof GroupsGroupIdImport
+    }
+    '/groups/$groupId/admin/invites': {
+      id: '/groups/$groupId/admin/invites'
+      path: '/admin/invites'
+      fullPath: '/groups/$groupId/admin/invites'
+      preLoaderRoute: typeof GroupsGroupIdAdminInvitesImport
+      parentRoute: typeof GroupsGroupIdImport
+    }
+    '/groups/$groupId/admin/members': {
+      id: '/groups/$groupId/admin/members'
+      path: '/admin/members'
+      fullPath: '/groups/$groupId/admin/members'
+      preLoaderRoute: typeof GroupsGroupIdAdminMembersImport
+      parentRoute: typeof GroupsGroupIdImport
+    }
     '/groups/$groupId/chats/$chatId': {
       id: '/groups/$groupId/chats/$chatId'
       path: '/chats/$chatId'
@@ -188,20 +228,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GroupsGroupIdAdminFoldersLazyImport
       parentRoute: typeof GroupsGroupIdImport
     }
-    '/groups/$groupId/admin/invites': {
-      id: '/groups/$groupId/admin/invites'
-      path: '/admin/invites'
-      fullPath: '/groups/$groupId/admin/invites'
-      preLoaderRoute: typeof GroupsGroupIdAdminInvitesLazyImport
-      parentRoute: typeof GroupsGroupIdImport
-    }
-    '/groups/$groupId/admin/members': {
-      id: '/groups/$groupId/admin/members'
-      path: '/admin/members'
-      fullPath: '/groups/$groupId/admin/members'
-      preLoaderRoute: typeof GroupsGroupIdAdminMembersLazyImport
-      parentRoute: typeof GroupsGroupIdImport
-    }
     '/groups/$groupId/admin/settings': {
       id: '/groups/$groupId/admin/settings'
       path: '/admin/settings'
@@ -215,22 +241,24 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface GroupsGroupIdRouteChildren {
+  GroupsGroupIdIndexLazyRoute: typeof GroupsGroupIdIndexLazyRoute
+  GroupsGroupIdAdminInvitesRoute: typeof GroupsGroupIdAdminInvitesRoute
+  GroupsGroupIdAdminMembersRoute: typeof GroupsGroupIdAdminMembersRoute
   GroupsGroupIdChatsChatIdRoute: typeof GroupsGroupIdChatsChatIdRoute
   GroupsGroupIdFoldersFolderIdRoute: typeof GroupsGroupIdFoldersFolderIdRoute
   GroupsGroupIdAdminChatsLazyRoute: typeof GroupsGroupIdAdminChatsLazyRoute
   GroupsGroupIdAdminFoldersLazyRoute: typeof GroupsGroupIdAdminFoldersLazyRoute
-  GroupsGroupIdAdminInvitesLazyRoute: typeof GroupsGroupIdAdminInvitesLazyRoute
-  GroupsGroupIdAdminMembersLazyRoute: typeof GroupsGroupIdAdminMembersLazyRoute
   GroupsGroupIdAdminSettingsLazyRoute: typeof GroupsGroupIdAdminSettingsLazyRoute
 }
 
 const GroupsGroupIdRouteChildren: GroupsGroupIdRouteChildren = {
+  GroupsGroupIdIndexLazyRoute: GroupsGroupIdIndexLazyRoute,
+  GroupsGroupIdAdminInvitesRoute: GroupsGroupIdAdminInvitesRoute,
+  GroupsGroupIdAdminMembersRoute: GroupsGroupIdAdminMembersRoute,
   GroupsGroupIdChatsChatIdRoute: GroupsGroupIdChatsChatIdRoute,
   GroupsGroupIdFoldersFolderIdRoute: GroupsGroupIdFoldersFolderIdRoute,
   GroupsGroupIdAdminChatsLazyRoute: GroupsGroupIdAdminChatsLazyRoute,
   GroupsGroupIdAdminFoldersLazyRoute: GroupsGroupIdAdminFoldersLazyRoute,
-  GroupsGroupIdAdminInvitesLazyRoute: GroupsGroupIdAdminInvitesLazyRoute,
-  GroupsGroupIdAdminMembersLazyRoute: GroupsGroupIdAdminMembersLazyRoute,
   GroupsGroupIdAdminSettingsLazyRoute: GroupsGroupIdAdminSettingsLazyRoute,
 }
 
@@ -240,10 +268,12 @@ const GroupsGroupIdRouteWithChildren = GroupsGroupIdRoute._addFileChildren(
 
 interface GroupsRouteChildren {
   GroupsGroupIdRoute: typeof GroupsGroupIdRouteWithChildren
+  GroupsIndexLazyRoute: typeof GroupsIndexLazyRoute
 }
 
 const GroupsRouteChildren: GroupsRouteChildren = {
   GroupsGroupIdRoute: GroupsGroupIdRouteWithChildren,
+  GroupsIndexLazyRoute: GroupsIndexLazyRoute,
 }
 
 const GroupsRouteWithChildren =
@@ -254,26 +284,28 @@ export interface FileRoutesByFullPath {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/groups/$groupId': typeof GroupsGroupIdRouteWithChildren
+  '/groups/': typeof GroupsIndexLazyRoute
+  '/groups/$groupId/': typeof GroupsGroupIdIndexLazyRoute
+  '/groups/$groupId/admin/invites': typeof GroupsGroupIdAdminInvitesRoute
+  '/groups/$groupId/admin/members': typeof GroupsGroupIdAdminMembersRoute
   '/groups/$groupId/chats/$chatId': typeof GroupsGroupIdChatsChatIdRoute
   '/groups/$groupId/folders/$folderId': typeof GroupsGroupIdFoldersFolderIdRoute
   '/groups/$groupId/admin/chats': typeof GroupsGroupIdAdminChatsLazyRoute
   '/groups/$groupId/admin/folders': typeof GroupsGroupIdAdminFoldersLazyRoute
-  '/groups/$groupId/admin/invites': typeof GroupsGroupIdAdminInvitesLazyRoute
-  '/groups/$groupId/admin/members': typeof GroupsGroupIdAdminMembersLazyRoute
   '/groups/$groupId/admin/settings': typeof GroupsGroupIdAdminSettingsLazyRoute
 }
 
 export interface FileRoutesByTo {
-  '/groups': typeof GroupsRouteWithChildren
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
-  '/groups/$groupId': typeof GroupsGroupIdRouteWithChildren
+  '/groups': typeof GroupsIndexLazyRoute
+  '/groups/$groupId': typeof GroupsGroupIdIndexLazyRoute
+  '/groups/$groupId/admin/invites': typeof GroupsGroupIdAdminInvitesRoute
+  '/groups/$groupId/admin/members': typeof GroupsGroupIdAdminMembersRoute
   '/groups/$groupId/chats/$chatId': typeof GroupsGroupIdChatsChatIdRoute
   '/groups/$groupId/folders/$folderId': typeof GroupsGroupIdFoldersFolderIdRoute
   '/groups/$groupId/admin/chats': typeof GroupsGroupIdAdminChatsLazyRoute
   '/groups/$groupId/admin/folders': typeof GroupsGroupIdAdminFoldersLazyRoute
-  '/groups/$groupId/admin/invites': typeof GroupsGroupIdAdminInvitesLazyRoute
-  '/groups/$groupId/admin/members': typeof GroupsGroupIdAdminMembersLazyRoute
   '/groups/$groupId/admin/settings': typeof GroupsGroupIdAdminSettingsLazyRoute
 }
 
@@ -283,12 +315,14 @@ export interface FileRoutesById {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/groups/$groupId': typeof GroupsGroupIdRouteWithChildren
+  '/groups/': typeof GroupsIndexLazyRoute
+  '/groups/$groupId/': typeof GroupsGroupIdIndexLazyRoute
+  '/groups/$groupId/admin/invites': typeof GroupsGroupIdAdminInvitesRoute
+  '/groups/$groupId/admin/members': typeof GroupsGroupIdAdminMembersRoute
   '/groups/$groupId/chats/$chatId': typeof GroupsGroupIdChatsChatIdRoute
   '/groups/$groupId/folders/$folderId': typeof GroupsGroupIdFoldersFolderIdRoute
   '/groups/$groupId/admin/chats': typeof GroupsGroupIdAdminChatsLazyRoute
   '/groups/$groupId/admin/folders': typeof GroupsGroupIdAdminFoldersLazyRoute
-  '/groups/$groupId/admin/invites': typeof GroupsGroupIdAdminInvitesLazyRoute
-  '/groups/$groupId/admin/members': typeof GroupsGroupIdAdminMembersLazyRoute
   '/groups/$groupId/admin/settings': typeof GroupsGroupIdAdminSettingsLazyRoute
 }
 
@@ -299,25 +333,27 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/groups/$groupId'
+    | '/groups/'
+    | '/groups/$groupId/'
+    | '/groups/$groupId/admin/invites'
+    | '/groups/$groupId/admin/members'
     | '/groups/$groupId/chats/$chatId'
     | '/groups/$groupId/folders/$folderId'
     | '/groups/$groupId/admin/chats'
     | '/groups/$groupId/admin/folders'
-    | '/groups/$groupId/admin/invites'
-    | '/groups/$groupId/admin/members'
     | '/groups/$groupId/admin/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/groups'
     | '/signin'
     | '/signup'
+    | '/groups'
     | '/groups/$groupId'
+    | '/groups/$groupId/admin/invites'
+    | '/groups/$groupId/admin/members'
     | '/groups/$groupId/chats/$chatId'
     | '/groups/$groupId/folders/$folderId'
     | '/groups/$groupId/admin/chats'
     | '/groups/$groupId/admin/folders'
-    | '/groups/$groupId/admin/invites'
-    | '/groups/$groupId/admin/members'
     | '/groups/$groupId/admin/settings'
   id:
     | '__root__'
@@ -325,12 +361,14 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/groups/$groupId'
+    | '/groups/'
+    | '/groups/$groupId/'
+    | '/groups/$groupId/admin/invites'
+    | '/groups/$groupId/admin/members'
     | '/groups/$groupId/chats/$chatId'
     | '/groups/$groupId/folders/$folderId'
     | '/groups/$groupId/admin/chats'
     | '/groups/$groupId/admin/folders'
-    | '/groups/$groupId/admin/invites'
-    | '/groups/$groupId/admin/members'
     | '/groups/$groupId/admin/settings'
   fileRoutesById: FileRoutesById
 }
@@ -365,7 +403,8 @@ export const routeTree = rootRoute
     "/groups": {
       "filePath": "groups.ts",
       "children": [
-        "/groups/$groupId"
+        "/groups/$groupId",
+        "/groups/"
       ]
     },
     "/signin": {
@@ -375,17 +414,34 @@ export const routeTree = rootRoute
       "filePath": "signup.ts"
     },
     "/groups/$groupId": {
-      "filePath": "groups/$groupId.tsx",
+      "filePath": "groups/$groupId.ts",
       "parent": "/groups",
       "children": [
+        "/groups/$groupId/",
+        "/groups/$groupId/admin/invites",
+        "/groups/$groupId/admin/members",
         "/groups/$groupId/chats/$chatId",
         "/groups/$groupId/folders/$folderId",
         "/groups/$groupId/admin/chats",
         "/groups/$groupId/admin/folders",
-        "/groups/$groupId/admin/invites",
-        "/groups/$groupId/admin/members",
         "/groups/$groupId/admin/settings"
       ]
+    },
+    "/groups/": {
+      "filePath": "groups/index.lazy.tsx",
+      "parent": "/groups"
+    },
+    "/groups/$groupId/": {
+      "filePath": "groups/$groupId/index.lazy.tsx",
+      "parent": "/groups/$groupId"
+    },
+    "/groups/$groupId/admin/invites": {
+      "filePath": "groups/$groupId/admin/invites.ts",
+      "parent": "/groups/$groupId"
+    },
+    "/groups/$groupId/admin/members": {
+      "filePath": "groups/$groupId/admin/members.ts",
+      "parent": "/groups/$groupId"
     },
     "/groups/$groupId/chats/$chatId": {
       "filePath": "groups/$groupId/chats/$chatId.ts",
@@ -401,14 +457,6 @@ export const routeTree = rootRoute
     },
     "/groups/$groupId/admin/folders": {
       "filePath": "groups/$groupId/admin/folders.lazy.tsx",
-      "parent": "/groups/$groupId"
-    },
-    "/groups/$groupId/admin/invites": {
-      "filePath": "groups/$groupId/admin/invites.lazy.tsx",
-      "parent": "/groups/$groupId"
-    },
-    "/groups/$groupId/admin/members": {
-      "filePath": "groups/$groupId/admin/members.lazy.tsx",
       "parent": "/groups/$groupId"
     },
     "/groups/$groupId/admin/settings": {

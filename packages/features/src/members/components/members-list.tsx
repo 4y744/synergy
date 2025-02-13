@@ -49,6 +49,7 @@ const Member = ({ groupId, memberId }: MemberProps) => {
               <DeleteMemberDialog
                 groupId={groupId}
                 memberId={memberId}
+                type="kick"
               >
                 <DropdownMenuItem
                   onSelect={(event) => event.preventDefault()}

@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import { findGroupsOptions } from "@synergy/features/groups";
 import { getChatsOptions } from "@synergy/features/chats";
@@ -17,5 +17,4 @@ export const Route = createFileRoute("/groups/$groupId")({
     await queryClient.ensureQueryData(getChatsOptions(queryClient, groupId));
     await queryClient.ensureQueryData(getFoldersOptions(queryClient, groupId));
   },
-  component: () => <Outlet />,
 });

@@ -14,8 +14,6 @@ export const createAuthStore = () => {
   return createStore<AuthState>()(
     subscribeWithSelector((set) => ({
       uid: "",
-      username: "",
-      createdAt: new Date(0),
       isSignedIn: false,
       isInitialized: false,
       initialize: () => set({ isInitialized: true }),

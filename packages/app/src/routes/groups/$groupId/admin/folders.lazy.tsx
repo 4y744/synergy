@@ -3,21 +3,21 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 
 import { FoldersList } from "@synergy/features/folders";
 
-import { Header } from "~/components/layouts/header";
-import { Content } from "~/components/layouts/content";
+import { ContentLayout } from "~/components/layouts/content-layout";
+import { Topbar } from "~/components/layouts/topbar";
 
 export const Route = createLazyFileRoute("/groups/$groupId/admin/folders")({
   component: () => {
     const { groupId } = Route.useParams();
     return (
       <>
-        <Header>
-          <FolderIcon size={16} />
-          Manage folders
-        </Header>
-        <Content>
+        <Topbar
+          title="Manage folders"
+          icon={<FolderIcon size={16} />}
+        />
+        <ContentLayout>
           <FoldersList groupId={groupId} />
-        </Content>
+        </ContentLayout>
       </>
     );
   },

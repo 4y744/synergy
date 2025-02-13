@@ -36,12 +36,17 @@ export const InvitesList = ({ groupId }: InvitesListProps) => {
         <TableRow>
           <TableHead>Id</TableHead>
           <TableHead>Expiration date</TableHead>
-          <TableHead className="float-end my-1">
-            <CreateInviteDialog groupId={groupId}>
-              <Button>
-                <PlusIcon />
-              </Button>
-            </CreateInviteDialog>
+          <TableHead className="float-end">
+            <div className="flex items-center h-full">
+              <CreateInviteDialog groupId={groupId}>
+                <Button
+                  className="w-8 h-8"
+                  variant="ghost"
+                >
+                  <PlusIcon />
+                </Button>
+              </CreateInviteDialog>
+            </div>
           </TableHead>
         </TableRow>
       </TableHeader>

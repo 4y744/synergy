@@ -1,15 +1,19 @@
+import { useEffect } from "react";
 import {
   ChevronsUpDown,
   FolderIcon,
   Hash,
   HashIcon,
+  LogOutIcon,
   MailPlusIcon,
   Settings,
   SettingsIcon,
   UsersIcon,
 } from "lucide-react";
 
-import { Link, Navigate, useNavigate, useParams } from "@tanstack/react-router";
+import { Link, useNavigate, useParams } from "@tanstack/react-router";
+
+import { useTranslation } from "react-i18next";
 
 import {
   Avatar,
@@ -21,8 +25,14 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
+  Separator,
   Sidebar,
   SidebarCard,
   SidebarContent,
@@ -34,7 +44,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  Theme,
   useSidebar,
+  useTheme,
 } from "@synergy/ui";
 
 import { useAuth, useSignOut } from "@synergy/features/auth";
@@ -45,21 +57,19 @@ import {
 } from "@synergy/features/groups";
 import { useChats } from "@synergy/features/chats";
 import { useFolders } from "@synergy/features/folders";
-import { CreateMemberDialog } from "@synergy/features/members";
+import {
+  CreateMemberDialog,
+  DeleteMemberDialog,
+} from "@synergy/features/members";
+import { UpdateUserDialog, useUser } from "@synergy/features/users";
 
 import { abbreviate, cn } from "@synergy/utils";
-import { useEffect } from "react";
 
 const SidebarGroups = () => {
   const { groupId } = useParams({ from: "/groups/$groupId" });
 
   const groups = useGroups();
   const selectedGroup = useGroup(groupId);
-
-  if (!groups.find(({ data }) => data?.id == groupId)) {
-    // Reached when the selected group is deleted.
-    return <Navigate to="/groups" />;
-  }
 
   return (
     <DropdownMenu>
@@ -88,6 +98,7 @@ const SidebarGroups = () => {
                 asChild
               >
                 <Link
+                  className="flex items-center gap-2 w-full"
                   to="/groups/$groupId"
                   params={{ groupId: group!.id }}
                 >
@@ -261,11 +272,45 @@ const SidebarFolders = () => {
   );
 };
 
+const SidebarLeave = () => {
+  const { groupId } = useParams({ from: "/groups/$groupId" });
+
+  const { uid } = useAuth();
+
+  const { data: group } = useGroup(groupId);
+
+  if (group?.createdBy == uid) {
+    return <></>;
+  }
+
+  return (
+    <SidebarGroup className="mt-auto">
+      <SidebarContent>
+        <DeleteMemberDialog
+          groupId={groupId}
+          memberId={uid}
+          type="leave"
+        >
+          <Button variant="destructive">
+            <LogOutIcon />
+            Leave group
+          </Button>
+        </DeleteMemberDialog>
+      </SidebarContent>
+    </SidebarGroup>
+  );
+};
+
 const SidebarUser = () => {
   const navigate = useNavigate();
 
-  const { username } = useAuth();
+  const { uid } = useAuth();
   const { mutate: signOut } = useSignOut();
+
+  const { data: user } = useUser(uid);
+
+  const { theme, setTheme } = useTheme();
+  const { i18n } = useTranslation();
 
   return (
     <DropdownMenu>
@@ -276,23 +321,60 @@ const SidebarUser = () => {
         {/* Trigger can't take components as direct children for some reason. */}
         <div>
           <SidebarCard
-            primary={username}
-            image=""
+            primary={user!.username}
+            image={user!.pfp}
             icon={<Settings />}
           />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
-        <DropdownMenuLabel>My account</DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem>Account</DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
+          <DropdownMenuLabel>Settings</DropdownMenuLabel>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <UpdateUserDialog>
+            <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
+              Account
+            </DropdownMenuItem>
+          </UpdateUserDialog>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuRadioGroup
+                value={theme}
+                onValueChange={(value) => setTheme(value as Theme)}
+              >
+                <DropdownMenuRadioItem value="dark">Dark</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="light">
+                  Light
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Language</DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuRadioGroup
+                value={i18n.language}
+                onValueChange={(value) => i18n.changeLanguage(value)}
+              >
+                <DropdownMenuRadioItem value="en">
+                  English
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="bg">
+                  Български
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem
             onClick={() => {
-              navigate({ to: ".." });
+              //@ts-ignore
+              navigate({ to: "/" });
               signOut();
             }}
           >
@@ -305,6 +387,7 @@ const SidebarUser = () => {
 };
 
 export const AppSidebar = () => {
+  const { groupId } = useParams({ strict: false });
   const { isMobile, setOpen } = useSidebar();
 
   useEffect(() => {
@@ -312,18 +395,6 @@ export const AppSidebar = () => {
       setOpen(true);
     }
   }, [isMobile]);
-
-  const { groupId } = useParams({ strict: false });
-  const groups = useGroups();
-
-  if (!groupId && groups.length > 0 && groups[0]?.data) {
-    return (
-      <Navigate
-        to="/groups/$groupId"
-        params={{ groupId: groups[0].data!.id }}
-      />
-    );
-  }
 
   return (
     <Sidebar>
@@ -347,9 +418,13 @@ export const AppSidebar = () => {
             <SidebarAdmin />
             <SidebarChats />
             <SidebarFolders />
+            <SidebarLeave />
           </>
         )}
       </SidebarContent>
+      <div className="px-2">
+        <Separator />
+      </div>
       <SidebarFooter>
         <SidebarUser />
       </SidebarFooter>

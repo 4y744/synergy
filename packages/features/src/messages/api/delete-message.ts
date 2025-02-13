@@ -7,7 +7,7 @@ const deleteMessage = (groupId: string, chatId: string, messageId: string) => {
   return updateDoc(
     doc(db, "groups", groupId, "chats", chatId, "messages", messageId),
     {
-      payload: "deleted",
+      payload: "__deleted__",
     }
   );
 };

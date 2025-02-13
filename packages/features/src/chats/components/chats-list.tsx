@@ -34,12 +34,17 @@ export const ChatsList = ({ groupId }: ChatsListProps) => {
       <TableHeader>
         <TableRow>
           <TableHead>Name</TableHead>
-          <TableHead className="float-end my-1">
-            <CreateChatDialog groupId={groupId}>
-              <Button>
-                <PlusIcon />
-              </Button>
-            </CreateChatDialog>
+          <TableHead className="float-end">
+            <div className="flex items-center h-full">
+              <CreateChatDialog groupId={groupId}>
+                <Button
+                  className="w-8 h-8"
+                  variant="ghost"
+                >
+                  <PlusIcon />
+                </Button>
+              </CreateChatDialog>
+            </div>
           </TableHead>
         </TableRow>
       </TableHeader>

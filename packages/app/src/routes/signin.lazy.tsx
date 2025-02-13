@@ -2,18 +2,18 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 
 import { SignInForm } from "@synergy/features/auth";
 
-import { Content } from "~/components/layouts/content";
+import { ContentLayout } from "~/components/layouts/content-layout";
 
 export const Route = createLazyFileRoute("/signin")({
   component: () => {
     const navigate = Route.useNavigate();
     return (
-      <Content isCentered>
+      <ContentLayout isCentered>
         <SignInForm
           onSuccess={() => navigate({ to: "/groups" })}
           onSwitch={() => navigate({ to: "/signup" })}
         />
-      </Content>
+      </ContentLayout>
     );
   },
 });

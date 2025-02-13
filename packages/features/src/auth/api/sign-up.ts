@@ -1,6 +1,6 @@
 import { MutationOptions } from "@tanstack/react-query";
 import { AuthError, createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 import { auth, db } from "@synergy/libs/firebase";
 
@@ -22,14 +22,8 @@ const signUp = async (data: SignUpInput) => {
     username: data.username,
     createdAt: serverTimestamp(),
   });
-  const userDoc = await getDoc(userDocRef);
-  const { username, createdAt } = userDoc.data({
-    serverTimestamps: "estimate",
-  })!;
   return {
     uid: credential.user.uid,
-    username,
-    createdAt: createdAt.toDate(),
   };
 };
 

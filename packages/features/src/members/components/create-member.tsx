@@ -111,12 +111,7 @@ export const CreateMemberDialog = ({ children }: CreateMemberDialogProps) => {
       open={isOpen}
       onOpenChange={(open) => setIsOpen(open)}
     >
-      <DialogTrigger
-        className="w-full"
-        asChild
-      >
-        {children}
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogTitle>Join group</DialogTitle>
         <CreateMemberForm onSuccess={() => setIsOpen(false)} />

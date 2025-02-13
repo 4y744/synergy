@@ -22,7 +22,7 @@ type DeleteMessageDialogProps = Readonly<{
   messageId: string;
 }>;
 
-export const DeleteInviteDialog = ({
+export const DeleteMessageDialog = ({
   children,
   groupId,
   chatId,

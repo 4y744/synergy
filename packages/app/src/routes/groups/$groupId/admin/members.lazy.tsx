@@ -3,21 +3,21 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 
 import { MembersList } from "@synergy/features/members";
 
-import { Header } from "~/components/layouts/header";
-import { Content } from "~/components/layouts/content";
+import { ContentLayout } from "~/components/layouts/content-layout";
+import { Topbar } from "~/components/layouts/topbar";
 
 export const Route = createLazyFileRoute("/groups/$groupId/admin/members")({
   component: () => {
     const { groupId } = Route.useParams();
     return (
       <>
-        <Header>
-          <UsersIcon size={16} />
-          Manage members
-        </Header>
-        <Content>
+        <Topbar
+          title="Manage members"
+          icon={<UsersIcon size={16} />}
+        />
+        <ContentLayout>
           <MembersList groupId={groupId} />
-        </Content>
+        </ContentLayout>
       </>
     );
   },

@@ -4,8 +4,8 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { useFolder } from "@synergy/features/folders";
 import { FilesList } from "@synergy/features/files";
 
-import { Header } from "~/components/layouts/header";
-import { Content } from "~/components/layouts/content";
+import { ContentLayout } from "~/components/layouts/content-layout";
+import { Topbar } from "~/components/layouts/topbar";
 
 export const Route = createLazyFileRoute("/groups/$groupId/folders/$folderId")({
   component: () => {
@@ -13,16 +13,16 @@ export const Route = createLazyFileRoute("/groups/$groupId/folders/$folderId")({
     const { data: folder } = useFolder(groupId, folderId);
     return (
       <>
-        <Header>
-          <FolderIcon size={16} />
-          {folder?.name}
-        </Header>
-        <Content>
+        <Topbar
+          title={folder?.name}
+          icon={<FolderIcon size={16} />}
+        />
+        <ContentLayout>
           <FilesList
             groupId={groupId}
             folderId={folderId}
           />
-        </Content>
+        </ContentLayout>
       </>
     );
   },

@@ -8,5 +8,8 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "deploy": "firebase deploy"
+  },
+  "overrides": {
+    "@radix-ui/react-focus-scope": "1.0.4"
   }
 }
