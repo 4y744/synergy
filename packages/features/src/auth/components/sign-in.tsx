@@ -4,6 +4,8 @@ import { Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useTranslation } from "react-i18next";
+
 import {
   Card,
   CardContent,
@@ -60,6 +62,8 @@ export const SignInForm = ({
     },
   });
 
+  const { t } = useTranslation();
+
   const onSubmit: SubmitHandler<SignInInput> = (data) => signIn(data);
 
   return (
@@ -68,8 +72,8 @@ export const SignInForm = ({
       {...props}
     >
       <CardHeader>
-        <CardTitle>Sign in</CardTitle>
-        <CardDescription>Sign into your account.</CardDescription>
+        <CardTitle>{t("auth.sign_in")}</CardTitle>
+        <CardDescription>{t("auth.sign_in_desc")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -81,14 +85,14 @@ export const SignInForm = ({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t("form.email")}</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="johndoe@gmail.com"
+                      placeholder={t("auth.placeholders.email")}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage render={(error) => t(error as any)} />
                 </FormItem>
               )}
             />
@@ -96,15 +100,15 @@ export const SignInForm = ({
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t("form.password")}</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Enter your password..."
+                      placeholder={t("auth.placeholders.password")}
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage render={(error) => t(error as any)} />
                 </FormItem>
               )}
             />
@@ -114,7 +118,7 @@ export const SignInForm = ({
               disabled={isPending || isSuccess}
             >
               {(isPending || isSuccess) && <Loader2 className="animate-spin" />}
-              Sign in
+              {t("auth.sign_in")}
             </Button>
           </form>
         </Form>
@@ -125,7 +129,7 @@ export const SignInForm = ({
           className="w-full"
           onClick={() => onSwitch?.()}
         >
-          Don't have an account? Sign up!
+          {t("auth.no_account")}
         </Button>
       </CardFooter>
     </Card>

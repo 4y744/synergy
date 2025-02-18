@@ -15,10 +15,15 @@
     "./react-query": {
       "import": "./dist/react-query/index.mjs",
       "types": "./dist/react-query/index.d.mts"
+    },
+    "./react-router": {
+      "import": "./dist/react-router/index.mjs",
+      "types": "./dist/react-router/index.d.mts"
     }
   },
   "dependencies": {
     "@tanstack/react-query": "^5.60.5",
+    "@tanstack/react-router": "^1.97.8",
     "firebase": "^11.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

@@ -16,18 +16,18 @@ import { DeleteMessageDialog } from "./delete-message";
 const squishMessages = (messages: Message[]) => {
   const squished: Message[][] = [];
 
-  messages.forEach((message) => {
+  messages.toReversed().forEach((message) => {
     if (squished.length == 0) {
-      return squished.push([{ ...message }]);
+      return squished.push([message]);
     }
-    const last = squished[squished.length - 1];
+    const last = squished[0];
     if (
       message.createdBy == last[0].createdBy &&
       message.createdAt.getTime() < last[0].createdAt.getTime() + 5 * 60 * 1000
     ) {
-      last.push({ ...message });
+      last.push(message);
     } else {
-      squished.push([{ ...message }]);
+      squished.unshift([message]);
     }
   });
 
@@ -61,15 +61,13 @@ const MessageGroup = ({ groupId, chatId, messages }: MessageGroupProps) => {
           </Muted>
         </div>
       </div>
-      <div className="flex flex-col-reverse w-full">
+      <div className="w-full">
         {messages.map(({ id, payload }) => (
-          <div className="group hover:bg-sidebar w-full min-h-6 pl-14 flex items-center">
-            <span
-              className="whitespace-pre-line text-sm"
-              key={id}
-            >
-              {payload}
-            </span>
+          <div
+            className="group hover:bg-sidebar w-full min-h-6 pl-14 flex items-center"
+            key={id}
+          >
+            <span className="whitespace-pre-line text-sm">{payload}</span>
             <DeleteMessageDialog
               groupId={groupId}
               chatId={chatId}

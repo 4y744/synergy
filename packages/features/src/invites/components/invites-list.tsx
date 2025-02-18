@@ -55,8 +55,7 @@ export const InvitesList = ({ groupId }: InvitesListProps) => {
           <TableRow key={id}>
             <TableCell>{id}</TableCell>
             <TableCell>
-              {expiresAt.getFullYear() <
-              5000 /* :), TODO: DO THIS MORE CLEANLY */
+              {expiresAt.getFullYear() < 5000 // very dumb
                 ? expiresAt.toLocaleString()
                 : "never"}
             </TableCell>

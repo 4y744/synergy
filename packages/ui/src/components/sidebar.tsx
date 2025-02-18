@@ -282,7 +282,6 @@ const SidebarTrigger = React.forwardRef<
       }}
       {...props}
     >
-      {/* TODO: FIX THE SIZE OF THIS */}
       <ArrowLeft size={20} />
       <span className="sr-only">Toggle Sidebar</span>
     </button>

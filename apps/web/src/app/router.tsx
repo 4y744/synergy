@@ -1,35 +1,27 @@
 import { useContext } from "react";
 import { Loader2Icon } from "lucide-react";
 
-import {
-  createRootRoute,
-  createRouter,
-  RouterProvider,
-} from "@tanstack/react-router";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { AuthContext } from "@synergy/features/auth";
+import { mergeRouteTree } from "@synergy/libs/react-router";
 
-import { routeTree as appRouteTree } from "@synergy/app";
-import { routeTree as rootRouteTree } from "~/routeTree.gen";
+import { routeTree } from "~/routeTree.gen";
+import { routeTree as _routeTree } from "@synergy/client";
+import { ContentLayout } from "~/components/layouts/content-layout";
 
-// Merge base routes and @synergy/app routes.
 export const router = createRouter({
-  routeTree: createRootRoute().addChildren([
-    Object.assign({ id: "base" }, rootRouteTree),
-    Object.assign({ id: "app" }, appRouteTree),
-  ]),
+  routeTree: mergeRouteTree(routeTree, _routeTree),
   defaultPreload: "intent",
-  defaultPendingComponent: () => {
-    return (
-      <div className="w-full h-screen flex justify-center items-center">
-        <Loader2Icon
-          className="animate-spin"
-          size={48}
-        />
-      </div>
-    );
-  },
+  defaultPendingComponent: () => (
+    <ContentLayout isCentered>
+      <Loader2Icon
+        className="animate-spin"
+        size={48}
+      />
+    </ContentLayout>
+  ),
 });
 
 export const AppRouter = () => {

@@ -4,6 +4,8 @@ import { FileUpIcon, Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useTranslation } from "react-i18next";
+
 import {
   Button,
   Input,
@@ -40,6 +42,7 @@ export const UpdateUserForm = ({
   ...props
 }: UpdateUserProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation();
 
   const { mutateAsync: updateUser, isPending } = useUpdateUser({
     onSuccess,
@@ -58,6 +61,7 @@ export const UpdateUserForm = ({
   const _onSubmit: SubmitHandler<UpdateUserInput> = (data) => {
     return updateUser(data);
   };
+
   return (
     <Form {...form}>
       <form
@@ -72,14 +76,14 @@ export const UpdateUserForm = ({
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>{t("users.name")}</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="John Doe"
+                  placeholder={t("users.placeholders.name")}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage render={(error) => t(error as any)} />
             </FormItem>
           )}
         />
@@ -99,7 +103,7 @@ export const UpdateUserForm = ({
             }}
           >
             <FileUpIcon />
-            Upload a profile picture
+            {t("users.upload_pfp")}
           </Button>
         </div>
         <Button
@@ -109,10 +113,10 @@ export const UpdateUserForm = ({
           {isPending ? (
             <>
               <Loader2 className="animate-spin" />
-              Saving
+              {t("general.save")}
             </>
           ) : (
-            <>Save</>
+            t("general.saving")
           )}
         </Button>
       </form>
@@ -126,6 +130,7 @@ type UpdateUserDialogProps = Readonly<{
 
 export const UpdateUserDialog = ({ children }: UpdateUserDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <Dialog
@@ -134,7 +139,7 @@ export const UpdateUserDialog = ({ children }: UpdateUserDialogProps) => {
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogTitle>Edit your profile</DialogTitle>
+        <DialogTitle>{t("users.edit")}</DialogTitle>
         <UpdateUserForm onSuccess={() => setIsOpen(false)} />
       </DialogContent>
     </Dialog>

@@ -3,7 +3,7 @@ import type { Config } from "tailwindcss";
 export default {
   content: [
     "./src/**/*.tsx",
-    "../../packages/app/src/**/*.tsx",
+    "../../packages/client/src/**/*.tsx",
     "../../packages/features/src/**/*.tsx",
     "../../packages/ui/src/**/*.tsx",
   ],
@@ -11,6 +11,7 @@ export default {
     extend: {
       fontFamily: {
         inter: ["Inter", "sans-serif", "system-ui"],
+        arcade: ["'Press Start 2P'", "sans-serif", "system-ui"],
       },
     },
   },

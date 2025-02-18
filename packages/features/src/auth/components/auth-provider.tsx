@@ -1,9 +1,7 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-
 import { useQueryClient } from "@tanstack/react-query";
-import { doc, getDoc } from "firebase/firestore";
 
-import { auth, db } from "@synergy/libs/firebase";
+import { auth } from "@synergy/libs/firebase";
 
 import { AuthStore, createAuthStore } from "../stores/auth-store";
 
@@ -22,11 +20,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const { initialize, signIn } = authStore.getState();
       const user = auth.currentUser;
       if (user) {
-        const snapshot = await getDoc(doc(db, "users", user.uid));
-        const data = snapshot.data();
         signIn({
           uid: user.uid,
-          username: data?.username,
         });
       }
       initialize();
