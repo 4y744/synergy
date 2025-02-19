@@ -1,3 +1,4 @@
+import { cn } from "@synergy/utils";
 import React, { ReactNode } from "react";
 
 interface Props {
@@ -8,7 +9,10 @@ interface Props {
 const H1: React.FC<Props> = ({ className, children }) => {
   return (
     <h1
-      className={`scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl ${className}`}
+      className={cn(
+        `scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl`,
+        className
+      )}
     >
       {children}
     </h1>

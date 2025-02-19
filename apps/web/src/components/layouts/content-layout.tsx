@@ -23,3 +23,4 @@ export const ContentLayout = forwardRef<HTMLDivElement, ContentProps>(
     );
   }
 );
+ContentLayout.displayName = "ContentLayout";

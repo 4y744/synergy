@@ -1,20 +1,32 @@
 {
   "firestore": {
-    "rules": "apps/backend/firestore/firestore.rules",
-    "indexes": "apps/backend/firestore/firestore.indexes.json"
+    "rules": "apps/api/firestore/firestore.rules",
+    "indexes": "apps/api/firestore/firestore.indexes.json"
   },
-  "hosting": {
-    "public": "apps/web/dist",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  },
+  "hosting": [
+    {
+      "site": "synergy-44df2",
+      "public": "apps/web/dist",
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "site": "synergy-44df2-cb909",
+      "public": "apps/client/dist",
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ],
   "storage": {
-    "rules": "apps/backend/storage/storage.rules"
+    "rules": "apps/api/storage/storage.rules"
   },
   "emulators": {
     "auth": {

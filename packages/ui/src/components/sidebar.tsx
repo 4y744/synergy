@@ -750,7 +750,7 @@ const SidebarMenuSubButton = React.forwardRef<
 SidebarMenuSubButton.displayName = "SidebarMenuSubButton";
 
 type SidebarCardProps = Readonly<{
-  primary: string;
+  primary?: string;
   secondary?: string;
   image?: string;
   icon?: React.ReactNode;
@@ -767,7 +767,7 @@ const SidebarCard = ({ primary, secondary, image, icon }: SidebarCardProps) => {
       >
         <AvatarImage src={image} />
         <AvatarFallback className="rounded-lg">
-          {abbreviate(primary)}
+          {abbreviate(primary || "")}
         </AvatarFallback>
       </Avatar>
       <div className="grid flex-1 text-left text-sm leading-tight">

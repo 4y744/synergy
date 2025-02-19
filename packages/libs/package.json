@@ -15,10 +15,6 @@
     "./react-query": {
       "import": "./dist/react-query/index.mjs",
       "types": "./dist/react-query/index.d.mts"
-    },
-    "./react-router": {
-      "import": "./dist/react-router/index.mjs",
-      "types": "./dist/react-router/index.d.mts"
     }
   },
   "dependencies": {

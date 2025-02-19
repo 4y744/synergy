@@ -8,10 +8,16 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+
+// Create Virtual Routes
+
+const InviteInviteIdLazyImport = createFileRoute('/invite/$inviteId')()
 
 // Create/Update Routes
 
@@ -20,6 +26,14 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const InviteInviteIdLazyRoute = InviteInviteIdLazyImport.update({
+  id: '/invite/$inviteId',
+  path: '/invite/$inviteId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/invite/$inviteId.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -32,6 +46,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/invite/$inviteId': {
+      id: '/invite/$inviteId'
+      path: '/invite/$inviteId'
+      fullPath: '/invite/$inviteId'
+      preLoaderRoute: typeof InviteInviteIdLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -39,32 +60,37 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/invite/$inviteId': typeof InviteInviteIdLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/invite/$inviteId': typeof InviteInviteIdLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/invite/$inviteId': typeof InviteInviteIdLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/invite/$inviteId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/invite/$inviteId'
+  id: '__root__' | '/' | '/invite/$inviteId'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  InviteInviteIdLazyRoute: typeof InviteInviteIdLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  InviteInviteIdLazyRoute: InviteInviteIdLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +103,15 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/invite/$inviteId"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/invite/$inviteId": {
+      "filePath": "invite/$inviteId.lazy.tsx"
     }
   }
 }

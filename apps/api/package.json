@@ -1,0 +1,10 @@
+{
+  "name": "@synergy/api",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "firebase emulators:start"
+  },
+  "dependencies": {
+    "firebase-tools": "^13.29.1"
+  }
+}
