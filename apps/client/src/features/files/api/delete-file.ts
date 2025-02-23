@@ -5,25 +5,6 @@ import { deleteObject, ref } from "firebase/storage";
 
 import { db, storage } from "@synergy/libs/firebase";
 
-const deleteFile = async (
-  groupId: string,
-  folderId: string,
-  fileId: string
-) => {
-  const fileDocRef = doc(
-    db,
-    "groups",
-    groupId,
-    "folders",
-    folderId,
-    "files",
-    fileId
-  );
-  const fileDoc = await getDoc(fileDocRef);
-  await deleteDoc(fileDocRef);
-  return deleteObject(ref(storage, fileDoc.data()?.url));
-};
-
 type DeleteFileOptions = MutationOptions<void, FirestoreError, void>;
 
 export const deleteFileOptions = (
@@ -32,6 +13,19 @@ export const deleteFileOptions = (
   fileId: string
 ) => {
   return {
-    mutationFn: () => deleteFile(groupId, folderId, fileId),
+    mutationFn: async () => {
+      const fileDocRef = doc(
+        db,
+        "groups",
+        groupId,
+        "folders",
+        folderId,
+        "files",
+        fileId
+      );
+      const fileDoc = await getDoc(fileDocRef);
+      await deleteObject(ref(storage, fileDoc.data()?.url));
+      return deleteDoc(fileDocRef);
+    },
   } satisfies DeleteFileOptions;
 };

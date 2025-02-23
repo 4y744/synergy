@@ -1,5 +1,8 @@
 import { ComponentProps, ReactNode, useEffect, useRef, useState } from "react";
-import { useCreateFile } from "../hooks/use-create-file";
+import { FileUpIcon } from "lucide-react";
+
+import { useTranslation } from "react-i18next";
+
 import {
   Dialog,
   DialogContent,
@@ -8,8 +11,7 @@ import {
   Progress,
 } from "@synergy/ui";
 
-import { FileUpIcon } from "lucide-react";
-import { useTranslation } from "@synergy/i18n";
+import { useCreateFile } from "../hooks/use-create-file";
 
 type CreateFileFormProps = Readonly<
   ComponentProps<"div"> & {
@@ -90,7 +92,6 @@ export const CreateFileDialog = ({
   folderId,
 }: CreateFileDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const { t } = useTranslation();
 
   return (
@@ -100,7 +101,7 @@ export const CreateFileDialog = ({
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogTitle>{t("file.create")}</DialogTitle>
+        <DialogTitle>{t("client.feature.file.create")}</DialogTitle>
         <CreateFileForm
           groupId={groupId}
           folderId={folderId}

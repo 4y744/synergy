@@ -1,6 +1,8 @@
 import { ReactNode, useState } from "react";
 import { Loader2 } from "lucide-react";
 
+import { useTranslation } from "react-i18next";
+
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -13,9 +15,8 @@ import {
   Button,
 } from "@synergy/ui";
 
-import { useDeleteFile } from "../hooks/use-delete-file";
 import { useFile } from "../hooks/use-file";
-import { useTranslation } from "@synergy/i18n";
+import { useDeleteFile } from "../hooks/use-delete-file";
 
 type DeleteFileDialogProps = Readonly<{
   children: ReactNode;
@@ -31,6 +32,7 @@ export const DeleteFileDialog = ({
   fileId,
 }: DeleteFileDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
 
   const { data: file } = useFile(groupId, folderId, fileId);
   const { mutateAsync: deleteFile, isPending } = useDeleteFile(
@@ -38,8 +40,6 @@ export const DeleteFileDialog = ({
     folderId,
     fileId
   );
-
-  const { t } = useTranslation();
 
   return (
     <AlertDialog
@@ -49,14 +49,13 @@ export const DeleteFileDialog = ({
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{t("file.delete")}</AlertDialogTitle>
+          <AlertDialogTitle>{t("client.feature.file.delete")}</AlertDialogTitle>
           <AlertDialogDescription>
-            {t("file.delete_desc", { name: file?.name })}
-            <span className="font-medium"> {file?.name}</span>?
+            {t("client.feature.file.delete_desc", { name: file?.name })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t("client.action.cancel")}</AlertDialogCancel>
           <Button
             onClick={() => deleteFile().then(() => setIsOpen(false))}
             disabled={isPending}
@@ -65,10 +64,10 @@ export const DeleteFileDialog = ({
             {isPending ? (
               <>
                 <Loader2 className="animate-spin" />
-                {t("generic.deleting")}
+                {t("client.action.deleting")}
               </>
             ) : (
-              t("generic.delete")
+              t("client.action.delete")
             )}
           </Button>
         </AlertDialogFooter>

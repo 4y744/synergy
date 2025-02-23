@@ -1,5 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { loadAuth } from "~/features/auth/api/load-auth";
 
 export const Route = createFileRoute("/(app)/invite/$inviteId")({
-  // TODO: FETCH INVITE TO GET GROUP'S NAME AND ICON
+  beforeLoad: async ({ context }) => {
+    const { authStore } = context;
+    const { isSignedIn } = await loadAuth(authStore);
+    if (!isSignedIn) {
+      throw redirect({ to: "/signin" });
+    }
+  },
 });

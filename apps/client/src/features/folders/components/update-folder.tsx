@@ -4,6 +4,7 @@ import { Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useTranslation } from "react-i18next";
 import {
   Button,
   Input,
@@ -27,7 +28,6 @@ import {
   UpdateFolderInput,
   updateFolderInputSchema,
 } from "../types/update-folder";
-import { useTranslation } from "@synergy/i18n";
 
 type UpdateFolderProps = Readonly<
   ComponentProps<"form"> & {
@@ -45,11 +45,13 @@ export const UpdateFolderForm = ({
   className,
   ...props
 }: UpdateFolderProps) => {
+  const { t } = useTranslation();
+
   const { data: folder } = useFolder(groupId, folderId);
   const { mutateAsync: updateFolder, isPending } = useUpdateFolder(
     groupId,
     folderId,
-    { onSuccess }
+    { onSuccess, throwOnError: false }
   );
 
   const form = useForm<UpdateFolderInput>({
@@ -58,8 +60,6 @@ export const UpdateFolderForm = ({
       name: folder?.name,
     },
   });
-
-  const { t } = useTranslation();
 
   const _onSubmit: SubmitHandler<UpdateFolderInput> = (data) => {
     return updateFolder(data);
@@ -79,11 +79,15 @@ export const UpdateFolderForm = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("folder.form.fields.name.label")}</FormLabel>
+              <FormLabel>
+                {t("client.feature.folder.form.fields.name.label")}
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder={t("folder.form.fields.name.placeholder")}
+                  placeholder={t(
+                    "client.feature.folder.form.fields.name.placeholder"
+                  )}
                 />
               </FormControl>
               <FormMessage />
@@ -94,10 +98,10 @@ export const UpdateFolderForm = ({
           {isPending ? (
             <>
               <Loader2 className="animate-spin" />
-              {t("generic.saving")}
+              {t("client.action.saving")}
             </>
           ) : (
-            t("generic.save")
+            t("client.action.save")
           )}
         </Button>
       </form>
@@ -117,9 +121,6 @@ export const UpdateFolderDialog = ({
   folderId,
 }: UpdateFolderDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const { data: folder } = useFolder(groupId, folderId);
-
   const { t } = useTranslation();
 
   return (
@@ -129,10 +130,7 @@ export const UpdateFolderDialog = ({
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogTitle>
-          {t("folder.update")}
-          <span className="font-medium"> #{folder?.name}</span>?
-        </DialogTitle>
+        <DialogTitle>{t("client.feature.folder.update")}</DialogTitle>
         <UpdateFolderForm
           groupId={groupId}
           folderId={folderId}

@@ -15,10 +15,6 @@ export const useGroups = (options?: Partial<UseGroupOptions>) => {
         return {
           ...options,
           ...getGroupOptions(queryClient, groupId),
-          staleTime: Infinity,
-          refetchIntervalInBackground: false,
-          refetchOnWindowFocus: false,
-          throwOnError: false,
         } satisfies UseGroupOptions;
       }) || [],
   });

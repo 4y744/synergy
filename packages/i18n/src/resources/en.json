@@ -1,216 +1,233 @@
 {
   "translation": {
-    "generic": {
-      "create": "Create",
-      "creating": "Creating",
-
-      "save": "Save",
-      "saving": "Saving",
-
-      "delete": "Delete",
-      "deleting": "Deleting",
-
-      "join": "Join",
-      "joining": "Joining",
-
-      "leave": "Leave",
-      "leaving": "Leaving",
-
-      "kick": "Kick",
-      "kicking": "Kicking",
-
-      "proceed": "Proceed",
-      "proceeding": "Proceeding",
-
-      "edit": "Edit",
-      "cancel": "Cancel",
-
-      "groups": "Groups",
-      "chats": "Chats",
-      "folders": "Folders",
-      "members": "Members",
-      "files": "files",
-      "invites": "Invites",
-
-      "administration": "Administration",
-      "account": "Account",
-      "settings": "Settings",
-      "themes": "Themes",
-      "language": "Language"
+    "web": {
+      "landing": {
+        "open_in_browser": "Open in browser",
+        "download": "Download"
+      },
+      "404": {
+        "does_not_exit": "Oops! This page doesn't seem to exist.",
+        "go_to_home": "Go to home page"
+      },
+      "footer": {
+        "project": "Project",
+        "powered_by": "Powered by",
+        "developed_with": "Developed with",
+        "license": "License"
+      }
     },
-    "time": {
-      "5_mins": "5 minutes",
-      "30_mins": "30 minutes",
-      "1_hour": "1 hour",
-      "1_week": "1 week",
-      "1_month": "1 month",
-      "1_year": "1 year",
-      "never": "Never"
-    },
-    "theme": {
-      "light": "Light",
-      "dark": "Dark"
-    },
-    "form": {
+    "client": {
+      "form": {
+        "errors": {
+          "too_long": "Too long. Must contain more than {{max_lenght}} characters.",
+          "too_short": "Too short. Must contain less than {{min_lenght}} characters."
+        }
+      },
+      "action": {
+        "create": "Create",
+        "creating": "Creating",
+        "save": "Save",
+        "saving": "Saving",
+        "delete": "Delete",
+        "deleting": "Deleting",
+        "join": "Join",
+        "joining": "Joining",
+        "leave": "Leave",
+        "leaving": "Leaving",
+        "kick": "Kick",
+        "kicking": "Kicking",
+        "proceed": "Proceed",
+        "proceeding": "Proceeding",
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "copy": "Copy",
+        "retry": "Retry"
+      },
+      "time": {
+        "5_mins": "5 minutes",
+        "30_mins": "30 minutes",
+        "1_hour": "1 hour",
+        "1_week": "1 week",
+        "1_month": "1 month",
+        "1_year": "1 year",
+        "never": "Never"
+      },
+      "theme": {
+        "light": "Light",
+        "dark": "Dark"
+      },
+      "sidebar": {
+        "category": {
+          "groups": "Groups",
+          "administration": "Administration",
+          "invites": "Invites",
+          "members": "Members",
+          "chats": "Chats",
+          "folders": "Folders",
+          "settings": "Settings"
+        },
+        "settings": {
+          "account": "Account",
+          "theme": "Theme",
+          "language": "Language"
+        }
+      },
+      "feature": {
+        "auth": {
+          "sign_in": "Sign in",
+          "sign_in_desc": "Sign into your account.",
+          "sign_up": "Sign up",
+          "sign_up_desc": "Create an account.",
+          "sign_out": "Sign out",
+          "no_account": "Don't have an account?",
+          "have_account": "Already have an account?",
+          "form": {
+            "fields": {
+              "username": {
+                "label": "Username",
+                "placeholder": "John Doe"
+              },
+              "email": {
+                "label": "Email",
+                "placeholder": "johndoe@gmail.com"
+              },
+              "password": {
+                "label": "Password",
+                "placeholder": "Enter your password..."
+              },
+              "confirm_password": {
+                "label": "Confirm password",
+                "placeholder": "Confirm your password..."
+              }
+            },
+            "errors": {
+              "invalid_email": "This email is invalid.",
+              "email_in_use": "This email is already in use.",
+              "weak_password": "This password is too weak.",
+              "wrong_password": "Wrong password",
+              "password_required": "Please enter a password.",
+              "password_mismatch": "These passwords dont match.",
+              "user_not_found": "User not found.",
+              "disabled_user": "This user is disabled."
+            }
+          }
+        },
+        "group": {
+          "name": "Group name",
+          "create": "Create a group",
+          "join": "Join a group",
+          "update": "Edit group",
+          "delete": "Delete group",
+          "delete_desc": "Are you sure you want to delete {{name}}?",
+          "leave": "Leave group",
+          "settings": "Group settings",
+          "upload_icon": "Upload an icon",
+          "form": {
+            "fields": {
+              "name": {
+                "label": "Group name",
+                "placeholder": "School project"
+              }
+            }
+          }
+        },
+        "member": {
+          "name": "Member name",
+          "leave": "Leave group",
+          "leave_desc": "Are you sure you want to leave {{name}}?",
+          "kick": "Kick member",
+          "kick_desc": "Are you sure you want to kick {{name}}?"
+        },
+        "chat": {
+          "name": "Chat name",
+          "create": "Create a chat",
+          "update": "Edit chat",
+          "delete": "Delete chat",
+          "delete_desc": "Are you sure you want to delete #{{name}}?",
+          "form": {
+            "fields": {
+              "name": {
+                "label": "Chat name",
+                "placeholder": "general"
+              }
+            }
+          }
+        },
+        "message": {
+          "delete": "Delete message",
+          "delete_desc": "Are you sure you want to delete this message?",
+          "deleted": "_Deleted message._",
+          "form": {
+            "fields": {
+              "send": {
+                "placeholder": "Send a message"
+              }
+            }
+          }
+        },
+        "folder": {
+          "name": "Folder name",
+          "create": "Create a folder",
+          "update": "Edit folder",
+          "delete": "Delete folder",
+          "delete_desc": "Are you sure you want to delete {{name}}?",
+          "form": {
+            "fields": {
+              "name": {
+                "label": "Folder name",
+                "placeholder": "Pictures"
+              }
+            }
+          }
+        },
+        "file": {
+          "name": "File name",
+          "create": "Upload a file",
+          "delete": "Delete file",
+          "delete_desc": "Are you sure you want to delete {{name}}?"
+        },
+        "invite": {
+          "id": "Invite ID",
+          "create": "Create an invite",
+          "delete": "Delete invite",
+          "delete_desc": "Are you sure you want to delete this invite?",
+          "expires_in": "Expires in",
+          "expires_at": "Expires at",
+          "form": {
+            "fields": {
+              "invite_id": {
+                "label": "Invite",
+                "placeholder": "https://synergy-app.net/invite/my-invite-link"
+              }
+            },
+            "errors": {
+              "invalid": "Invalid invite."
+            }
+          }
+        },
+        "user": {
+          "name": "Username",
+          "update": "Edit your profile",
+          "upload_pfp": "Upload a profile picture",
+          "delete": "Delete account",
+          "delete_desc": "Are you sure you want to delete your account?",
+          "form": {
+            "fields": {
+              "username": {
+                "label": "Username",
+                "placeholder": "John Doe"
+              }
+            }
+          }
+        }
+      },
       "errors": {
-        "too_long": "Too long. Must contain more than {{max_lenght}} characters.",
-        "too_short": "Too short. Must contain less than {{min_lenght}} characters."
+        "generic": "An error has occured."
+      },
+      "misc": {
+        "no_groups": "Looks like you aren't part of any groups.",
+        "no_chats": "Looks like there aren't any chats in this group."
       }
-    },
-    "auth": {
-      "sign_in": "Sign in",
-      "sign_in_desc": "Sign into your account.",
-
-      "sign_up": "Sign up",
-      "sign_up_desc": "Create an account.",
-
-      "sign_out": "Sign out",
-
-      "no_account": "Don't have an account?",
-      "have_account": "Already have an account?",
-
-      "form": {
-        "fields": {
-          "username": {
-            "label": "Username",
-            "placeholder": "John Doe"
-          },
-          "email": {
-            "label": "Email",
-            "placeholder": "johndoe@gmail.com"
-          },
-          "password": {
-            "label": "Password",
-            "placeholder": "Enter your password..."
-          },
-          "confirm_password": {
-            "label": "Confirm password",
-            "placeholder": "Confirm your password..."
-          }
-        },
-        "errors": {
-          "invalid_email": "This email is invalid.",
-          "invalid_password": "This password is invalid.",
-          "password_required": "Please enter a password.",
-          "password_mismatch": "These passwords dont match."
-        }
-      }
-    },
-    "group": {
-      "name": "Group name",
-      "manage": "Manage group",
-      "settings": "Group settings",
-      "create": "Create group",
-      "update": "Edit group",
-      "delete": "Delete group",
-      "delete_desc": "Are you sure you want to delete {{name}}?",
-      "join": "Join a group",
-      "leave": "Leave groups",
-      "form": {
-        "fields": {
-          "name": {
-            "label": "Group name",
-            "placeholder": "School project"
-          }
-        }
-      }
-    },
-    "chat": {
-      "name": "Chat name",
-      "manage": "Manage chat",
-      "create": "Create chat",
-      "update": "Edit chat",
-      "delete": "Delete chat",
-      "delete_desc": "Are you sure you want to delete #{{name}}?",
-      "form": {
-        "fields": {
-          "name": {
-            "label": "Chat name",
-            "placeholder": "general"
-          }
-        }
-      }
-    },
-    "message": {
-      "delete": "Delete message",
-      "delete_desc": "Are you sure you want to delete this message?",
-      "form": {
-        "fields": {
-          "send": {
-            "placeholder": "Send a message"
-          }
-        }
-      }
-    },
-    "folder": {
-      "name": "Folder name",
-      "manage": "Manage folder",
-      "create": "Create folder",
-      "update": "Edit folder",
-      "delete": "Delete folder",
-      "delete_desc": "Are you sure you want to delete {{name}}?",
-      "form": {
-        "fields": {
-          "name": {
-            "label": "Folder name",
-            "placeholder": "Pictures"
-          }
-        }
-      }
-    },
-    "file": {
-      "name": "File name",
-      "manage": "Manage file",
-      "create": "Upload a file",
-      "delete": "Delete file",
-      "delete_desc": "Are you sure you want to delete {{name}}?"
-    },
-    "member": {
-      "name": "Member name",
-      "manage": "Manage member",
-      "leave": "Leave group",
-      "leave_desc": "Are you sure you want to leave {{name}}?",
-      "kick": "Kick member",
-      "kick_desc": "Are you sure you want to kick {{name}}?"
-    },
-    "invite": {
-      "id": "Invite ID",
-      "create": "Create an invite",
-      "delete": "Delete invite",
-      "delete_desc": "Are you sure you want to delete this invite?",
-      "expires_in": "Expires in",
-      "expires_at": "Expires at",
-      "manage": "Manage member",
-      "form": {
-        "fields": {
-          "invite_id": {
-            "label": "Invite",
-            "placeholder": "https://synergy-app.net/invite/my-invite-link"
-          }
-        },
-        "errors": {
-          "invalid": "Invalid invite."
-        }
-      }
-    },
-    "user": {
-      "name": "Username",
-      "update": "Edit your profile",
-      "upload_pfp": "Upload a profile picture",
-      "delete": "Delete account",
-      "delete_desc": "Are you sure you want to delete your account?",
-      "form": {
-        "fields": {
-          "username": {
-            "label": "Username",
-            "placeholder": "John Doe"
-          }
-        }
-      }
-    },
-    "misc": {
-      "no_groups": "Looks like you aren't part of any groups...",
-      "no_chats": "Looks like there aren't any chats in this group."
     }
   }
 }

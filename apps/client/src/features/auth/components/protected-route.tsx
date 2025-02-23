@@ -1,4 +1,5 @@
 import { Navigate, ReactNode } from "@tanstack/react-router";
+
 import { useAuth } from "../hooks/use-auth";
 
 type ProtectedRouteProps = Readonly<{
@@ -10,3 +11,4 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   return isSignedIn ? children : <Navigate to="/signin" />;
 };
+ProtectedRoute.displayName = "ProtectedRoute";

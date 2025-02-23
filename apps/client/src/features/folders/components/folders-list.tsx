@@ -1,12 +1,13 @@
 import { FolderIcon, MoreHorizontalIcon, PlusIcon } from "lucide-react";
 
+import { useTranslation } from "react-i18next";
+
 import {
   Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   Table,
@@ -17,11 +18,10 @@ import {
   TableRow,
 } from "@synergy/ui";
 
+import { CreateFolderDialog } from "./create-folder";
 import { UpdateFolderDialog } from "./update-folder";
 import { DeleteFolderDialog } from "./delete-folder";
 import { useFolders } from "../hooks/use-folders";
-import { CreateFolderDialog } from "./create-folder";
-import { useTranslation } from "@synergy/i18n";
 
 type FoldersListProps = Readonly<{
   groupId: string;
@@ -29,14 +29,13 @@ type FoldersListProps = Readonly<{
 
 export const FoldersList = ({ groupId }: FoldersListProps) => {
   const { data: folders } = useFolders(groupId);
-
   const { t } = useTranslation();
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>{t("folder.name")}</TableHead>
+          <TableHead>{t("client.feature.folder.name")}</TableHead>
           <TableHead className="float-end">
             <div className="flex items-center h-full">
               <CreateFolderDialog groupId={groupId}>
@@ -69,8 +68,6 @@ export const FoldersList = ({ groupId }: FoldersListProps) => {
                   />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuLabel>{t("folder.manage")}</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <UpdateFolderDialog
                       groupId={groupId}
@@ -79,7 +76,7 @@ export const FoldersList = ({ groupId }: FoldersListProps) => {
                       <DropdownMenuItem
                         onSelect={(event) => event.preventDefault()}
                       >
-                        {t("generic.edit")}
+                        {t("client.action.edit")}
                       </DropdownMenuItem>
                     </UpdateFolderDialog>
                   </DropdownMenuGroup>
@@ -92,7 +89,7 @@ export const FoldersList = ({ groupId }: FoldersListProps) => {
                       <DropdownMenuItem
                         onSelect={(event) => event.preventDefault()}
                       >
-                        {t("generic.delete")}
+                        {t("client.action.delete")}
                       </DropdownMenuItem>
                     </DeleteFolderDialog>
                   </DropdownMenuGroup>

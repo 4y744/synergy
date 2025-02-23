@@ -1,8 +1,11 @@
 import { ComponentProps } from "react";
 import { Loader2 } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useTranslation } from "react-i18next";
 
 import {
   Form,
@@ -15,15 +18,15 @@ import {
   Button,
 } from "@synergy/ui";
 
+import { AUTH_ERRORS } from "../configs/errors";
 import { useSignUp } from "../hooks/use-sign-up";
 import { SignUpInput, signUpInputSchema } from "../types/sign-up";
-import { useTranslation } from "@synergy/i18n";
-import { useNavigate } from "@tanstack/react-router";
 
 type SignUpFormProps = Readonly<ComponentProps<"div">>;
 
 export const SignUpForm = (props: SignUpFormProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const {
     mutate: signUp,
@@ -33,9 +36,10 @@ export const SignUpForm = (props: SignUpFormProps) => {
     onSuccess: () => navigate({ to: "/groups" }),
     onError: (error) => {
       form.setError("confirmPassword", {
-        message: error.code,
+        message: AUTH_ERRORS[error.code as keyof typeof AUTH_ERRORS],
       });
     },
+    throwOnError: false,
   });
 
   const form = useForm<SignUpInput>({
@@ -47,8 +51,6 @@ export const SignUpForm = (props: SignUpFormProps) => {
       confirmPassword: "",
     },
   });
-
-  const { t } = useTranslation();
 
   const onSubmit: SubmitHandler<SignUpInput> = (data) => signUp(data);
 
@@ -66,11 +68,15 @@ export const SignUpForm = (props: SignUpFormProps) => {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("auth.form.fields.username.label")}</FormLabel>
+              <FormLabel>
+                {t("client.feature.auth.form.fields.username.label")}
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder={t("auth.form.fields.username.placeholder")}
+                  placeholder={t(
+                    "client.feature.auth.form.fields.username.placeholder"
+                  )}
                 />
               </FormControl>
               <FormMessage />
@@ -82,11 +88,15 @@ export const SignUpForm = (props: SignUpFormProps) => {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("auth.form.fields.email.label")}</FormLabel>
+              <FormLabel>
+                {t("client.feature.auth.form.fields.email.label")}
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder={t("auth.form.fields.email.placeholder")}
+                  placeholder={t(
+                    "client.feature.auth.form.fields.email.placeholder"
+                  )}
                 />
               </FormControl>
               <FormMessage />
@@ -98,11 +108,15 @@ export const SignUpForm = (props: SignUpFormProps) => {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("auth.form.fields.password.label")}</FormLabel>
+              <FormLabel>
+                {t("client.feature.auth.form.fields.password.label")}
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder={t("auth.form.fields.password.placeholder")}
+                  placeholder={t(
+                    "client.feature.auth.form.fields.password.placeholder"
+                  )}
                   type="password"
                 />
               </FormControl>
@@ -116,13 +130,13 @@ export const SignUpForm = (props: SignUpFormProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                {t("auth.form.fields.confirm_password.label")}
+                {t("client.feature.auth.form.fields.confirm_password.label")}
               </FormLabel>
               <FormControl>
                 <Input
                   {...field}
                   placeholder={t(
-                    "auth.form.fields.confirm_password.placeholder"
+                    "client.feature.auth.form.fields.confirm_password.placeholder"
                   )}
                   type="password"
                 />
@@ -136,16 +150,17 @@ export const SignUpForm = (props: SignUpFormProps) => {
           disabled={isPending || isSuccess}
         >
           {(isPending || isSuccess) && <Loader2 className="animate-spin" />}
-          {t("auth.sign_up")}
-        </Button>
-        <Button
-          variant="link"
-          className="w-full"
-          onClick={() => navigate({ to: "/signin" })}
-        >
-          {t("auth.have_account")}
+          {t("client.feature.auth.sign_up")}
         </Button>
       </form>
+      <Button
+        variant="link"
+        className="w-full"
+        onClick={() => navigate({ to: "/signin" })}
+      >
+        {t("client.feature.auth.have_account")}
+      </Button>
     </Form>
   );
 };
+SignUpForm.displayName = "SignUpInput";

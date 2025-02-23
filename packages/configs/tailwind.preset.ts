@@ -3,6 +3,10 @@ import { type PresetsConfig } from "tailwindcss/types/config";
 export default {
   theme: {
     extend: {
+      fontFamily: {
+        inter: ["Inter", "sans-serif", "system-ui"],
+        arcade: ["'Press Start 2P'", "sans-serif", "system-ui"],
+      },
       colors: {
         primary: {
           DEFAULT: "hsl(var(--primary))",

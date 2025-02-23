@@ -6,7 +6,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   Table,
@@ -17,12 +16,12 @@ import {
   TableRow,
 } from "@synergy/ui";
 
+import { CreateChatDialog } from "./create-chat";
 import { UpdateChatDialog } from "./update-chat";
 import { DeleteChatDialog } from "./delete-chat";
 import { useChats } from "../hooks/use-chats";
-import { CreateChatDialog } from "./create-chat";
 
-import { useTranslation } from "@synergy/i18n";
+import { useTranslation } from "react-i18next";
 
 type ChatsListProps = Readonly<{
   groupId: string;
@@ -30,14 +29,13 @@ type ChatsListProps = Readonly<{
 
 export const ChatsList = ({ groupId }: ChatsListProps) => {
   const { data: chats } = useChats(groupId);
-
   const { t } = useTranslation();
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>{t("chat.name")}</TableHead>
+          <TableHead>{t("client.feature.chat.name")}</TableHead>
           <TableHead className="float-end">
             <div className="flex items-center h-full">
               <CreateChatDialog groupId={groupId}>
@@ -70,8 +68,6 @@ export const ChatsList = ({ groupId }: ChatsListProps) => {
                   />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuLabel>{t("chat.manage")}</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <UpdateChatDialog
                       groupId={groupId}
@@ -80,7 +76,7 @@ export const ChatsList = ({ groupId }: ChatsListProps) => {
                       <DropdownMenuItem
                         onSelect={(event) => event.preventDefault()}
                       >
-                        {t("generic.edit")}
+                        {t("client.action.edit")}
                       </DropdownMenuItem>
                     </UpdateChatDialog>
                   </DropdownMenuGroup>
@@ -93,7 +89,7 @@ export const ChatsList = ({ groupId }: ChatsListProps) => {
                       <DropdownMenuItem
                         onSelect={(event) => event.preventDefault()}
                       >
-                        {t("generic.delete")}
+                        {t("client.action.delete")}
                       </DropdownMenuItem>
                     </DeleteChatDialog>
                   </DropdownMenuGroup>

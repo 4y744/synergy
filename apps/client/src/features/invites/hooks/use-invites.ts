@@ -24,8 +24,5 @@ export const useInvites = (
   return useQuery({
     ...options,
     ...getInvitesOptions(queryClient, groupId),
-    staleTime: Infinity,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
   } satisfies UseInvitesOptions);
 };

@@ -23,8 +23,5 @@ export const useChats = (
   return useQuery({
     ...options,
     ...getChatsOptions(queryClient, groupId),
-    staleTime: Infinity,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
   } satisfies UseChatsOptions);
 };

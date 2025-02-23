@@ -4,6 +4,8 @@ import { Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { t } from "i18next";
+
 import {
   Button,
   Dialog,
@@ -23,7 +25,6 @@ import { cn } from "@synergy/utils";
 
 import { useCreateChat } from "../hooks/use-create-chat";
 import { CreateChatInput, createChatInputSchema } from "../types/create-chat";
-import { t } from "@synergy/i18n";
 
 type CreateChatProps = Readonly<
   ComponentProps<"form"> & {
@@ -41,6 +42,7 @@ export const CreateChatForm = ({
 }: CreateChatProps) => {
   const { mutateAsync: createChat, isPending } = useCreateChat(groupId, {
     onSuccess,
+    throwOnError: false,
   });
 
   const form = useForm<CreateChatInput>({
@@ -68,11 +70,15 @@ export const CreateChatForm = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("chat.form.fields.name.label")}</FormLabel>
+              <FormLabel>
+                {t("client.feature.chat.form.fields.name.label")}
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder={t("chat.form.fields.name.placeholder")}
+                  placeholder={t(
+                    "client.feature.chat.form.fields.name.placeholder"
+                  )}
                 />
               </FormControl>
               <FormMessage />
@@ -86,10 +92,10 @@ export const CreateChatForm = ({
           {isPending ? (
             <>
               <Loader2 className="animate-spin" />
-              {t("generic.create")}
+              {t("client.action.create")}
             </>
           ) : (
-            <>{t("generic.creating")}</>
+            t("client.action.creating")
           )}
         </Button>
       </form>
@@ -115,7 +121,7 @@ export const CreateChatDialog = ({
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogTitle>{t("chat.create")}</DialogTitle>
+        <DialogTitle>{t("client.feature.chat.create")}</DialogTitle>
         <CreateChatForm
           groupId={groupId}
           onSuccess={() => setIsOpen(false)}

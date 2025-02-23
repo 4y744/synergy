@@ -1,12 +1,13 @@
 import { MoreHorizontalIcon, PlusIcon } from "lucide-react";
 
+import { useTranslation } from "react-i18next";
+
 import {
   Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   Table,
@@ -19,23 +20,24 @@ import {
 
 import { copyToClipboard } from "@synergy/utils";
 
-import { useInvites } from "../hooks/use-invites";
-import { DeleteInviteDialog } from "./delete-invite";
 import { CreateInviteDialog } from "./create-invite";
+import { DeleteInviteDialog } from "./delete-invite";
+import { useInvites } from "../hooks/use-invites";
 
 type InvitesListProps = Readonly<{
   groupId: string;
 }>;
 
 export const InvitesList = ({ groupId }: InvitesListProps) => {
+  const { t } = useTranslation();
   const { data: invites } = useInvites(groupId);
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Id</TableHead>
-          <TableHead>Expiration date</TableHead>
+          <TableHead>{t("client.feature.invite.id")}</TableHead>
+          <TableHead>{t("client.feature.invite.expires_at")}</TableHead>
           <TableHead className="float-end">
             <div className="flex items-center h-full">
               <CreateInviteDialog groupId={groupId}>
@@ -57,7 +59,7 @@ export const InvitesList = ({ groupId }: InvitesListProps) => {
             <TableCell>
               {expiresAt.getFullYear() < 5000 // very dumb
                 ? expiresAt.toLocaleString()
-                : "never"}
+                : t("client.time.never")}
             </TableCell>
             <TableCell className="float-end">
               <DropdownMenu>
@@ -68,15 +70,13 @@ export const InvitesList = ({ groupId }: InvitesListProps) => {
                   />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuLabel>Manage invite</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem
                       onClick={() => {
                         copyToClipboard(`https://synergy-app.net/invite/${id}`);
                       }}
                     >
-                      Copy
+                      {t("client.action.copy")}
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
@@ -88,7 +88,7 @@ export const InvitesList = ({ groupId }: InvitesListProps) => {
                       <DropdownMenuItem
                         onSelect={(event) => event.preventDefault()}
                       >
-                        Delete
+                        {t("client.action.delete")}
                       </DropdownMenuItem>
                     </DeleteInviteDialog>
                   </DropdownMenuGroup>

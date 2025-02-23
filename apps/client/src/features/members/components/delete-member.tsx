@@ -1,6 +1,8 @@
 import { ReactNode, useState } from "react";
 import { Loader2 } from "lucide-react";
 
+import { useTranslation } from "react-i18next";
+
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -13,10 +15,10 @@ import {
   Button,
 } from "@synergy/ui";
 
-import { useDeleteMember } from "../hooks/use-delete-member";
 import { useUser } from "~/features/users/hooks/use-user";
 import { useGroup } from "~/features/groups/hooks/use-group";
-import { useTranslation } from "@synergy/i18n";
+
+import { useDeleteMember } from "../hooks/use-delete-member";
 
 type DeleteMemberDialogProps = Readonly<{
   children?: ReactNode;
@@ -52,24 +54,16 @@ export const DeleteMemberDialog = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {t(type == "kick" ? "member.kick" : "member.leave")}
+            {t(`client.feature.member.${type}`)}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {type == "kick" ? (
-              <>
-                {t("member.kick_desc")}
-                <span className="font-medium"> {user?.username}</span>?
-              </>
-            ) : (
-              <>
-                {t("member.leave_desc")}
-                <span className="font-medium"> {group?.name}</span>?
-              </>
-            )}
+            {type == "kick"
+              ? t(`client.feature.member.kick_desc`, { name: user?.username })
+              : t(`client.feature.member.leave_desc`, { name: group?.name })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{t("generic.cancel")}</AlertDialogCancel>
+          <AlertDialogCancel>{t("client.action.cancel")}</AlertDialogCancel>
           <Button
             onClick={() => {
               deleteMember().then(() => setIsOpen(false));
@@ -80,10 +74,14 @@ export const DeleteMemberDialog = ({
             {isPending ? (
               <>
                 <Loader2 className="animate-spin" />
-                {t(type == "kick" ? "generic.kicking" : "generic.leaving")}
+                {t(
+                  type == "kick"
+                    ? "client.action.kicking"
+                    : "client.action.leaving"
+                )}
               </>
             ) : (
-              t(type == "kick" ? "generic.kick" : "generic.leave")
+              t(`client.action.${type}`)
             )}
           </Button>
         </AlertDialogFooter>

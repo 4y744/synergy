@@ -25,6 +25,7 @@ export const getGroupOptions = (queryClient: QueryClient, groupId: string) => {
             const group = groupSchema.safeParse({
               id: snapshot.id,
               name: data?.name,
+              icon: data?.icon,
               createdBy: data?.createdBy,
               createdAt: data?.createdAt.toDate(),
             } satisfies Group);

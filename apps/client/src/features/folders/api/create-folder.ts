@@ -11,17 +11,6 @@ import { db } from "@synergy/libs/firebase";
 
 import { CreateFolderInput } from "../types/create-folder";
 
-const createFolder = async (groupId: string, data: CreateFolderInput) => {
-  const { id: folderId } = await addDoc(
-    collection(db, "groups", groupId, "folders"),
-    {
-      ...data,
-      createdAt: serverTimestamp(),
-    }
-  );
-  return folderId;
-};
-
 type CreateFolderOptions = MutationOptions<
   string,
   FirestoreError,
@@ -30,6 +19,15 @@ type CreateFolderOptions = MutationOptions<
 
 export const createFolderOptions = (groupId: string) => {
   return {
-    mutationFn: (data) => createFolder(groupId, data),
+    mutationFn: async (data) => {
+      const { id: folderId } = await addDoc(
+        collection(db, "groups", groupId, "folders"),
+        {
+          ...data,
+          createdAt: serverTimestamp(),
+        }
+      );
+      return folderId;
+    },
   } satisfies CreateFolderOptions;
 };

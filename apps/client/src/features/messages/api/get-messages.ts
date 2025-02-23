@@ -62,8 +62,6 @@ export const getMessagesOptions = (
             limit(50)
           );
         } else {
-          //TODO: Try to retreive the 50th (or last if < 50) element and use that as a reference point.
-          //Might be possible with startAfter(50), limit(1) or something like that.
           const { docs } = await getDocs(
             query(messagesCollection, orderBy("createdAt", "desc"), limit(1))
           );
@@ -96,6 +94,7 @@ export const getMessagesOptions = (
                 ),
                 nextPage: snapshot.docs[snapshot.docs.length - 1],
               };
+
               resolve(messagesPage);
               queryClient.setQueryData(
                 queryKey,

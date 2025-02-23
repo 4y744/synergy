@@ -3,6 +3,8 @@ import { ComponentProps, forwardRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useTranslation } from "react-i18next";
+
 import { Input, Form, FormControl, FormField, FormItem } from "@synergy/ui";
 
 import { cn } from "@synergy/utils";
@@ -12,7 +14,6 @@ import {
   CreateMessageInput,
   createMessageInputSchema,
 } from "../types/create-message";
-import { useTranslation } from "@synergy/i18n";
 
 type ChatInputProps = Readonly<
   ComponentProps<"form"> & {
@@ -23,7 +24,11 @@ type ChatInputProps = Readonly<
 
 export const CreateMessageForm = forwardRef<HTMLFormElement, ChatInputProps>(
   ({ chatId, groupId, onSubmit, ...props }, ref) => {
-    const { mutateAsync: createMessage } = useCreateMessage(groupId, chatId);
+    const { t } = useTranslation();
+
+    const { mutateAsync: createMessage } = useCreateMessage(groupId, chatId, {
+      throwOnError: false,
+    });
 
     const form = useForm<CreateMessageInput>({
       resolver: zodResolver(createMessageInputSchema),
@@ -36,8 +41,6 @@ export const CreateMessageForm = forwardRef<HTMLFormElement, ChatInputProps>(
       form.reset();
       return createMessage(data);
     };
-
-    const { t } = useTranslation();
 
     return (
       <Form {...form}>
@@ -60,7 +63,7 @@ export const CreateMessageForm = forwardRef<HTMLFormElement, ChatInputProps>(
                       "bg-sidebar border-border h-10 w-full",
                       "focus-visible:ring-0"
                     )}
-                    placeholder={`${t("message.form.fields.send.placeholder")}...`}
+                    placeholder={`${t("client.feature.message.form.fields.send.placeholder")}...`}
                   />
                 </FormControl>
               </FormItem>

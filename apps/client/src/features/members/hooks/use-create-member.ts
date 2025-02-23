@@ -15,6 +15,5 @@ export const useCreateMember = (options?: Partial<UseCreateMemberOptions>) => {
   return useMutation({
     ...options,
     ...createMemberOptions(),
-    throwOnError: true,
   } satisfies UseCreateMemberOptions);
 };

@@ -14,21 +14,6 @@ import { auth, db } from "@synergy/libs/firebase";
 
 import { CreateMemberInput } from "../types/create-member";
 
-const createMember = async (data: CreateMemberInput) => {
-  const { docs: invitesDocs } = await getDocs(
-    query(
-      collectionGroup(db, "invites"),
-      where("inviteId", "==", data.inviteId)
-    )
-  );
-  const groupId = invitesDocs[0]?.ref.parent.parent?.id!;
-  await setDoc(doc(db, "groups", groupId, "members", auth.currentUser!.uid), {
-    ...data,
-    uid: auth.currentUser!.uid,
-  });
-  return groupId;
-};
-
 type CreateMemberOptions = MutationOptions<
   string,
   FirestoreError,
@@ -37,6 +22,25 @@ type CreateMemberOptions = MutationOptions<
 
 export const createMemberOptions = () => {
   return {
-    mutationFn: (data) => createMember(data),
+    mutationFn: async (data) => {
+      const { docs: invitesDocs } = await getDocs(
+        query(
+          collectionGroup(db, "invites"),
+          where("inviteId", "==", data.inviteId)
+        )
+      );
+      if (invitesDocs.length == 0) {
+        throw new Error();
+      }
+      const groupId = invitesDocs[0]?.ref.parent.parent?.id!;
+      await setDoc(
+        doc(db, "groups", groupId, "members", auth.currentUser!.uid),
+        {
+          ...data,
+          uid: auth.currentUser!.uid,
+        }
+      );
+      return groupId;
+    },
   } satisfies CreateMemberOptions;
 };

@@ -6,8 +6,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
   Table,
   TableBody,
@@ -17,14 +15,14 @@ import {
   TableRow,
 } from "@synergy/ui";
 
+import { useAuth } from "~/features/auth/hooks/use-auth";
+import { useGroup } from "~/features/groups/hooks/use-group";
+
 import { CreateFileDialog } from "./create-file";
 import { DeleteFileDialog } from "./delete-file";
 import { useFiles } from "../hooks/use-files";
 
-import { useAuth } from "~/features/auth/hooks/use-auth";
-import { useGroup } from "~/features/groups/hooks/use-group";
-
-import { useTranslation } from "@synergy/i18n";
+import { useTranslation } from "react-i18next";
 
 type FilesListProps = Readonly<{
   groupId: string;
@@ -33,17 +31,16 @@ type FilesListProps = Readonly<{
 
 export const FilesList = ({ groupId, folderId }: FilesListProps) => {
   const { uid } = useAuth();
+  const { t } = useTranslation();
 
   const { data: group } = useGroup(groupId);
   const { data: files } = useFiles(groupId, folderId);
-
-  const { t } = useTranslation();
 
   return (
     <Table>
       <TableHeader>
         <TableRow className="align-middle">
-          <TableHead>{t("file.name")}</TableHead>
+          <TableHead>{t("client.feature.file.name")}</TableHead>
           <TableHead className="float-end">
             <div className="flex items-center h-full">
               <CreateFileDialog
@@ -82,8 +79,6 @@ export const FilesList = ({ groupId, folderId }: FilesListProps) => {
                   />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuLabel>{t("file.manage")}</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DeleteFileDialog
                       groupId={groupId}
@@ -94,7 +89,7 @@ export const FilesList = ({ groupId, folderId }: FilesListProps) => {
                         onSelect={(event) => event.preventDefault()}
                         disabled={uid != createdBy && uid != group?.createdBy}
                       >
-                        {t("generic.delete")}
+                        {t("client.action.delete")}
                       </DropdownMenuItem>
                     </DeleteFileDialog>
                   </DropdownMenuGroup>

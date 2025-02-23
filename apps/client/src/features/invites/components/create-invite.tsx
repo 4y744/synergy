@@ -4,6 +4,8 @@ import { Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useTranslation } from "react-i18next";
+
 import {
   Button,
   Dialog,
@@ -11,7 +13,6 @@ import {
   DialogTitle,
   DialogTrigger,
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
@@ -25,12 +26,12 @@ import {
 
 import { cn } from "@synergy/utils";
 
+import { EXPIRATION_TIME } from "../configs/expiration";
 import { useCreateInvite } from "../hooks/use-create-invite";
 import {
   CreateInviteInput,
   createInviteInputSchema,
 } from "../types/create-invite";
-import { useTranslation } from "@synergy/i18n";
 
 type CreateInviteFormProps = Readonly<
   ComponentProps<"form"> & {
@@ -39,17 +40,6 @@ type CreateInviteFormProps = Readonly<
   }
 >;
 
-export const EXPIRATION_TIME = {
-  "5mins": "300000",
-  "30mins": "1800000",
-  "1hour": "3600000",
-  "1day": "86400000",
-  "1week": "604800000",
-  "1month": "2678400000",
-  "1year": "31556952000",
-  never: "99999999999999",
-};
-
 export const CreateInviteForm = ({
   groupId,
   onSuccess,
@@ -57,15 +47,16 @@ export const CreateInviteForm = ({
   className,
   ...props
 }: CreateInviteFormProps) => {
+  const { t } = useTranslation();
+
   const { mutateAsync: createInvite, isPending } = useCreateInvite(groupId, {
     onSuccess,
+    throwOnError: false,
   });
 
   const form = useForm<CreateInviteInput>({
     resolver: zodResolver(createInviteInputSchema),
   });
-
-  const { t } = useTranslation();
 
   const _onSubmit: SubmitHandler<CreateInviteInput> = (date) => {
     return createInvite(date);
@@ -85,40 +76,38 @@ export const CreateInviteForm = ({
           name="expiresAt"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("invite.expires_in")}</FormLabel>
+              <FormLabel>{t("client.feature.invite.expires_in")}</FormLabel>
               <Select
                 onValueChange={(value) => {
                   return field.onChange(new Date(Date.now() + parseInt(value)));
                 }}
                 defaultValue={field.value}
               >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="When should your invite expire?" />
-                  </SelectTrigger>
-                </FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="-" />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value={EXPIRATION_TIME["5mins"]}>
-                    {t("time.5_mins")}
+                    {t("client.time.5_mins")}
                   </SelectItem>
                   <SelectItem value={EXPIRATION_TIME["30mins"]}>
-                    {t("time.30_mins")}
+                    {t("client.time.30_mins")}
                   </SelectItem>
                   <SelectItem value={EXPIRATION_TIME["1hour"]}>
-                    {t("time.1_hour")}
+                    {t("client.time.1_hour")}
                   </SelectItem>
                   <SelectItem value={EXPIRATION_TIME["1day"]}>1 day</SelectItem>
                   <SelectItem value={EXPIRATION_TIME["1week"]}>
-                    {t("time.1_week")}
+                    {t("client.time.1_week")}
                   </SelectItem>
                   <SelectItem value={EXPIRATION_TIME["1month"]}>
-                    {t("time.1_month")}
+                    {t("client.time.1_month")}
                   </SelectItem>
                   <SelectItem value={EXPIRATION_TIME["1year"]}>
-                    {t("time.1_year")}
+                    {t("client.time.1_year")}
                   </SelectItem>
                   <SelectItem value={EXPIRATION_TIME["never"]}>
-                    {t("time.never")}
+                    {t("client.time.never")}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -133,10 +122,10 @@ export const CreateInviteForm = ({
           {isPending ? (
             <>
               <Loader2 className="animate-spin" />
-              {t("generic.creating")}
+              {t("client.action.creating")}
             </>
           ) : (
-            t("generic.create")
+            t("client.action.create")
           )}
         </Button>
       </form>
@@ -154,7 +143,6 @@ export const CreateInviteDialog = ({
   groupId,
 }: CreateInviteDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const { t } = useTranslation();
 
   return (
@@ -164,7 +152,7 @@ export const CreateInviteDialog = ({
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogTitle>{t("invite.create")}</DialogTitle>
+        <DialogTitle>{t("client.action.create")}</DialogTitle>
         <CreateInviteForm
           groupId={groupId}
           onSuccess={() => setIsOpen(false)}

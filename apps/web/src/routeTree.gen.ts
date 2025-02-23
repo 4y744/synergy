@@ -13,19 +13,19 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
 
 // Create Virtual Routes
 
+const IndexLazyImport = createFileRoute('/')()
 const InviteInviteIdLazyImport = createFileRoute('/invite/$inviteId')()
 
 // Create/Update Routes
 
-const IndexRoute = IndexImport.update({
+const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
 const InviteInviteIdLazyRoute = InviteInviteIdLazyImport.update({
   id: '/invite/$inviteId',
@@ -43,7 +43,7 @@ declare module '@tanstack/react-router' {
       id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+      preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/invite/$inviteId': {
@@ -59,18 +59,18 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof IndexLazyRoute
   '/invite/$inviteId': typeof InviteInviteIdLazyRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof IndexLazyRoute
   '/invite/$inviteId': typeof InviteInviteIdLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
+  '/': typeof IndexLazyRoute
   '/invite/$inviteId': typeof InviteInviteIdLazyRoute
 }
 
@@ -84,12 +84,12 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  IndexLazyRoute: typeof IndexLazyRoute
   InviteInviteIdLazyRoute: typeof InviteInviteIdLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  IndexLazyRoute: IndexLazyRoute,
   InviteInviteIdLazyRoute: InviteInviteIdLazyRoute,
 }
 
@@ -108,7 +108,7 @@ export const routeTree = rootRoute
       ]
     },
     "/": {
-      "filePath": "index.tsx"
+      "filePath": "index.lazy.tsx"
     },
     "/invite/$inviteId": {
       "filePath": "invite/$inviteId.lazy.tsx"

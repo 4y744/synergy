@@ -3,9 +3,7 @@ import {
   useQueryClient,
   UseQueryOptions,
 } from "@tanstack/react-query";
-
 import { FirestoreError } from "firebase/firestore";
-
 import { ZodError } from "zod";
 
 import { getFilesOptions } from "../api/get-files";
@@ -27,8 +25,5 @@ export const useFiles = (
   return useQuery({
     ...options,
     ...getFilesOptions(queryClient, groupId, folderId),
-    staleTime: Infinity,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
   } satisfies UseFilesOptions);
 };

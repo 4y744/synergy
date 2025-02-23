@@ -24,9 +24,5 @@ export const useGroup = (
   return useQuery({
     ...options,
     ...getGroupOptions(queryClient, groupId),
-    staleTime: Infinity,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
-    throwOnError: false,
   } satisfies UseGroupOptions);
 };

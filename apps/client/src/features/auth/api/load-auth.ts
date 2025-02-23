@@ -10,7 +10,9 @@ export const loadAuth = async (authStore: AuthStore) => {
           unsubscribe();
         }
       },
-      { fireImmediately: true }
+      {
+        fireImmediately: true,
+      }
     );
   });
   return authStore.getState();

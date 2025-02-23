@@ -3,15 +3,6 @@ import { doc, FirestoreError, updateDoc } from "firebase/firestore";
 
 import { db } from "@synergy/libs/firebase";
 
-const deleteMessage = (groupId: string, chatId: string, messageId: string) => {
-  return updateDoc(
-    doc(db, "groups", groupId, "chats", chatId, "messages", messageId),
-    {
-      payload: "__deleted__",
-    }
-  );
-};
-
 type DeleteMessageOptions = MutationOptions<void, FirestoreError, void>;
 
 export const deleteMessageOptions = (
@@ -20,6 +11,13 @@ export const deleteMessageOptions = (
   messageId: string
 ) => {
   return {
-    mutationFn: () => deleteMessage(groupId, chatId, messageId),
+    mutationFn: () => {
+      return updateDoc(
+        doc(db, "groups", groupId, "chats", chatId, "messages", messageId),
+        {
+          payload: "__deleted__",
+        }
+      );
+    },
   } satisfies DeleteMessageOptions;
 };

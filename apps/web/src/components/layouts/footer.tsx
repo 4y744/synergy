@@ -1,72 +1,49 @@
-import { cn } from "@synergy/utils";
-import { ComponentProps, forwardRef } from "react";
+import { Footer, FooterGroup, FooterItem, FooterLabel } from "@synergy/ui";
+import { useTranslation } from "react-i18next";
 
-type FooterProps = Readonly<ComponentProps<"footer">>;
+export const SiteFooter = () => {
+  const { t } = useTranslation();
 
-export const Footer = forwardRef<HTMLDivElement, FooterProps>(
-  ({ children, className, ...props }, ref) => {
-    return (
-      <footer
-        className={cn(
-          "flex justify-center w-full p-8 border-t border-t-border",
-          className
-        )}
-        ref={ref}
-        {...props}
-      >
-        <div className={cn("w-fit flex flex-wrap gap-12", className)}>
-          {children}
-        </div>
-      </footer>
-    );
-  }
-);
-Footer.displayName = "Footer";
-
-type FooterGroupProps = Readonly<ComponentProps<"section">>;
-
-export const FooterGroup = forwardRef<HTMLDivElement, FooterGroupProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <section
-        className={cn("space-y-2 min-w-64", className)}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
-);
-FooterGroup.displayName = "FooterGroup";
-
-type FooterLabelProps = Readonly<ComponentProps<"span">>;
-
-export const FooterLabel = forwardRef<HTMLSpanElement, FooterLabelProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <span
-        className={cn("font-bold", className)}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
-);
-FooterLabel.displayName = "FooterLabel";
-
-type FooterItemProps = Readonly<ComponentProps<"div">>;
-
-export const FooterItem = forwardRef<HTMLDivElement, FooterItemProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <div
-        className={cn(
-          "text-sm text-muted-foreground hover:underline cursor-pointer",
-          className
-        )}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
-);
-FooterItem.displayName = "FooterItem";
+  return (
+    <Footer>
+      <FooterGroup>
+        <FooterLabel>{t("web.footer.project")}</FooterLabel>
+        <FooterItem>
+          <a href="https://github.com/4y744/synergy">Github</a>
+        </FooterItem>
+        <FooterItem>
+          <a href="https://github.com/4y744/synergy/blob/main/LICENSE">
+            {t("web.footer.license")}
+          </a>
+        </FooterItem>
+        <FooterItem>
+          <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPLv3</a>
+        </FooterItem>
+      </FooterGroup>
+      <FooterGroup>
+        <FooterLabel>{t("web.footer.powered_by")}</FooterLabel>
+        <FooterItem>
+          <a href="https://react.dev/">React</a>
+        </FooterItem>
+        <FooterItem>
+          <a href="https://firebase.google.com/">Firebase</a>
+        </FooterItem>
+        <FooterItem>
+          <a href="https://tailwindcss.com/">Tailwind</a>
+        </FooterItem>
+      </FooterGroup>
+      <FooterGroup>
+        <FooterLabel>{t("web.footer.developed_with")}</FooterLabel>
+        <FooterItem>
+          <a href="https://vite.dev/">Vite</a>
+        </FooterItem>
+        <FooterItem>
+          <a href="https://pnpm.io/">pnpm</a>
+        </FooterItem>
+        <FooterItem>
+          <a href="https://turbo.build/">Turborepo</a>
+        </FooterItem>
+      </FooterGroup>
+    </Footer>
+  );
+};

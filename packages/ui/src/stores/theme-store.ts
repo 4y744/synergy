@@ -1,5 +1,7 @@
-import { Theme } from "~/types/theme";
 import { createStore } from "zustand";
+import { persist } from "zustand/middleware";
+
+import { Theme } from "~/types/theme";
 
 export type ThemeState = {
   theme: Theme;
@@ -7,10 +9,17 @@ export type ThemeState = {
 };
 
 export const createThemeStore = (defaultTheme?: Theme) => {
-  return createStore<ThemeState>((set) => ({
-    theme: defaultTheme || "dark",
-    setTheme: (theme) => set({ theme }),
-  }));
+  return createStore<ThemeState>()(
+    persist(
+      (set) => ({
+        theme: defaultTheme || "dark",
+        setTheme: (theme) => set({ theme }),
+      }),
+      {
+        name: "theme",
+      }
+    )
+  );
 };
 
 export type ThemeStore = ReturnType<typeof createThemeStore>;

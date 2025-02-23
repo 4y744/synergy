@@ -22,11 +22,9 @@ export const updateUserOptions = () => {
           pfp: url,
         });
       }
-      if (data.username) {
-        await updateDoc(userDocRef, {
-          username: data.username,
-        });
-      }
+      await updateDoc(userDocRef, {
+        username: data.username,
+      });
     },
   } satisfies UpdateUserOptions;
 };

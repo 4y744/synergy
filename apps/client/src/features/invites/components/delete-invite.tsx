@@ -1,6 +1,8 @@
 import { ReactNode, useState } from "react";
 import { Loader2 } from "lucide-react";
 
+import { useTranslation } from "react-i18next";
+
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -27,6 +29,7 @@ export const DeleteInviteDialog = ({
   inviteId,
 }: DeleteInviteDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
 
   const { mutateAsync: deleteInvite, isPending } = useDeleteInvite(
     groupId,
@@ -41,13 +44,15 @@ export const DeleteInviteDialog = ({
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete invite?</AlertDialogTitle>
+          <AlertDialogTitle>
+            {t("client.feature.invite.delete")}
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete this invite?
+            {t("client.feature.invite.delete_desc")}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t("client.action.cancel")}</AlertDialogCancel>
           <Button
             onClick={() => {
               deleteInvite().then(() => setIsOpen(false));
@@ -58,10 +63,10 @@ export const DeleteInviteDialog = ({
             {isPending ? (
               <>
                 <Loader2 className="animate-spin" />
-                Deleting
+                {t("client.action.deleting")}
               </>
             ) : (
-              <>Delete</>
+              t("client.action.delete")
             )}
           </Button>
         </AlertDialogFooter>

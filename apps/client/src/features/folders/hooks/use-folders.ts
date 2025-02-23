@@ -24,8 +24,5 @@ export const useFolders = (
   return useQuery({
     ...options,
     ...getFoldersOptions(queryClient, groupId),
-    staleTime: Infinity,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
   } satisfies UseFoldersOptions);
 };

@@ -1,12 +1,12 @@
 import { MoreHorizontalIcon } from "lucide-react";
 
+import { useTranslation } from "react-i18next";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
   Table,
   TableBody,
@@ -16,12 +16,11 @@ import {
   TableRow,
 } from "@synergy/ui";
 
-import { DeleteMemberDialog } from "./delete-member";
-import { useMembers } from "../hooks/use-members";
-
 import { useAuth } from "~/features/auth/hooks/use-auth";
 import { useUser } from "~/features/users/hooks/use-user";
-import { useTranslation } from "@synergy/i18n";
+
+import { DeleteMemberDialog } from "./delete-member";
+import { useMembers } from "../hooks/use-members";
 
 type MemberProps = Readonly<{
   groupId: string;
@@ -29,10 +28,10 @@ type MemberProps = Readonly<{
 }>;
 
 const Member = ({ groupId, memberId }: MemberProps) => {
+  const { t } = useTranslation();
+
   const { uid } = useAuth();
   const { data: user } = useUser(memberId);
-
-  const { t } = useTranslation();
 
   return (
     <TableRow>
@@ -46,8 +45,6 @@ const Member = ({ groupId, memberId }: MemberProps) => {
             />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>{t("member.manage")}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DeleteMemberDialog
                 groupId={groupId}
@@ -58,7 +55,7 @@ const Member = ({ groupId, memberId }: MemberProps) => {
                   onSelect={(event) => event.preventDefault()}
                   disabled={memberId == uid}
                 >
-                  {t("generic.kick")}
+                  {t("client.action.kick")}
                 </DropdownMenuItem>
               </DeleteMemberDialog>
             </DropdownMenuGroup>
@@ -74,15 +71,14 @@ type MembersListProps = Readonly<{
 }>;
 
 export const MembersList = ({ groupId }: MembersListProps) => {
-  const { data: members } = useMembers(groupId);
-
   const { t } = useTranslation();
+  const { data: members } = useMembers(groupId);
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>{t("member.name")}</TableHead>
+          <TableHead>{t("client.feature.member.name")}</TableHead>
           <TableHead />
         </TableRow>
       </TableHeader>

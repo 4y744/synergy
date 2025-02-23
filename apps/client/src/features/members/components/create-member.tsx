@@ -4,6 +4,8 @@ import { Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useTranslation } from "react-i18next";
+
 import {
   Button,
   Dialog,
@@ -20,12 +22,12 @@ import {
 } from "@synergy/ui";
 
 import { cn, isValidURL } from "@synergy/utils";
+
 import {
   CreateMemberInput,
   createMemberInputSchema,
 } from "../types/create-member";
 import { useCreateMember } from "../hooks/use-create-member";
-import { useTranslation } from "@synergy/i18n";
 
 type CreateMemberFormProps = Readonly<
   ComponentProps<"form"> & {
@@ -39,23 +41,24 @@ export const CreateMemberForm = ({
   className,
   ...props
 }: CreateMemberFormProps) => {
+  const { t } = useTranslation();
+
+  const { mutateAsync: createMember, isPending } = useCreateMember({
+    onSuccess,
+    onError: () => {
+      form.setError("inviteId", {
+        message: t("client.feature.invite.form.errors.invalid"),
+      });
+    },
+    throwOnError: false,
+  });
+
   const form = useForm<CreateMemberInput>({
     resolver: zodResolver(createMemberInputSchema),
     defaultValues: {
       inviteId: "",
     },
   });
-
-  const { mutateAsync: createMember, isPending } = useCreateMember({
-    onSuccess,
-    onError: () => {
-      form.setError("inviteId", {
-        message: "form/invalid-invite",
-      });
-    },
-  });
-
-  const { t } = useTranslation();
 
   const _onSubmit: SubmitHandler<CreateMemberInput> = ({ inviteId }) => {
     return createMember({
@@ -79,7 +82,7 @@ export const CreateMemberForm = ({
           name="inviteId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("invite.id")}</FormLabel>
+              <FormLabel>{t("client.feature.invite.id")}</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -97,10 +100,10 @@ export const CreateMemberForm = ({
           {isPending ? (
             <>
               <Loader2 className="animate-spin" />
-              {t("generic.joining")}
+              {t("client.action.joining")}
             </>
           ) : (
-            t("generic.join")
+            t("client.action.join")
           )}
         </Button>
       </form>
@@ -114,7 +117,6 @@ type CreateMemberDialogProps = Readonly<{
 
 export const CreateMemberDialog = ({ children }: CreateMemberDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const { t } = useTranslation();
 
   return (
@@ -124,7 +126,7 @@ export const CreateMemberDialog = ({ children }: CreateMemberDialogProps) => {
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogTitle>{t("group.join")}</DialogTitle>
+        <DialogTitle>{t("client.feature.group.join")}</DialogTitle>
         <CreateMemberForm onSuccess={() => setIsOpen(false)} />
       </DialogContent>
     </Dialog>

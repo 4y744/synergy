@@ -1,8 +1,6 @@
 {
   "extends": "@synergy/configs/typescript",
   "compilerOptions": {
-    "noEmit": true,
-    "allowImportingTsExtensions": true,
     "paths": {
       "~/*": ["./src/*"]
     }

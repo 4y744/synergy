@@ -20,8 +20,5 @@ export const useFindGroups = (options?: Partial<UseFindGroupsOptions>) => {
   return useQuery({
     ...options,
     ...findGroupsOptions(queryClient),
-    staleTime: Infinity,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
   } satisfies UseFindGroupsOptions);
 };

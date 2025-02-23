@@ -12,6 +12,10 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/groups/$(groupId)).data.createdBy == uid;
     }
 
+    function getInvite(groupId, inviteId){
+      return get(/databases/$(database)/documents/groups/$(groupId)/invites/$(inviteId));
+    }
+
     // Users
     match /users/{userId} {
       allow create: if (
@@ -26,7 +30,9 @@ service cloud.firestore {
       allow delete: if (
         request.auth.uid == userId
       );
-      allow get, list: if true;
+      allow get, list: if (
+        request.auth != null
+      );
     }
 
     // Groups
@@ -34,12 +40,18 @@ service cloud.firestore {
       allow create: if (
         request.auth.uid != null
         && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.keys().hasOnly(["name", "createdAt", "createdBy"])
       );
-      allow update, delete: if (
+      allow update: if (
         resource.data.createdBy == request.auth.uid
-      )
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["name", "icon"])
+      );
+      allow delete: if (
+        resource.data.createdBy == request.auth.uid
+      );
       allow get: if (
-        request.auth.uid == resource.data.createdBy ||
+        resource.data.createdBy == request.auth.uid ||
         isMember(groupId, request.auth.uid)
       );
     }
@@ -47,14 +59,23 @@ service cloud.firestore {
     // Members
     match /groups/{groupId}/members/{memberId} {
       allow create: if (
-        request.auth != null && (
-          isAdmin(groupId, request.auth.uid) ||
-          get(/databases/$(database)/documents/groups/$(groupId)/invites/$(request.resource.data.inviteId)).data.expiresAt > request.time
+        request.auth != null
+        && request.resource.data.keys().hasOnly(["uid", "inviteId"])
+        && (
+          isAdmin(groupId, request.auth.uid)
+          || getInvite(groupId, request.resource.data.inviteId).data.expiresAt > request.time
         )
       );
-      allow update, delete: if (
-        request.auth.uid == memberId ||
-        isAdmin(groupId, request.auth.uid)
+      allow update: if (
+        (
+          request.auth.uid == memberId
+          || isAdmin(groupId, request.auth.uid)
+        )
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["inviteId"])
+      );
+      allow  delete: if (
+        request.auth.uid == memberId
+        || isAdmin(groupId, request.auth.uid)
       );
       allow get, list: if (
         isMember(groupId, request.auth.uid)
@@ -72,9 +93,14 @@ service cloud.firestore {
     match /groups/{groupId}/chats/{chatId} {
       allow create: if (
         isAdmin(groupId, request.auth.uid) 
+        && request.resource.data.keys().hasOnly(["name", "createdAt"])
       );
-      allow update, delete: if (
-        isAdmin(groupId, request.auth.uid) 
+      allow update: if (
+        isAdmin(groupId, request.auth.uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["name"])
+      );
+      allow delete: if (
+        isAdmin(groupId, request.auth.uid)
       );
       allow get, list: if (
         isMember(groupId, request.auth.uid)
@@ -85,10 +111,17 @@ service cloud.firestore {
     match /groups/{groupId}/chats/{chatId}/messages/{messageId} {
       allow create: if (
         isMember(groupId, request.auth.uid)
+        && request.resource.data.keys().hasOnly(["payload", "createdAt", "createdBy"])
       );
-      allow update, delete: if (
-        resource.data.createdBy == request.auth.uid
-        || isAdmin(groupId, request.auth.uid) 
+      allow update: if (
+        (
+          resource.data.createdBy == request.auth.uid
+          || isAdmin(groupId, request.auth.uid)
+        )
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["payload"])
+      )
+      allow delete: if (
+        isAdmin(groupId, request.auth.uid) 
       )
       allow get, list: if (
         isMember(groupId, request.auth.uid)
@@ -97,11 +130,16 @@ service cloud.firestore {
 
     // Folder
     match /groups/{groupId}/folders/{folderId} {
-      allow create: if (
+     allow create: if (
         isAdmin(groupId, request.auth.uid) 
+        && request.resource.data.keys().hasOnly(["name", "createdAt"])
       );
-      allow update, delete: if (
-        isAdmin(groupId, request.auth.uid) 
+      allow update: if (
+        isAdmin(groupId, request.auth.uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["name"])
+      );
+      allow delete: if (
+        isAdmin(groupId, request.auth.uid)
       );
       allow get, list: if (
         isMember(groupId, request.auth.uid)
@@ -112,28 +150,34 @@ service cloud.firestore {
     match /groups/{groupId}/folders/{folderId}/files/{fileId} {
       allow create: if (
         isMember(groupId, request.auth.uid)
+        && request.resource.data.keys().hasOnly(["name", "url", "createdAt", "createdBy"])
       );
-      allow update, delete: if (
+      // allow update: if ()
+      allow delete: if (
         resource.data.createdBy == request.auth.uid
-        || isAdmin(groupId, request.auth.uid) 
-      )
+        || isAdmin(groupId, request.auth.uid)
+      );
       allow get, list: if (
         isMember(groupId, request.auth.uid)
-      )
+      );
     }
 
     // Invites
     match /groups/{groupId}/invites/{inviteId} {
-      allow create, update, delete, list: if (
+      allow create: if (
+        isAdmin(groupId, request.auth.uid)
+        && request.resource.data.keys().hasOnly(["inviteId", "expiresAt"])
+      )
+      allow delete: if (
         isAdmin(groupId, request.auth.uid)
       );
-      allow get: if (
+      allow get, list: if (
         request.auth != null
       );
     }
 
     match /{path=**}/invites/{inviteId} {
-      allow get, list: if (
+      allow list: if (
         request.auth != null
       );
     }

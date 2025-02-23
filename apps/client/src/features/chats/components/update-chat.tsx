@@ -4,6 +4,8 @@ import { Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useTranslation } from "react-i18next";
+
 import {
   Button,
   Input,
@@ -21,10 +23,9 @@ import {
 
 import { cn } from "@synergy/utils";
 
-import { useUpdateChat } from "../hooks/use-update-chat";
 import { useChat } from "../hooks/use-chat";
+import { useUpdateChat } from "../hooks/use-update-chat";
 import { CreateChatInput, createChatInputSchema } from "../types/create-chat";
-import { useTranslation } from "@synergy/i18n";
 
 type UpdateChatProps = Readonly<
   ComponentProps<"form"> & {
@@ -42,11 +43,13 @@ export const UpdateChatForm = ({
   className,
   ...props
 }: UpdateChatProps) => {
+  const { t } = useTranslation();
+
   const { data: chat } = useChat(groupId, chatId);
   const { mutateAsync: updateChat, isPending } = useUpdateChat(
     groupId,
     chatId,
-    { onSuccess }
+    { onSuccess, throwOnError: false }
   );
 
   const form = useForm<CreateChatInput>({
@@ -55,8 +58,6 @@ export const UpdateChatForm = ({
       name: chat?.name,
     },
   });
-
-  const { t } = useTranslation();
 
   const _onSubmit: SubmitHandler<CreateChatInput> = (data) => {
     return updateChat(data);
@@ -76,11 +77,15 @@ export const UpdateChatForm = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("chat.form.fields.name.label")}</FormLabel>
+              <FormLabel>
+                {t("client.feature.chat.form.fields.name.label")}
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder={t("chat.form.fields.name.placeholder")}
+                  placeholder={t(
+                    "client.feature.chat.form.fields.name.placeholder"
+                  )}
                 />
               </FormControl>
               <FormMessage />
@@ -91,10 +96,10 @@ export const UpdateChatForm = ({
           {isPending ? (
             <>
               <Loader2 className="animate-spin" />
-              {t("generic.saving")}
+              {t("client.action.saving")}
             </>
           ) : (
-            t("generic.save")
+            t("client.action.save")
           )}
         </Button>
       </form>
@@ -115,8 +120,6 @@ export const UpdateChatDialog = ({
 }: UpdateChatDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { data: chat } = useChat(groupId, chatId);
-
   const { t } = useTranslation();
 
   return (
@@ -126,10 +129,7 @@ export const UpdateChatDialog = ({
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogTitle>
-          {t("chat.update")}
-          <span className="font-medium"> #{chat?.name}</span>
-        </DialogTitle>
+        <DialogTitle>{t("client.feature.chat.update")}</DialogTitle>
         <UpdateChatForm
           groupId={groupId}
           chatId={chatId}

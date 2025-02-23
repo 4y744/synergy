@@ -1,15 +1,19 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 
-import { H1 } from "@synergy/ui";
+import { ThemeToggle } from "@synergy/ui";
+import { LanguageToggle } from "~/components/language-toggle";
 
-import { ContentLayout } from "~/components/layouts/content-layout";
 import { SignUpForm } from "~/features/auth/components/sign-up";
+import { ContentLayout } from "~/components/layouts/content-layout";
+import { Logo } from "~/components/logo";
 
 export const Route = createLazyFileRoute("/(auth)/signup")({
   component: () => {
     return (
       <ContentLayout isCentered>
-        <H1 className="font-arcade">synergy</H1>
+        <ThemeToggle />
+        <LanguageToggle />
+        <Logo />
         <SignUpForm />
       </ContentLayout>
     );

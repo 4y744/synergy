@@ -4,6 +4,8 @@ import { Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useTranslation } from "react-i18next";
+
 import {
   Input,
   Button,
@@ -26,7 +28,6 @@ import {
   CreateGroupInput,
   createGroupInputSchema,
 } from "../types/create-group";
-import { useTranslation } from "@synergy/i18n";
 
 type CreateGroupProps = Readonly<
   ComponentProps<"form"> & {
@@ -40,7 +41,12 @@ export const CreateGroupForm = ({
   className,
   ...props
 }: CreateGroupProps) => {
-  const { mutateAsync: createGroup, isPending } = useCreateGroup({ onSuccess });
+  const { t } = useTranslation();
+
+  const { mutateAsync: createGroup, isPending } = useCreateGroup({
+    onSuccess,
+    throwOnError: false,
+  });
 
   const form = useForm<CreateGroupInput>({
     resolver: zodResolver(createGroupInputSchema),
@@ -48,8 +54,6 @@ export const CreateGroupForm = ({
       name: "",
     },
   });
-
-  const { t } = useTranslation();
 
   const _onSubmit: SubmitHandler<CreateGroupInput> = (data) => {
     return createGroup(data);
@@ -69,11 +73,15 @@ export const CreateGroupForm = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("group.form.fields.name.label")}</FormLabel>
+              <FormLabel>
+                {t("client.feature.group.form.fields.name.label")}
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder={t("group.form.fields.name.placeholder")}
+                  placeholder={t(
+                    "client.feature.group.form.fields.name.placeholder"
+                  )}
                 />
               </FormControl>
               <FormMessage />
@@ -87,10 +95,10 @@ export const CreateGroupForm = ({
           {isPending ? (
             <>
               <Loader2 className="animate-spin" />
-              {t("generic.creating")}
+              {t("client.action.creating")}
             </>
           ) : (
-            t("generic.create")
+            t("client.action.create")
           )}
         </Button>
       </form>
@@ -104,7 +112,6 @@ type CreateGroupDialogProps = Readonly<{
 
 export const CreateGroupDialog = ({ children }: CreateGroupDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const { t } = useTranslation();
 
   return (
@@ -114,7 +121,7 @@ export const CreateGroupDialog = ({ children }: CreateGroupDialogProps) => {
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogTitle>{t("group.create")}</DialogTitle>
+        <DialogTitle>{t("client.feature.group.create")}</DialogTitle>
         <CreateGroupForm onSuccess={() => setIsOpen(false)} />
       </DialogContent>
     </Dialog>

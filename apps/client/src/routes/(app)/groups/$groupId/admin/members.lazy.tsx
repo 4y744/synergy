@@ -1,26 +1,27 @@
-import { UsersIcon } from "lucide-react";
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { UsersIcon } from "lucide-react";
 
-import { ContentLayout } from "~/components/layouts/content-layout";
-import { Topbar } from "~/components/layouts/topbar";
+import { useTranslation } from "react-i18next";
+
 import { MembersList } from "~/features/members/components/members-list";
-import { useTranslation } from "@synergy/i18n";
+import { ContentLayout } from "~/components/layouts/content-layout";
+import { Header } from "~/components/layouts/header";
 
-export const Route = createLazyFileRoute("/(app)/groups/$groupId/admin/members")({
+export const Route = createLazyFileRoute(
+  "/(app)/groups/$groupId/admin/members"
+)({
   component: () => {
     const { groupId } = Route.useParams();
-
     const { t } = useTranslation();
+
     return (
-      <>
-        <Topbar
-          title={t("member.manage")}
+      <ContentLayout>
+        <Header
+          title={t("client.sidebar.category.members")}
           icon={<UsersIcon size={16} />}
         />
-        <ContentLayout>
-          <MembersList groupId={groupId} />
-        </ContentLayout>
-      </>
+        <MembersList groupId={groupId} />
+      </ContentLayout>
     );
   },
 });

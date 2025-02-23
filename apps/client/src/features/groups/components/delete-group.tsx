@@ -1,6 +1,8 @@
 import { ReactNode, useState } from "react";
 import { Loader2 } from "lucide-react";
 
+import { useTranslation } from "react-i18next";
+
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -15,7 +17,6 @@ import {
 
 import { useGroup } from "../hooks/use-group";
 import { useDeleteGroup } from "../hooks/use-delete-group";
-import { useTranslation } from "@synergy/i18n";
 
 type DeleteGroupDialogProps = Readonly<{
   children: ReactNode;
@@ -27,11 +28,10 @@ export const DeleteGroupDialog = ({
   groupId,
 }: DeleteGroupDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
 
   const { data: group } = useGroup(groupId);
   const { mutateAsync: deleteGroup, isPending } = useDeleteGroup(groupId);
-
-  const { t } = useTranslation();
 
   return (
     <AlertDialog
@@ -41,14 +41,15 @@ export const DeleteGroupDialog = ({
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{t("group.delete")}</AlertDialogTitle>
+          <AlertDialogTitle>
+            {t("client.feature.group.delete")}
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            {t("group.delete_desc", { name: group?.name })}
-            <span className="font-medium"> {group?.name}</span>?
+            {t("client.feature.group.delete_desc", { name: group?.name })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{t("generic.cancel")}</AlertDialogCancel>
+          <AlertDialogCancel>{t("client.action.cancel")}</AlertDialogCancel>
           <Button
             onClick={() => deleteGroup().then(() => setIsOpen(false))}
             disabled={isPending}
@@ -57,10 +58,10 @@ export const DeleteGroupDialog = ({
             {isPending ? (
               <>
                 <Loader2 className="animate-spin" />
-                {t("generic.deleting")}
+                {t("client.action.deleting")}
               </>
             ) : (
-              t("generic.delete")
+              t("client.action.delete")
             )}
           </Button>
         </AlertDialogFooter>

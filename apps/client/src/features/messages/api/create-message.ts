@@ -10,22 +10,6 @@ import { auth, db } from "@synergy/libs/firebase";
 
 import { CreateMessageInput } from "../types/create-message";
 
-const createMessage = async (
-  groupId: string,
-  chatId: string,
-  data: CreateMessageInput
-) => {
-  const { id } = await addDoc(
-    collection(db, "groups", groupId, "chats", chatId, "messages"),
-    {
-      ...data,
-      createdAt: serverTimestamp(),
-      createdBy: auth.currentUser!.uid,
-    }
-  );
-  return id;
-};
-
 type CreateMessageOptions = MutationOptions<
   string,
   FirestoreError,
@@ -34,6 +18,16 @@ type CreateMessageOptions = MutationOptions<
 
 export const createMessageOptions = (groupId: string, chatId: string) => {
   return {
-    mutationFn: (data) => createMessage(groupId, chatId, data),
+    mutationFn: async (data) => {
+      const { id } = await addDoc(
+        collection(db, "groups", groupId, "chats", chatId, "messages"),
+        {
+          ...data,
+          createdAt: serverTimestamp(),
+          createdBy: auth.currentUser!.uid,
+        }
+      );
+      return id;
+    },
   } satisfies CreateMessageOptions;
 };

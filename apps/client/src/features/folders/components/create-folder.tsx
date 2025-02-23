@@ -4,6 +4,8 @@ import { Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useTranslation } from "react-i18next";
+
 import {
   Button,
   Dialog,
@@ -26,7 +28,6 @@ import {
   CreateFolderInput,
   createFolderInputSchema,
 } from "../types/create-folder";
-import { useTranslation } from "@synergy/i18n";
 
 type CreateFolderProps = Readonly<
   ComponentProps<"form"> & {
@@ -42,8 +43,11 @@ export const CreateFolderForm = ({
   className,
   ...props
 }: CreateFolderProps) => {
+  const { t } = useTranslation();
+
   const { mutateAsync: createFolder, isPending } = useCreateFolder(groupId, {
     onSuccess,
+    throwOnError: false,
   });
 
   const form = useForm<CreateFolderInput>({
@@ -52,8 +56,6 @@ export const CreateFolderForm = ({
       name: "",
     },
   });
-
-  const { t } = useTranslation();
 
   const _onSubmit: SubmitHandler<CreateFolderInput> = (data) => {
     return createFolder(data);
@@ -73,11 +75,15 @@ export const CreateFolderForm = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("folder.form.fields.name.label")}</FormLabel>
+              <FormLabel>
+                {t("client.feature.folder.form.fields.name.label")}
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder={t("folder.form.fields.name.placeholder")}
+                  placeholder={t(
+                    "client.feature.folder.form.fields.name.placeholder"
+                  )}
                 />
               </FormControl>
               <FormMessage />
@@ -91,10 +97,10 @@ export const CreateFolderForm = ({
           {isPending ? (
             <>
               <Loader2 className="animate-spin" />
-              {t("generic.creating")}
+              {t("client.action.creating")}
             </>
           ) : (
-            t("generic.create")
+            t("client.action.create")
           )}
         </Button>
       </form>
@@ -112,7 +118,6 @@ export const CreateFolderDialog = ({
   groupId,
 }: CreateFolderDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const { t } = useTranslation();
 
   return (
@@ -122,7 +127,7 @@ export const CreateFolderDialog = ({
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogTitle>{t("folder.create")}</DialogTitle>
+        <DialogTitle>{t("client.feature.folder.create")}</DialogTitle>
         <CreateFolderForm
           groupId={groupId}
           onSuccess={() => setIsOpen(false)}

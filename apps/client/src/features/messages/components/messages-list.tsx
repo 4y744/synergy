@@ -1,14 +1,18 @@
 import { ComponentProps, forwardRef, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import ReactMarkdown from "react-markdown";
+import { Trash2Icon } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage, Muted } from "@synergy/ui";
 import { abbreviate, cn } from "@synergy/utils";
 
+import { useUser } from "~/features/users/hooks/use-user";
+
+import { DeleteMessageDialog } from "./delete-message";
 import { useMessages } from "../hooks/use-messages";
 import { Message } from "../types/message";
-
-import { useUser } from "~/features/users/hooks/use-user";
-import { Trash2Icon } from "lucide-react";
-import { DeleteMessageDialog } from "./delete-message";
+import { useAuth } from "~/features/auth/hooks/use-auth";
+import { useGroup } from "~/features/groups/hooks/use-group";
 
 /**
  * Combines messages based on ```createdBy``` and ```createdAt```.
@@ -41,6 +45,10 @@ type MessageGroupProps = Readonly<{
 }>;
 
 const MessageGroup = ({ groupId, chatId, messages }: MessageGroupProps) => {
+  const { t } = useTranslation();
+  const { uid } = useAuth();
+
+  const { data: group } = useGroup(groupId);
   const { data: user, isPending } = useUser(messages[0].createdBy);
 
   if (isPending) {
@@ -50,7 +58,7 @@ const MessageGroup = ({ groupId, chatId, messages }: MessageGroupProps) => {
   return (
     <div className="py-2">
       <div className="flex gap-2 p-2">
-        <Avatar>
+        <Avatar className="rounded-lg">
           <AvatarFallback>{abbreviate(user!.username)}</AvatarFallback>
           <AvatarImage src={user?.pfp} />
         </Avatar>
@@ -62,23 +70,36 @@ const MessageGroup = ({ groupId, chatId, messages }: MessageGroupProps) => {
         </div>
       </div>
       <div className="w-full">
-        {messages.map(({ id, payload }) => (
-          <div
-            className="group hover:bg-sidebar w-full min-h-6 pl-14 flex items-center"
-            key={id}
-          >
-            <span className="whitespace-pre-line text-sm">{payload}</span>
-            <DeleteMessageDialog
-              groupId={groupId}
-              chatId={chatId}
-              messageId={id}
+        {messages
+          .map((message) => {
+            return message.payload == "__deleted__"
+              ? {
+                  ...message,
+                  payload: t("client.feature.message.deleted", {
+                    interpolation: { escapeValue: false },
+                  }),
+                }
+              : message;
+          })
+          .map(({ id, payload }) => (
+            <div
+              className="group hover:bg-sidebar w-full min-h-6 pl-14 flex items-center text-sm"
+              key={id}
             >
-              <button className="group-hover:block hidden ml-auto mr-2 text-destructive">
-                <Trash2Icon size={16} />
-              </button>
-            </DeleteMessageDialog>
-          </div>
-        ))}
+              <ReactMarkdown>{payload}</ReactMarkdown>
+              {(uid == user?.uid || uid == group?.createdBy) && (
+                <DeleteMessageDialog
+                  groupId={groupId}
+                  chatId={chatId}
+                  messageId={id}
+                >
+                  <button className="group-hover:block hidden ml-auto mr-2 text-destructive">
+                    <Trash2Icon size={16} />
+                  </button>
+                </DeleteMessageDialog>
+              )}
+            </div>
+          ))}
       </div>
     </div>
   );

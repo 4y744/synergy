@@ -23,16 +23,9 @@ export const useMessages = (
   const { data, ...rest } = useInfiniteQuery({
     ...options,
     ...getMessagesOptions(queryClient, groupId, chatId),
-    staleTime: Infinity,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
   } satisfies UseMessagesOptions);
-  // Tsup refuses to make DTS files if getMessageQueryOptions's
-  // return value isn't explicitly annotated.
-  // But annotating it somehow makes data get
-  // the type MessagesPage instead of InfiniteData<MessagesPage>.
-  // Most likely there's something wrong in useInfiniteQuery's
-  // type definition, because no other hooks has this issue.
+  // For some reason useInfiniteQuery thinks
+  // ```data``` is of type MessagesPage, instead of InfiniteData
   return {
     data: data as InfiniteData<MessagesPage, DocumentSnapshot> | undefined,
     ...rest,

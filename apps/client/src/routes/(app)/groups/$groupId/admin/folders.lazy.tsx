@@ -1,26 +1,27 @@
-import { FolderIcon } from "lucide-react";
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { FolderIcon } from "lucide-react";
 
-import { ContentLayout } from "~/components/layouts/content-layout";
-import { Topbar } from "~/components/layouts/topbar";
+import { useTranslation } from "react-i18next";
+
 import { FoldersList } from "~/features/folders/components/folders-list";
-import { useTranslation } from "@synergy/i18n";
+import { ContentLayout } from "~/components/layouts/content-layout";
+import { Header } from "~/components/layouts/header";
 
-export const Route = createLazyFileRoute("/(app)/groups/$groupId/admin/folders")({
+export const Route = createLazyFileRoute(
+  "/(app)/groups/$groupId/admin/folders"
+)({
   component: () => {
     const { groupId } = Route.useParams();
-
     const { t } = useTranslation();
+
     return (
-      <>
-        <Topbar
-          title={t("folder.manage")}
+      <ContentLayout>
+        <Header
+          title={t("client.sidebar.category.folders")}
           icon={<FolderIcon size={16} />}
         />
-        <ContentLayout>
-          <FoldersList groupId={groupId} />
-        </ContentLayout>
-      </>
+        <FoldersList groupId={groupId} />
+      </ContentLayout>
     );
   },
 });

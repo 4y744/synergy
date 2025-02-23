@@ -1,8 +1,10 @@
-import { ComponentProps } from "react";
-import { Loader2 } from "lucide-react";
+import { ComponentProps, useRef } from "react";
+import { FileUpIcon, Loader2 } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useTranslation } from "react-i18next";
 
 import {
   Button,
@@ -23,7 +25,6 @@ import {
   UpdateGroupInput,
   updateGroupInputSchema,
 } from "../types/update-group";
-import { useTranslation } from "@synergy/i18n";
 
 type UpdateGroupProps = Readonly<
   ComponentProps<"form"> & {
@@ -39,9 +40,13 @@ export const UpdateGroupForm = ({
   className,
   ...props
 }: UpdateGroupProps) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation();
+
   const { data: group } = useGroup(groupId);
   const { mutateAsync: updateGroup, isPending } = useUpdateGroup(groupId, {
     onSuccess,
+    throwOnError: false,
   });
 
   const form = useForm<UpdateGroupInput>({
@@ -50,8 +55,6 @@ export const UpdateGroupForm = ({
       name: group?.name,
     },
   });
-
-  const { t } = useTranslation();
 
   const _onSubmit: SubmitHandler<UpdateGroupInput> = (data) => {
     return updateGroup(data);
@@ -71,17 +74,40 @@ export const UpdateGroupForm = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("group.form.fields.name.label")}</FormLabel>
+              <FormLabel>
+                {t("client.feature.group.form.fields.name.label")}
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder={t("group.form.fields.name.placeholder")}
+                  placeholder={t(
+                    "client.feature.group.form.fields.name.placeholder"
+                  )}
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <div>
+          <input
+            className="hidden"
+            type="file"
+            onChange={(event) => {
+              form.setValue("icon", event.target.files![0]);
+            }}
+            ref={inputRef}
+          />
+          <Button
+            onClick={(event) => {
+              inputRef.current!.click();
+              event?.preventDefault();
+            }}
+          >
+            <FileUpIcon />
+            {t("client.feature.group.upload_icon")}
+          </Button>
+        </div>
         <Button
           disabled={isPending}
           type="submit"
@@ -89,10 +115,10 @@ export const UpdateGroupForm = ({
           {isPending ? (
             <>
               <Loader2 className="animate-spin" />
-              {t("generic.saving")}
+              {t("client.action.saving")}
             </>
           ) : (
-            t("generic.save")
+            t("client.action.save")
           )}
         </Button>
       </form>

@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as IndexImport } from './routes/index'
 import { Route as authSignupImport } from './routes/(auth)/signup'
 import { Route as authSigninImport } from './routes/(auth)/signin'
 import { Route as appGroupsImport } from './routes/(app)/groups'
@@ -25,7 +26,6 @@ import { Route as appGroupsGroupIdAdminInvitesImport } from './routes/(app)/grou
 
 // Create Virtual Routes
 
-const IndexLazyImport = createFileRoute('/')()
 const appGroupsIndexLazyImport = createFileRoute('/(app)/groups/')()
 const appGroupsGroupIdIndexLazyImport = createFileRoute(
   '/(app)/groups/$groupId/',
@@ -42,11 +42,11 @@ const appGroupsGroupIdAdminChatsLazyImport = createFileRoute(
 
 // Create/Update Routes
 
-const IndexLazyRoute = IndexLazyImport.update({
+const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+} as any)
 
 const authSignupRoute = authSignupImport
   .update({
@@ -205,7 +205,7 @@ declare module '@tanstack/react-router' {
       id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexLazyImport
+      preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
     '/(app)/groups': {
@@ -352,7 +352,7 @@ const appGroupsRouteWithChildren = appGroupsRoute._addFileChildren(
 )
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexLazyRoute
+  '/': typeof IndexRoute
   '/groups': typeof appGroupsRouteWithChildren
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
@@ -370,7 +370,7 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexLazyRoute
+  '/': typeof IndexRoute
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
   '/invite/$inviteId': typeof appInviteInviteIdRoute
@@ -387,7 +387,7 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexLazyRoute
+  '/': typeof IndexRoute
   '/(app)/groups': typeof appGroupsRouteWithChildren
   '/(auth)/signin': typeof authSigninRoute
   '/(auth)/signup': typeof authSignupRoute
@@ -458,7 +458,7 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute
+  IndexRoute: typeof IndexRoute
   appGroupsRoute: typeof appGroupsRouteWithChildren
   authSigninRoute: typeof authSigninRoute
   authSignupRoute: typeof authSignupRoute
@@ -466,7 +466,7 @@ export interface RootRouteChildren {
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexLazyRoute: IndexLazyRoute,
+  IndexRoute: IndexRoute,
   appGroupsRoute: appGroupsRouteWithChildren,
   authSigninRoute: authSigninRoute,
   authSignupRoute: authSignupRoute,
@@ -491,7 +491,7 @@ export const routeTree = rootRoute
       ]
     },
     "/": {
-      "filePath": "index.lazy.tsx"
+      "filePath": "index.ts"
     },
     "/(app)/groups": {
       "filePath": "(app)/groups.ts",

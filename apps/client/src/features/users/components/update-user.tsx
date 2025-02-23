@@ -4,7 +4,7 @@ import { FileUpIcon, Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useTranslation } from "@synergy/i18n";
+import { useTranslation } from "react-i18next";
 
 import {
   Button,
@@ -23,11 +23,11 @@ import {
 
 import { cn } from "@synergy/utils";
 
+import { useAuth } from "~/features/auth/hooks/use-auth";
+
+import { useUser } from "../hooks/use-user";
 import { useUpdateUser } from "../hooks/use-update-user";
 import { UpdateUserInput, updateUserInputSchema } from "../types/update-user";
-
-import { useAuth } from "~/features/auth/hooks/use-auth";
-import { useUser } from "../hooks/use-user";
 
 type UpdateUserProps = Readonly<
   ComponentProps<"form"> & {
@@ -46,6 +46,7 @@ export const UpdateUserForm = ({
 
   const { mutateAsync: updateUser, isPending } = useUpdateUser({
     onSuccess,
+    throwOnError: false,
   });
 
   const { uid } = useAuth();
@@ -76,11 +77,15 @@ export const UpdateUserForm = ({
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("user.form.fields.username.label")}</FormLabel>
+              <FormLabel>
+                {t("client.feature.user.form.fields.username.label")}
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder={t("user.form.fields.username.placeholder")}
+                  placeholder={t(
+                    "client.feature.user.form.fields.username.placeholder"
+                  )}
                 />
               </FormControl>
               <FormMessage />
@@ -103,7 +108,7 @@ export const UpdateUserForm = ({
             }}
           >
             <FileUpIcon />
-            {t("user.upload_pfp")}
+            {t("client.feature.user.upload_pfp")}
           </Button>
         </div>
         <Button
@@ -113,10 +118,10 @@ export const UpdateUserForm = ({
           {isPending ? (
             <>
               <Loader2 className="animate-spin" />
-              {t("generic.save")}
+              {t("client.action.saving")}
             </>
           ) : (
-            t("generic.saving")
+            t("client.action.save")
           )}
         </Button>
       </form>
@@ -139,7 +144,7 @@ export const UpdateUserDialog = ({ children }: UpdateUserDialogProps) => {
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogTitle>{t("user.update")}</DialogTitle>
+        <DialogTitle>{t("client.feature.user.update")}</DialogTitle>
         <UpdateUserForm onSuccess={() => setIsOpen(false)} />
       </DialogContent>
     </Dialog>

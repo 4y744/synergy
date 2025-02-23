@@ -1,6 +1,8 @@
 import { ReactNode, useState } from "react";
 import { Loader2 } from "lucide-react";
 
+import { useTranslation } from "react-i18next";
+
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -14,7 +16,6 @@ import {
 } from "@synergy/ui";
 
 import { useDeleteMessage } from "../hooks/use-delete-message";
-import { useTranslation } from "@synergy/i18n";
 
 type DeleteMessageDialogProps = Readonly<{
   children?: ReactNode;
@@ -30,14 +31,13 @@ export const DeleteMessageDialog = ({
   messageId,
 }: DeleteMessageDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
 
   const { mutateAsync: deleteMessage, isPending } = useDeleteMessage(
     groupId,
     chatId,
     messageId
   );
-
-  const { t } = useTranslation();
 
   return (
     <AlertDialog
@@ -47,13 +47,15 @@ export const DeleteMessageDialog = ({
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{t("message.delete")}</AlertDialogTitle>
+          <AlertDialogTitle>
+            {t("client.feature.message.delete")}
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            {t("message.delete_desc")}
+            {t("client.feature.message.delete_desc")}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{t("generic.cancel")}</AlertDialogCancel>
+          <AlertDialogCancel>{t("client.action.cancel")}</AlertDialogCancel>
           <Button
             onClick={() => {
               deleteMessage().then(() => setIsOpen(false));
@@ -64,10 +66,10 @@ export const DeleteMessageDialog = ({
             {isPending ? (
               <>
                 <Loader2 className="animate-spin" />
-                {t("generic.deleting")}
+                {t("client.action.deleting")}
               </>
             ) : (
-              t("generic.delete")
+              t("client.action.delete")
             )}
           </Button>
         </AlertDialogFooter>

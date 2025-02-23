@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "tailwindcss": "^3.4.10",
-    "tailwindcss-animate": "^1.0.7",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
     "tsup": "8.0.0"
   }
 }
