@@ -4,7 +4,7 @@ import { cn } from "@synergy/utils";
 
 type LogoProps = Readonly<Omit<ComponentProps<"span">, "children">>;
 
-export const Logo = forwardRef<HTMLHeadingElement, LogoProps>(
+export const Logo = forwardRef<HTMLSpanElement, LogoProps>(
   ({ className, ...props }: LogoProps, ref) => {
     return (
       <span

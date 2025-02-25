@@ -9,39 +9,82 @@ export const SiteFooter = () => {
       <FooterGroup>
         <FooterLabel>{t("web.footer.project")}</FooterLabel>
         <FooterItem>
-          <a href="https://github.com/4y744/synergy">Github</a>
+          <a
+            href="https://github.com/4y744/synergy"
+            target="_blank"
+          >
+            Github
+          </a>
         </FooterItem>
         <FooterItem>
-          <a href="https://github.com/4y744/synergy/blob/main/LICENSE">
+          <a
+            href="https://github.com/4y744/synergy/blob/main/LICENSE"
+            target="_blank"
+          >
             {t("web.footer.license")}
           </a>
         </FooterItem>
         <FooterItem>
-          <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPLv3</a>
+          <a
+            href="https://www.gnu.org/licenses/gpl-3.0.en.html"
+            target="_blank"
+          >
+            GNU GPLv3
+          </a>
         </FooterItem>
       </FooterGroup>
       <FooterGroup>
         <FooterLabel>{t("web.footer.powered_by")}</FooterLabel>
         <FooterItem>
-          <a href="https://react.dev/">React</a>
+          <a
+            href="https://react.dev/"
+            target="_blank"
+          >
+            React
+          </a>
         </FooterItem>
         <FooterItem>
-          <a href="https://firebase.google.com/">Firebase</a>
+          <a
+            href="https://firebase.google.com/"
+            target="_blank"
+          >
+            Firebase
+          </a>
         </FooterItem>
         <FooterItem>
-          <a href="https://tailwindcss.com/">Tailwind</a>
+          <a
+            href="https://tailwindcss.com/"
+            target="_blank"
+          >
+            Tailwind
+          </a>
         </FooterItem>
       </FooterGroup>
       <FooterGroup>
         <FooterLabel>{t("web.footer.developed_with")}</FooterLabel>
         <FooterItem>
-          <a href="https://vite.dev/">Vite</a>
+          <a
+            href="https://vite.dev/"
+            target="_blank"
+          >
+            Vite
+          </a>
         </FooterItem>
         <FooterItem>
-          <a href="https://pnpm.io/">pnpm</a>
+          <a
+            href="https://pnpm.io/"
+            target="_blank"
+          >
+            pnpm
+          </a>
         </FooterItem>
         <FooterItem>
-          <a href="https://turbo.build/">Turborepo</a>
+          <a
+            href="https://turbo.build/"
+            target="_blank"
+          >
+            Turborepo
+          </a>
         </FooterItem>
       </FooterGroup>
     </Footer>

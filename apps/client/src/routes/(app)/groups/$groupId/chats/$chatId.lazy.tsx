@@ -40,7 +40,7 @@ export const Route = createLazyFileRoute(
           ref={messagesRef}
         />
         <CreateMessageForm
-          className="md:absolute fixed bottom-0 w-full p-2"
+          className="md:absolute fixed bottom-0 w-full p-2 bg-background"
           groupId={groupId!}
           chatId={chatId!}
           onSubmit={() => {

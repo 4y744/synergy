@@ -92,10 +92,10 @@ export const CreateChatForm = ({
           {isPending ? (
             <>
               <Loader2 className="animate-spin" />
-              {t("client.action.create")}
+              {t("client.action.creating")}
             </>
           ) : (
-            t("client.action.creating")
+            t("client.action.create")
           )}
         </Button>
       </form>
