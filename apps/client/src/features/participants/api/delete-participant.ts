@@ -5,11 +5,15 @@ import {
 } from "@tanstack/react-query";
 import { deleteDoc, doc, FirestoreError, updateDoc } from "firebase/firestore";
 
-import { auth, db } from "@synergy/libs/firebase";
+import { db } from "@synergy/libs/firebase";
 
 type DeleteParticipantOptions = MutationOptions<void, FirestoreError, string>;
 
-export const deleteParticipantOptions = (groupId: string, callId: string) => {
+export const deleteParticipantOptions = (
+  groupId: string,
+  callId: string,
+  uid: string
+) => {
   return {
     mutationFn: async () => {
       const docRef = doc(
@@ -19,7 +23,7 @@ export const deleteParticipantOptions = (groupId: string, callId: string) => {
         "calls",
         callId,
         "participants",
-        auth.currentUser!.uid
+        uid
       );
       await deleteDoc(docRef);
       return updateDoc(docRef, {});
@@ -36,10 +40,11 @@ type UseDeleteParticipantOptions = UseMutationOptions<
 export const useDeleteParticipant = (
   groupId: string,
   callId: string,
+  uid: string,
   options?: Partial<UseDeleteParticipantOptions>
 ) => {
   return useMutation({
     ...options,
-    ...deleteParticipantOptions(groupId, callId),
+    ...deleteParticipantOptions(groupId, callId, uid),
   } satisfies UseDeleteParticipantOptions);
 };

@@ -87,7 +87,7 @@ export const TasksList = ({ groupId, boardId }: TasksListProps) => {
             </div>
             {assignedTo.length > 0 && (
               <div className="text-xs text-muted-foreground">
-                <span>{t("client.feature.task.assigned_to")} to </span>
+                <span>{t("client.feature.task.assigned_to")} </span>
                 <span className="font-medium">
                   {assignedTo.map((uid, index) => (
                     <Fragment key={uid}>

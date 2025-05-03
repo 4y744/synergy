@@ -1,13 +1,15 @@
 import { useEffect, useRef } from "react";
-import { MicIcon, MicOffIcon } from "lucide-react";
+import { MicIcon, MicOffIcon, UserXIcon } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@synergy/ui";
+import { Avatar, AvatarFallback, AvatarImage, Button } from "@synergy/ui";
 import { abbreviate } from "@synergy/utils";
 
 import { useAuth } from "~/features/auth/hooks/use-auth";
 import { useUser } from "~/features/users/api/get-user";
+import { useGroup } from "~/features/groups/api/get-group";
 
 import { useParticipant, useParticipants } from "../api/get-participants";
+import { useDeleteParticipant } from "../api/delete-participant";
 import { UpdateParticipant } from "./update-participants";
 import { DeleteParticipant } from "./delete-participant";
 
@@ -61,8 +63,17 @@ type ParticipantProps = Readonly<{
 }>;
 
 const Participant = ({ groupId, callId, uid }: ParticipantProps) => {
-  const { data: participant } = useParticipant(groupId, callId, uid);
+  const { uid: _uid } = useAuth();
+  const { data: group } = useGroup(groupId);
+
   const { data: user, isPending } = useUser(uid);
+
+  const { data: participant } = useParticipant(groupId, callId, uid);
+  const { mutate: deleteParticipant } = useDeleteParticipant(
+    groupId,
+    callId,
+    uid
+  );
 
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -96,6 +107,13 @@ const Participant = ({ groupId, callId, uid }: ParticipantProps) => {
           <MicIcon size={12} />
         )}
       </div>
+      <Button
+        variant="destructive"
+        className={_uid != uid && _uid == group?.createdBy ? "flex" : "hidden"}
+        onClick={() => deleteParticipant()}
+      >
+        <UserXIcon />
+      </Button>
     </div>
   );
 };
