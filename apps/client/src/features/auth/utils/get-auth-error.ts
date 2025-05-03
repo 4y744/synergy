@@ -10,6 +10,9 @@ export const getAuthError = (error: string) => {
       return t("client.feature.auth.form.errors.weak_password");
     case "auth/wrong-password":
       return t("client.feature.auth.form.errors.wrong_password");
+    // This error is thrown when the password is wrong for some reason.
+    case "auth/invalid-credential":
+      return t("client.feature.auth.form.errors.wrong_password");
     case "auth/missing-password":
       return t("client.feature.auth.form.errors.missing_password");
     case "auth/user-not-found":

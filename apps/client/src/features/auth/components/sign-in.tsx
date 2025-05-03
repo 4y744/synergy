@@ -35,7 +35,6 @@ export const SignInForm = ({
     onSuccess: () => navigate({ to: "/groups" }),
     onError: (error) => {
       form.setError("password", {
-        //@ts-ignore
         message: getAuthError(error.code),
       });
     },

@@ -35,7 +35,6 @@ export const SignUpForm = ({
     onSuccess: () => navigate({ to: "/groups" }),
     onError: (error) => {
       form.setError("confirmPassword", {
-        //@ts-ignore
         message: getAuthError(error.code),
       });
     },
