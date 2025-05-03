@@ -12,7 +12,7 @@ export const Route = createLazyFileRoute("/(app)/groups/")({
     const { t } = useTranslation();
     return (
       <ContentLayout isCentered>
-        <Muted>{t("client.misc.no_chats")}</Muted>
+        <Muted>{t("client.misc.no_groups")}</Muted>
         <div>
           <CreateGroupDialog>
             <Button variant="link">{t("client.feature.group.create")}</Button>

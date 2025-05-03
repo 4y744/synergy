@@ -1,6 +1,5 @@
-import { MoreHorizontalIcon } from "lucide-react";
-
 import { useTranslation } from "react-i18next";
+import { MoreHorizontalIcon } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -17,54 +16,10 @@ import {
 } from "@synergy/ui";
 
 import { useAuth } from "~/features/auth/hooks/use-auth";
-import { useUser } from "~/features/users/hooks/use-user";
+import { useUser } from "~/features/users/api/get-user";
 
+import { useMembers } from "../api/get-members";
 import { DeleteMemberDialog } from "./delete-member";
-import { useMembers } from "../hooks/use-members";
-
-type MemberProps = Readonly<{
-  groupId: string;
-  memberId: string;
-}>;
-
-const Member = ({ groupId, memberId }: MemberProps) => {
-  const { t } = useTranslation();
-
-  const { uid } = useAuth();
-  const { data: user } = useUser(memberId);
-
-  return (
-    <TableRow>
-      <TableCell>{user?.username}</TableCell>
-      <TableCell className="float-end">
-        <DropdownMenu>
-          <DropdownMenuTrigger className="hover:bg-secondary rounded-md focus:outline-none">
-            <MoreHorizontalIcon
-              className="p-2"
-              size={32}
-            />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuGroup>
-              <DeleteMemberDialog
-                groupId={groupId}
-                memberId={memberId}
-                type="kick"
-              >
-                <DropdownMenuItem
-                  onSelect={(event) => event.preventDefault()}
-                  disabled={memberId == uid}
-                >
-                  {t("client.action.kick")}
-                </DropdownMenuItem>
-              </DeleteMemberDialog>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </TableCell>
-    </TableRow>
-  );
-};
 
 type MembersListProps = Readonly<{
   groupId: string;
@@ -94,3 +49,49 @@ export const MembersList = ({ groupId }: MembersListProps) => {
     </Table>
   );
 };
+MembersList.displayName = "MembersList";
+
+type MemberProps = Readonly<{
+  groupId: string;
+  memberId: string;
+}>;
+
+const Member = ({ groupId, memberId }: MemberProps) => {
+  const { t } = useTranslation();
+
+  const { uid } = useAuth();
+  const { data: user } = useUser(memberId);
+
+  return (
+    <TableRow>
+      <TableCell>{user?.username}</TableCell>
+      <TableCell className="flex items-center float-end">
+        <DropdownMenu>
+          <DropdownMenuTrigger className="hover:bg-secondary rounded-md focus:outline-none">
+            <MoreHorizontalIcon
+              className="p-2"
+              size={32}
+            />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DeleteMemberDialog
+                groupId={groupId}
+                memberId={memberId}
+                type="kick"
+              >
+                <DropdownMenuItem
+                  onSelect={(event) => event.preventDefault()}
+                  disabled={memberId == uid}
+                >
+                  {t("client.action.kick")}
+                </DropdownMenuItem>
+              </DeleteMemberDialog>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </TableCell>
+    </TableRow>
+  );
+};
+Member.displayName = "MembersList:Member";

@@ -552,6 +552,7 @@ const SidebarMenuButton = React.forwardRef<
     asChild?: boolean;
     isActive?: boolean;
     tooltip?: string | React.ComponentProps<typeof TooltipContent>;
+    closeSidebar?: boolean;
   } & VariantProps<typeof sidebarMenuButtonVariants>
 >(
   (
@@ -563,6 +564,7 @@ const SidebarMenuButton = React.forwardRef<
       tooltip,
       className,
       onClick,
+      closeSidebar = true,
       ...props
     },
     ref
@@ -579,7 +581,9 @@ const SidebarMenuButton = React.forwardRef<
         className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
         onClick={(event) => {
           onClick?.(event);
-          setOpenMobile(false);
+          if (closeSidebar) {
+            setOpenMobile(false);
+          }
         }}
         {...props}
       />

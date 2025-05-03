@@ -1,7 +1,6 @@
 import { ReactNode, useState } from "react";
-import { Loader2 } from "lucide-react";
-
 import { useTranslation } from "react-i18next";
+import { Loader2Icon } from "lucide-react";
 
 import {
   AlertDialog,
@@ -15,8 +14,8 @@ import {
   Button,
 } from "@synergy/ui";
 
-import { useFile } from "../hooks/use-file";
-import { useDeleteFile } from "../hooks/use-delete-file";
+import { useFile } from "../api/get-files";
+import { useDeleteFile } from "../api/delete-file";
 
 type DeleteFileDialogProps = Readonly<{
   children: ReactNode;
@@ -63,7 +62,7 @@ export const DeleteFileDialog = ({
           >
             {isPending ? (
               <>
-                <Loader2 className="animate-spin" />
+                <Loader2Icon className="animate-spin" />
                 {t("client.action.deleting")}
               </>
             ) : (
@@ -75,3 +74,4 @@ export const DeleteFileDialog = ({
     </AlertDialog>
   );
 };
+DeleteFileDialog.displayName = "DeleteFileDialog";

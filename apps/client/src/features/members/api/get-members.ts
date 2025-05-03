@@ -1,14 +1,24 @@
-import { QueryClient, QueryOptions } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryOptions,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import { collection, FirestoreError, onSnapshot } from "firebase/firestore";
-import { ZodError } from "zod";
+import z from "zod";
 
 import { db } from "@synergy/libs/firebase";
 
-import { Member, memberSchema } from "../types/member";
+export const memberSchema = z.object({
+  uid: z.string(),
+});
+
+export type Member = z.infer<typeof memberSchema>;
 
 type GetMembersOptions = QueryOptions<
   Member[],
-  FirestoreError | ZodError<Member[]>,
+  FirestoreError,
   Member[],
   string[]
 >;
@@ -21,26 +31,23 @@ export const getMembersOptions = (
     queryKey: ["groups", groupId, "members"],
     queryFn: ({ queryKey }) => {
       return new Promise<Member[]>((resolve, reject) => {
-        const unsubscribe = onSnapshot(
+        onSnapshot(
           collection(db, "groups", groupId, "members"),
           (snapshot) => {
-            const members = memberSchema.array().safeParse(
-              snapshot.docs.map((doc) => {
-                const { uid } = doc.data({ serverTimestamps: "estimate" });
-                return {
-                  uid,
-                } satisfies Member;
-              })
-            );
+            const parsedMembers = snapshot.docs.map((doc) => {
+              const { uid } = doc.data({ serverTimestamps: "estimate" });
+              return memberSchema.safeParse({
+                uid,
+              } satisfies Member);
+            });
 
-            if (members.success) {
-              resolve(members.data);
-              queryClient.setQueryData(queryKey, members.data);
-            } else {
-              unsubscribe();
-              reject(members.error);
-              queryClient.removeQueries({ queryKey });
-            }
+            const members = parsedMembers
+              .filter(({ success }) => success)
+              .filter(({ data }) => data?.uid)
+              .map(({ data }) => data!);
+
+            resolve(members);
+            queryClient.setQueryData(queryKey, members);
           },
           (err) => {
             reject(err);
@@ -50,4 +57,22 @@ export const getMembersOptions = (
       });
     },
   } satisfies GetMembersOptions;
+};
+
+type UseMembersOptions = UseQueryOptions<
+  Member[],
+  FirestoreError,
+  Member[],
+  string[]
+>;
+
+export const useMembers = (
+  groupId: string,
+  options?: Partial<UseMembersOptions>
+) => {
+  const queryClient = useQueryClient();
+  return useQuery({
+    ...options,
+    ...getMembersOptions(queryClient, groupId),
+  } satisfies UseMembersOptions);
 };

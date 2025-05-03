@@ -1,19 +1,18 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import i18n from "i18next";
+import { Link, useNavigate, useParams } from "@tanstack/react-router";
 import {
-  ChevronsUpDown,
+  ChevronsUpDownIcon,
+  ClipboardListIcon,
   FolderIcon,
-  Hash,
   HashIcon,
   LogOutIcon,
   MailPlusIcon,
-  Settings,
   SettingsIcon,
   UsersIcon,
+  Volume2Icon,
 } from "lucide-react";
 
-import { Link, useNavigate, useParams } from "@tanstack/react-router";
+import { auth } from "@synergy/libs/firebase";
 
 import {
   Avatar,
@@ -51,19 +50,25 @@ import { LANGUAGES } from "@synergy/i18n";
 import { abbreviate, cn } from "@synergy/utils";
 
 import { useAuth } from "~/features/auth/hooks/use-auth";
-import { useSignOut } from "~/features/auth/hooks/use-sign-out";
+import { useSignOut } from "~/features/auth/api/sign-out";
 
-import { useGroup } from "~/features/groups/hooks/use-group";
-import { useGroups } from "~/features/groups/hooks/use-groups";
+import { useGroup, useGroups } from "~/features/groups/api/get-group";
 import { CreateGroupDialog } from "~/features/groups/components/create-group";
 
-import { useChats } from "~/features/chats/hooks/use-chats";
-import { useFolders } from "~/features/folders/hooks/use-folders";
+import { useChats } from "~/features/chats/api/get-chats";
+import { useCalls } from "~/features/calls/api/get-calls";
+
+import { ParticipantsList } from "~/features/participants/components/participants-list";
+import { CreateParticipant } from "~/features/participants/components/create-participant";
+
+import { useFolders } from "~/features/folders/api/get-folders";
 
 import { CreateMemberDialog } from "~/features/members/components/create-member";
 import { DeleteMemberDialog } from "~/features/members/components/delete-member";
 
-import { useUser } from "~/features/users/hooks/use-user";
+import { useBoards } from "~/features/boards/api/get-boards";
+
+import { useUser } from "~/features/users/api/get-user";
 import { UpdateUserDialog } from "~/features/users/components/update-user";
 
 import { Logo } from "../logo";
@@ -87,7 +92,7 @@ const SidebarGroups = () => {
             <SidebarCard
               primary={selectedGroup.data!.name}
               image={selectedGroup.data?.icon}
-              icon={<ChevronsUpDown />}
+              icon={<ChevronsUpDownIcon />}
             />
           </div>
         </DropdownMenuTrigger>
@@ -181,6 +186,7 @@ const SidebarAdmin = () => {
               <Link
                 to="/groups/$groupId/admin/invites"
                 params={{ groupId }}
+                activeProps={{ className: "bg-sidebar-accent" }}
               >
                 <MailPlusIcon />
                 {t("client.sidebar.category.invites")}
@@ -192,6 +198,7 @@ const SidebarAdmin = () => {
               <Link
                 to="/groups/$groupId/admin/members"
                 params={{ groupId }}
+                activeProps={{ className: "bg-sidebar-accent" }}
               >
                 <UsersIcon />
                 {t("client.sidebar.category.members")}
@@ -203,6 +210,7 @@ const SidebarAdmin = () => {
               <Link
                 to="/groups/$groupId/admin/chats"
                 params={{ groupId }}
+                activeProps={{ className: "bg-sidebar-accent" }}
               >
                 <HashIcon />
                 {t("client.sidebar.category.chats")}
@@ -212,8 +220,21 @@ const SidebarAdmin = () => {
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <Link
+                to="/groups/$groupId/admin/calls"
+                params={{ groupId }}
+                activeProps={{ className: "bg-sidebar-accent" }}
+              >
+                <Volume2Icon />
+                {t("client.sidebar.category.calls")}
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link
                 to="/groups/$groupId/admin/folders"
                 params={{ groupId }}
+                activeProps={{ className: "bg-sidebar-accent" }}
               >
                 <FolderIcon />
                 {t("client.sidebar.category.folders")}
@@ -223,8 +244,21 @@ const SidebarAdmin = () => {
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <Link
+                to="/groups/$groupId/admin/boards"
+                params={{ groupId }}
+                activeProps={{ className: "bg-sidebar-accent" }}
+              >
+                <ClipboardListIcon />
+                {t("client.sidebar.category.boards")}
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link
                 to="/groups/$groupId/admin/settings"
                 params={{ groupId }}
+                activeProps={{ className: "bg-sidebar-accent" }}
               >
                 <SettingsIcon />
                 {t("client.sidebar.category.settings")}
@@ -242,9 +276,9 @@ const SidebarChats = () => {
   const { groupId } = useParams({ from: "/(app)/groups/$groupId" });
   const { t } = useTranslation();
 
-  const chats = useChats(groupId);
+  const { data: chats } = useChats(groupId);
 
-  if (chats.data?.length == 0) {
+  if (chats?.length == 0) {
     return <></>;
   }
 
@@ -255,14 +289,15 @@ const SidebarChats = () => {
       </SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
-          {chats.data?.map((chat) => (
+          {chats?.map((chat) => (
             <SidebarMenuItem key={chat.id}>
               <SidebarMenuButton asChild>
                 <Link
                   to="/groups/$groupId/chats/$chatId"
                   params={{ groupId, chatId: chat.id }}
+                  activeProps={{ className: "bg-sidebar-accent" }}
                 >
-                  <Hash />
+                  <HashIcon />
                   {chat.name}
                 </Link>
               </SidebarMenuButton>
@@ -275,13 +310,60 @@ const SidebarChats = () => {
 };
 SidebarChats.displayName = "SidebarChats";
 
+const SidebarCalls = () => {
+  const { groupId } = useParams({ from: "/(app)/groups/$groupId" });
+  const { t } = useTranslation();
+
+  const { data: calls } = useCalls(groupId);
+
+  if (calls?.length == 0) {
+    return <></>;
+  }
+
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel>
+        {t("client.sidebar.category.calls")}
+      </SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {calls?.map((call) => (
+            <SidebarMenuItem
+              className="space-y-2"
+              key={call.id}
+            >
+              <CreateParticipant
+                groupId={groupId}
+                callId={call.id}
+              >
+                <SidebarMenuButton
+                  onClick={(event) => event.preventDefault()}
+                  closeSidebar={false}
+                >
+                  <Volume2Icon />
+                  {call.name}
+                </SidebarMenuButton>
+              </CreateParticipant>
+              <ParticipantsList
+                groupId={groupId}
+                callId={call.id}
+              />
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
+};
+SidebarCalls.displayName = "SidebarCalls";
+
 const SidebarFolders = () => {
   const { groupId } = useParams({ from: "/(app)/groups/$groupId" });
   const { t } = useTranslation();
 
-  const folders = useFolders(groupId);
+  const { data: folders } = useFolders(groupId);
 
-  if (folders.data?.length == 0) {
+  if (folders?.length == 0) {
     return <></>;
   }
 
@@ -292,12 +374,13 @@ const SidebarFolders = () => {
       </SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
-          {folders.data?.map((folder) => (
+          {folders?.map((folder) => (
             <SidebarMenuItem key={folder.id}>
               <SidebarMenuButton asChild>
                 <Link
                   to="/groups/$groupId/folders/$folderId"
                   params={{ groupId, folderId: folder.id }}
+                  activeProps={{ className: "bg-sidebar-accent" }}
                 >
                   <FolderIcon />
                   {folder.name}
@@ -311,6 +394,44 @@ const SidebarFolders = () => {
   );
 };
 SidebarFolders.displayName = "SidebarFolders";
+
+const SidebarBoards = () => {
+  const { groupId } = useParams({ from: "/(app)/groups/$groupId" });
+  const { t } = useTranslation();
+
+  const { data: boards } = useBoards(groupId);
+
+  if (boards?.length == 0) {
+    return <></>;
+  }
+
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel>
+        {t("client.sidebar.category.boards")}
+      </SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {boards?.map((board) => (
+            <SidebarMenuItem key={board.id}>
+              <SidebarMenuButton asChild>
+                <Link
+                  to="/groups/$groupId/boards/$boardId"
+                  params={{ groupId, boardId: board.id }}
+                  activeProps={{ className: "bg-sidebar-accent" }}
+                >
+                  <ClipboardListIcon />
+                  {board.name}
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
+};
+SidebarBoards.displayName = "SidebarBoards";
 
 const SidebarLeave = () => {
   const { groupId } = useParams({ from: "/(app)/groups/$groupId" });
@@ -333,7 +454,7 @@ const SidebarLeave = () => {
         >
           <Button variant="destructive">
             <LogOutIcon />
-            {t("client.feature.group.leave")}
+            {t("client.feature.member.leave")}
           </Button>
         </DeleteMemberDialog>
       </SidebarContent>
@@ -344,15 +465,18 @@ SidebarLeave.displayName = "SidebarLeave";
 
 const SidebarUser = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { uid } = useAuth();
   const { mutate: signOut } = useSignOut();
 
-  const { data: user } = useUser(uid);
+  const { data: user, isPending } = useUser(uid);
 
   const { theme, setTheme } = useTheme();
-  const [language, setLanguage] = useState(i18n.language);
+
+  if (isPending) {
+    return <></>;
+  }
 
   return (
     <DropdownMenu>
@@ -365,12 +489,17 @@ const SidebarUser = () => {
           <SidebarCard
             primary={user!.username}
             image={user!.pfp}
-            icon={<Settings />}
+            icon={<SettingsIcon />}
           />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
         <DropdownMenuGroup>
+          {auth.currentUser?.isAnonymous && (
+            <DropdownMenuItem asChild>
+              <Link to="/upgrade">{t("client.sidebar.settings.upgrade")}</Link>
+            </DropdownMenuItem>
+          )}
           <UpdateUserDialog>
             <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
               {t("client.sidebar.settings.account")}
@@ -400,10 +529,9 @@ const SidebarUser = () => {
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
               <DropdownMenuRadioGroup
-                value={language}
+                value={i18n.language}
                 onValueChange={(value) => {
                   i18n.changeLanguage(value);
-                  setLanguage(value);
                 }}
               >
                 {LANGUAGES.map(({ id, name }) => (
@@ -420,7 +548,9 @@ const SidebarUser = () => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => navigate({ to: "/" }).then(signOut)}>
+          <DropdownMenuItem
+            onClick={() => navigate({ to: "/signin" }).then(signOut)}
+          >
             {t("client.feature.auth.sign_out")}
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -444,7 +574,9 @@ export const AppSidebar = () => {
             <SidebarGroups />
             <SidebarAdmin />
             <SidebarChats />
+            <SidebarCalls />
             <SidebarFolders />
+            <SidebarBoards />
             <SidebarLeave />
           </>
         ) : (

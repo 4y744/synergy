@@ -1,10 +1,9 @@
 import { ComponentProps, ReactNode, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Loader2Icon } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useTranslation } from "react-i18next";
 
 import {
   Input,
@@ -23,11 +22,11 @@ import {
 
 import { cn } from "@synergy/utils";
 
-import { useCreateGroup } from "../hooks/use-create-group";
 import {
+  useCreateGroup,
   CreateGroupInput,
   createGroupInputSchema,
-} from "../types/create-group";
+} from "../api/create-group";
 
 type CreateGroupProps = Readonly<
   ComponentProps<"form"> & {
@@ -71,6 +70,7 @@ export const CreateGroupForm = ({
       >
         <FormField
           name="name"
+          control={form.control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -94,7 +94,7 @@ export const CreateGroupForm = ({
         >
           {isPending ? (
             <>
-              <Loader2 className="animate-spin" />
+              <Loader2Icon className="animate-spin" />
               {t("client.action.creating")}
             </>
           ) : (
@@ -105,6 +105,7 @@ export const CreateGroupForm = ({
     </Form>
   );
 };
+CreateGroupForm.displayName = "CreateGroupForm";
 
 type CreateGroupDialogProps = Readonly<{
   children?: ReactNode;
@@ -127,3 +128,4 @@ export const CreateGroupDialog = ({ children }: CreateGroupDialogProps) => {
     </Dialog>
   );
 };
+CreateGroupDialog.displayName = "CreateGroupsDialog";

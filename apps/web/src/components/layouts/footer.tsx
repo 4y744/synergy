@@ -1,5 +1,5 @@
-import { Footer, FooterGroup, FooterItem, FooterLabel } from "@synergy/ui";
 import { useTranslation } from "react-i18next";
+import { Footer, FooterGroup, FooterItem, FooterLabel } from "@synergy/ui";
 
 export const SiteFooter = () => {
   const { t } = useTranslation();
@@ -90,3 +90,4 @@ export const SiteFooter = () => {
     </Footer>
   );
 };
+SiteFooter.displayName = "SiteFooter";

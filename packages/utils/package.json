@@ -18,7 +18,7 @@
     "tailwind-merge": "^2.5.4"
   },
   "devDependencies": {
-    "@synergy/configs": "workspace:*",
+    "@synergy/config": "workspace:*",
     "tsup": "8.0.0"
   }
 }

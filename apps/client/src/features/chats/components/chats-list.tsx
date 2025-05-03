@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { HashIcon, MoreHorizontalIcon, PlusIcon } from "lucide-react";
 
 import {
@@ -16,37 +17,34 @@ import {
   TableRow,
 } from "@synergy/ui";
 
+import { useChats } from "../api/get-chats";
 import { CreateChatDialog } from "./create-chat";
 import { UpdateChatDialog } from "./update-chat";
 import { DeleteChatDialog } from "./delete-chat";
-import { useChats } from "../hooks/use-chats";
-
-import { useTranslation } from "react-i18next";
 
 type ChatsListProps = Readonly<{
   groupId: string;
 }>;
 
 export const ChatsList = ({ groupId }: ChatsListProps) => {
-  const { data: chats } = useChats(groupId);
   const { t } = useTranslation();
+
+  const { data: chats } = useChats(groupId);
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead>{t("client.feature.chat.name")}</TableHead>
-          <TableHead className="float-end">
-            <div className="flex items-center h-full">
-              <CreateChatDialog groupId={groupId}>
-                <Button
-                  className="w-8 h-8"
-                  variant="ghost"
-                >
-                  <PlusIcon />
-                </Button>
-              </CreateChatDialog>
-            </div>
+          <TableHead className="flex items-center float-end">
+            <CreateChatDialog groupId={groupId}>
+              <Button
+                className="w-8 h-8"
+                variant="ghost"
+              >
+                <PlusIcon />
+              </Button>
+            </CreateChatDialog>
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -59,7 +57,7 @@ export const ChatsList = ({ groupId }: ChatsListProps) => {
                 {name}
               </div>
             </TableCell>
-            <TableCell className="float-end">
+            <TableCell className="flex items-center float-end">
               <DropdownMenu>
                 <DropdownMenuTrigger className="hover:bg-secondary rounded-md focus:outline-none">
                   <MoreHorizontalIcon
@@ -102,3 +100,4 @@ export const ChatsList = ({ groupId }: ChatsListProps) => {
     </Table>
   );
 };
+ChatsList.displayName = "ChatsList";

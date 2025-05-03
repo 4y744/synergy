@@ -8,10 +8,11 @@ import {
 
 import { SidebarInset, SidebarProvider } from "@synergy/ui";
 
-import { ProtectedRoute } from "~/features/auth/components/protected-route";
-import { useGroups } from "~/features/groups/hooks/use-groups";
 import { HeaderProvider } from "~/components/layouts/header";
 import { AppSidebar } from "~/components/layouts/sidebar";
+
+import { ProtectedRoute } from "~/features/auth/components/protected-route";
+import { useGroups } from "~/features/groups/api/get-group";
 
 export const Route = createLazyFileRoute("/(app)/groups")({
   component: () => {

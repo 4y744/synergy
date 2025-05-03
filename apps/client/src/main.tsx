@@ -5,6 +5,7 @@ import { App } from "./app";
 
 import "./globals.css";
 import "@synergy/i18n";
+import "./zod-error-map";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

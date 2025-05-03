@@ -1,10 +1,9 @@
 import { ComponentProps, useRef } from "react";
-import { FileUpIcon, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { FileUpIcon, Loader2Icon } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useTranslation } from "react-i18next";
 
 import {
   Button,
@@ -19,12 +18,9 @@ import {
 
 import { cn } from "@synergy/utils";
 
-import { useGroup } from "../hooks/use-group";
-import { useUpdateGroup } from "../hooks/use-update-group";
-import {
-  UpdateGroupInput,
-  updateGroupInputSchema,
-} from "../types/update-group";
+import { useGroup } from "../api/get-group";
+import { useUpdateGroup } from "../api/update-group";
+import { UpdateGroupInput, updateGroupInputSchema } from "../api/update-group";
 
 type UpdateGroupProps = Readonly<
   ComponentProps<"form"> & {
@@ -72,6 +68,7 @@ export const UpdateGroupForm = ({
       >
         <FormField
           name="name"
+          control={form.control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -114,7 +111,7 @@ export const UpdateGroupForm = ({
         >
           {isPending ? (
             <>
-              <Loader2 className="animate-spin" />
+              <Loader2Icon className="animate-spin" />
               {t("client.action.saving")}
             </>
           ) : (

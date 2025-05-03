@@ -1,10 +1,20 @@
-import { MutationOptions } from "@tanstack/react-query";
+import {
+  MutationOptions,
+  useMutation,
+  UseMutationOptions,
+} from "@tanstack/react-query";
 import { doc, FirestoreError, updateDoc } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import z from "zod";
 
 import { auth, db, storage } from "@synergy/libs/firebase";
 
-import { UpdateUserInput } from "../types/update-user";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+export const updateUserInputSchema = z.object({
+  username: z.string().optional(),
+  pfp: z.instanceof(File).optional(),
+});
+
+export type UpdateUserInput = z.infer<typeof updateUserInputSchema>;
 
 type UpdateUserOptions = MutationOptions<void, FirestoreError, UpdateUserInput>;
 
@@ -22,9 +32,24 @@ export const updateUserOptions = () => {
           pfp: url,
         });
       }
-      await updateDoc(userDocRef, {
-        username: data.username,
-      });
+      if (data.username) {
+        await updateDoc(userDocRef, {
+          username: data.username,
+        });
+      }
     },
   } satisfies UpdateUserOptions;
+};
+
+type UseUpdateUserOptions = UseMutationOptions<
+  void,
+  FirestoreError,
+  UpdateUserInput
+>;
+
+export const useUpdateUser = (options?: Partial<UseUpdateUserOptions>) => {
+  return useMutation({
+    ...options,
+    ...updateUserOptions(),
+  } satisfies UseUpdateUserOptions);
 };

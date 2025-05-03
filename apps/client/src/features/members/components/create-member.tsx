@@ -1,10 +1,10 @@
 import { ComponentProps, ReactNode, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useTranslation } from "react-i18next";
+import { Loader2Icon } from "lucide-react";
 
 import {
   Button,
@@ -26,8 +26,8 @@ import { cn, isValidURL } from "@synergy/utils";
 import {
   CreateMemberInput,
   createMemberInputSchema,
-} from "../types/create-member";
-import { useCreateMember } from "../hooks/use-create-member";
+  useCreateMember,
+} from "../api/create-member";
 
 type CreateMemberFormProps = Readonly<
   ComponentProps<"form"> & {
@@ -80,6 +80,7 @@ export const CreateMemberForm = ({
       >
         <FormField
           name="inviteId"
+          control={form.control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>{t("client.feature.invite.id")}</FormLabel>
@@ -99,7 +100,7 @@ export const CreateMemberForm = ({
         >
           {isPending ? (
             <>
-              <Loader2 className="animate-spin" />
+              <Loader2Icon className="animate-spin" />
               {t("client.action.joining")}
             </>
           ) : (
@@ -110,6 +111,7 @@ export const CreateMemberForm = ({
     </Form>
   );
 };
+CreateMemberForm.displayName = "CreateMemberForm";
 
 type CreateMemberDialogProps = Readonly<{
   children?: ReactNode;
@@ -132,3 +134,4 @@ export const CreateMemberDialog = ({ children }: CreateMemberDialogProps) => {
     </Dialog>
   );
 };
+CreateMemberDialog.displayName = "CreateMemberDialog";

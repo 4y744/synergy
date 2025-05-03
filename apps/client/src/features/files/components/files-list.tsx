@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { FileUpIcon, MoreHorizontalIcon } from "lucide-react";
 
 import {
@@ -16,13 +17,11 @@ import {
 } from "@synergy/ui";
 
 import { useAuth } from "~/features/auth/hooks/use-auth";
-import { useGroup } from "~/features/groups/hooks/use-group";
+import { useGroup } from "~/features/groups/api/get-group";
 
 import { CreateFileDialog } from "./create-file";
 import { DeleteFileDialog } from "./delete-file";
-import { useFiles } from "../hooks/use-files";
-
-import { useTranslation } from "react-i18next";
+import { useFiles } from "../api/get-files";
 
 type FilesListProps = Readonly<{
   groupId: string;
@@ -41,20 +40,18 @@ export const FilesList = ({ groupId, folderId }: FilesListProps) => {
       <TableHeader>
         <TableRow className="align-middle">
           <TableHead>{t("client.feature.file.name")}</TableHead>
-          <TableHead className="float-end">
-            <div className="flex items-center h-full">
-              <CreateFileDialog
-                groupId={groupId}
-                folderId={folderId}
+          <TableHead className="flex items-center float-end">
+            <CreateFileDialog
+              groupId={groupId}
+              folderId={folderId}
+            >
+              <Button
+                className="w-8 h-8"
+                variant="ghost"
               >
-                <Button
-                  className="w-8 h-8"
-                  variant="ghost"
-                >
-                  <FileUpIcon />
-                </Button>
-              </CreateFileDialog>
-            </div>
+                <FileUpIcon />
+              </Button>
+            </CreateFileDialog>
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -70,7 +67,7 @@ export const FilesList = ({ groupId, folderId }: FilesListProps) => {
                 {name}
               </a>
             </TableCell>
-            <TableCell className="float-end">
+            <TableCell className="flex items-center float-end">
               <DropdownMenu>
                 <DropdownMenuTrigger className="hover:bg-secondary rounded-md focus:outline-none">
                   <MoreHorizontalIcon
@@ -102,3 +99,4 @@ export const FilesList = ({ groupId, folderId }: FilesListProps) => {
     </Table>
   );
 };
+FilesList.displayName = "FilesList";

@@ -1,21 +1,21 @@
-import { MutationOptions } from "@tanstack/react-query";
-
 import {
-  collectionGroup,
-  doc,
-  FirestoreError,
-  getDocs,
-  query,
-  setDoc,
-  where,
-} from "firebase/firestore";
+  MutationOptions,
+  useMutation,
+  UseMutationOptions,
+} from "@tanstack/react-query";
+import { doc, FirestoreError, setDoc } from "firebase/firestore";
+import z from "zod";
 
 import { auth, db } from "@synergy/libs/firebase";
 
-import { CreateMemberInput } from "../types/create-member";
+export const createMemberInputSchema = z.object({
+  inviteId: z.string(),
+});
+
+export type CreateMemberInput = z.infer<typeof createMemberInputSchema>;
 
 type CreateMemberOptions = MutationOptions<
-  string,
+  void,
   FirestoreError,
   CreateMemberInput
 >;
@@ -23,24 +23,30 @@ type CreateMemberOptions = MutationOptions<
 export const createMemberOptions = () => {
   return {
     mutationFn: async (data) => {
-      const { docs: invitesDocs } = await getDocs(
-        query(
-          collectionGroup(db, "invites"),
-          where("inviteId", "==", data.inviteId)
-        )
-      );
-      if (invitesDocs.length == 0) {
+      const [groupId, inviteId] = data.inviteId.split("-");
+      if (!groupId || !inviteId) {
         throw new Error();
       }
-      const groupId = invitesDocs[0]?.ref.parent.parent?.id!;
       await setDoc(
         doc(db, "groups", groupId, "members", auth.currentUser!.uid),
         {
-          ...data,
+          inviteId,
           uid: auth.currentUser!.uid,
         }
       );
-      return groupId;
     },
   } satisfies CreateMemberOptions;
+};
+
+type UseCreateMemberOptions = UseMutationOptions<
+  void,
+  FirestoreError,
+  CreateMemberInput
+>;
+
+export const useCreateMember = (options?: Partial<UseCreateMemberOptions>) => {
+  return useMutation({
+    ...options,
+    ...createMemberOptions(),
+  } satisfies UseCreateMemberOptions);
 };

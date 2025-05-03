@@ -1,7 +1,6 @@
+import { useTranslation } from "react-i18next";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { UsersIcon } from "lucide-react";
-
-import { useTranslation } from "react-i18next";
 
 import { MembersList } from "~/features/members/components/members-list";
 import { ContentLayout } from "~/components/layouts/content-layout";

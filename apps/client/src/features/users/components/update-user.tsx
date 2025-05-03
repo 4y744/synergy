@@ -1,5 +1,5 @@
 import { useState, ReactNode, ComponentProps, useRef } from "react";
-import { FileUpIcon, Loader2 } from "lucide-react";
+import { FileUpIcon, Loader2Icon } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,9 +25,12 @@ import { cn } from "@synergy/utils";
 
 import { useAuth } from "~/features/auth/hooks/use-auth";
 
-import { useUser } from "../hooks/use-user";
-import { useUpdateUser } from "../hooks/use-update-user";
-import { UpdateUserInput, updateUserInputSchema } from "../types/update-user";
+import { useUser } from "../api/get-user";
+import {
+  updateUserInputSchema,
+  UpdateUserInput,
+  useUpdateUser,
+} from "../api/update-user";
 
 type UpdateUserProps = Readonly<
   ComponentProps<"form"> & {
@@ -42,15 +45,15 @@ export const UpdateUserForm = ({
   ...props
 }: UpdateUserProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { uid } = useAuth();
   const { t } = useTranslation();
 
+  const { data: user } = useUser(uid);
   const { mutateAsync: updateUser, isPending } = useUpdateUser({
     onSuccess,
     throwOnError: false,
   });
-
-  const { uid } = useAuth();
-  const { data: user } = useUser(uid);
 
   const form = useForm<UpdateUserInput>({
     resolver: zodResolver(updateUserInputSchema),
@@ -75,6 +78,7 @@ export const UpdateUserForm = ({
       >
         <FormField
           name="username"
+          control={form.control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -117,7 +121,7 @@ export const UpdateUserForm = ({
         >
           {isPending ? (
             <>
-              <Loader2 className="animate-spin" />
+              <Loader2Icon className="animate-spin" />
               {t("client.action.saving")}
             </>
           ) : (
@@ -128,6 +132,7 @@ export const UpdateUserForm = ({
     </Form>
   );
 };
+UpdateUserForm.displayName = "UpdateUserForm";
 
 type UpdateUserDialogProps = Readonly<{
   children?: ReactNode;
@@ -150,3 +155,4 @@ export const UpdateUserDialog = ({ children }: UpdateUserDialogProps) => {
     </Dialog>
   );
 };
+UpdateUserDialog.displayName = "UpdateUserDialog";

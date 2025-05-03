@@ -1,10 +1,20 @@
-import { MutationOptions } from "@tanstack/react-query";
+import {
+  MutationOptions,
+  useMutation,
+  UseMutationOptions,
+} from "@tanstack/react-query";
 import { doc, FirestoreError, updateDoc } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import z from "zod";
 
 import { db, storage } from "@synergy/libs/firebase";
 
-import { UpdateGroupInput } from "../types/update-group";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+export const updateGroupInputSchema = z.object({
+  name: z.string().min(4).max(32),
+  icon: z.instanceof(File).optional(),
+});
+
+export type UpdateGroupInput = z.infer<typeof updateGroupInputSchema>;
 
 type UpdateGroupOptions = MutationOptions<
   void,
@@ -23,12 +33,28 @@ export const updateGroupOptions = (groupId: string) => {
         );
         const url = await getDownloadURL(pfpRef);
         await updateDoc(groupDocRef, {
-          name: data.name,
           icon: url,
         });
-      } else {
+      }
+      if (data.name) {
         await updateDoc(groupDocRef, { name: data.name });
       }
     },
   } satisfies UpdateGroupOptions;
+};
+
+type UseUpdateGroupOptions = UseMutationOptions<
+  void,
+  FirestoreError,
+  UpdateGroupInput
+>;
+
+export const useUpdateGroup = (
+  groupId: string,
+  options?: Partial<UseUpdateGroupOptions>
+) => {
+  return useMutation({
+    ...options,
+    ...updateGroupOptions(groupId),
+  } satisfies UseUpdateGroupOptions);
 };

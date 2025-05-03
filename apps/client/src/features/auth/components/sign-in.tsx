@@ -1,11 +1,10 @@
-import { ComponentProps } from "react";
-import { Loader2 } from "lucide-react";
+import { ComponentProps, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "@tanstack/react-router";
+import { Loader2Icon } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useTranslation } from "react-i18next";
 
 import {
   Form,
@@ -17,26 +16,27 @@ import {
   Button,
   FormMessage,
 } from "@synergy/ui";
+import { cn } from "@synergy/utils";
 
-import { AUTH_ERRORS } from "../configs/errors";
-import { useSignIn } from "../hooks/use-sign-in";
-import { SignInInput, signInInputSchema } from "../types/sign-in";
+import { SignInInput, signInInputSchema, useSignIn } from "../api/sign-in";
+import { getAuthError } from "../utils/get-auth-error";
 
-type SignInFormProps = Readonly<ComponentProps<"div">>;
+type SignInFormProps = Readonly<ComponentProps<"form">>;
 
-export const SignInForm = (props: SignInFormProps) => {
+export const SignInForm = ({
+  className,
+  onSubmit,
+  ...props
+}: SignInFormProps) => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { t } = useTranslation();
 
-  const {
-    mutate: signIn,
-    isPending,
-    isSuccess,
-  } = useSignIn({
+  const { mutate: signIn, isPending } = useSignIn({
     onSuccess: () => navigate({ to: "/groups" }),
     onError: (error) => {
       form.setError("password", {
-        message: AUTH_ERRORS[error.code as keyof typeof AUTH_ERRORS],
+        //@ts-ignore
+        message: getAuthError(error.code),
       });
     },
     throwOnError: false,
@@ -50,19 +50,23 @@ export const SignInForm = (props: SignInFormProps) => {
     },
   });
 
-  const onSubmit: SubmitHandler<SignInInput> = (data) => signIn(data);
+  useEffect(() => form.reset(), [i18n.language]);
+
+  const _onSubmit: SubmitHandler<SignInInput> = (data) => signIn(data);
 
   return (
-    <Form
-      {...form}
-      {...props}
-    >
+    <Form {...form}>
       <form
-        className="space-y-4 w-80 max-w-[100vw]"
-        onSubmit={form.handleSubmit(onSubmit)}
+        className={cn("space-y-4 w-80 max-w-[100vw]", className)}
+        onSubmit={(event) => {
+          onSubmit?.(event);
+          form.handleSubmit(_onSubmit)(event);
+        }}
+        {...props}
       >
         <FormField
           name="email"
+          control={form.control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -82,6 +86,7 @@ export const SignInForm = (props: SignInFormProps) => {
         />
         <FormField
           name="password"
+          control={form.control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -103,19 +108,12 @@ export const SignInForm = (props: SignInFormProps) => {
         <Button
           type="submit"
           className="w-full"
-          disabled={isPending || isSuccess}
+          disabled={isPending}
         >
-          {(isPending || isSuccess) && <Loader2 className="animate-spin" />}
+          {isPending && <Loader2Icon className="animate-spin" />}
           {t("client.feature.auth.sign_in")}
         </Button>
       </form>
-      <Button
-        variant="link"
-        className="w-full"
-        onClick={() => navigate({ to: "/signup" })}
-      >
-        {t("client.feature.auth.no_account")}
-      </Button>
     </Form>
   );
 };

@@ -1,7 +1,6 @@
+import { useTranslation } from "react-i18next";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { FolderIcon } from "lucide-react";
-
-import { useTranslation } from "react-i18next";
 
 import { FoldersList } from "~/features/folders/components/folders-list";
 import { ContentLayout } from "~/components/layouts/content-layout";

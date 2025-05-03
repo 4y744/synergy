@@ -1,17 +1,29 @@
-import { QueryClient, QueryOptions } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryOptions,
+  useQueries,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import { doc, FirestoreError, onSnapshot } from "firebase/firestore";
-import { ZodError } from "zod";
+import z from "zod";
 
 import { db } from "@synergy/libs/firebase";
 
-import { Group, groupSchema } from "../types/group";
+import { useFindGroups } from "./find-groups";
 
-type GetGroupOptions = QueryOptions<
-  Group,
-  FirestoreError | ZodError<Group>,
-  Group,
-  string[]
->;
+export const groupSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  icon: z.string().optional(),
+  createdBy: z.string(),
+  createdAt: z.date(),
+});
+
+export type Group = z.infer<typeof groupSchema>;
+
+type GetGroupOptions = QueryOptions<Group, FirestoreError, Group, string[]>;
 
 export const getGroupOptions = (queryClient: QueryClient, groupId: string) => {
   return {
@@ -47,4 +59,33 @@ export const getGroupOptions = (queryClient: QueryClient, groupId: string) => {
       });
     },
   } satisfies GetGroupOptions;
+};
+
+type UseGroupOptions = UseQueryOptions<Group, FirestoreError, Group, string[]>;
+
+export const useGroup = (
+  groupId: string,
+  options?: Partial<UseGroupOptions>
+) => {
+  const queryClient = useQueryClient();
+  return useQuery({
+    ...options,
+    ...getGroupOptions(queryClient, groupId),
+  } satisfies UseGroupOptions);
+};
+
+export const useGroups = (options?: Partial<UseGroupOptions>) => {
+  const { data: groupIds } = useFindGroups({
+    initialData: [],
+  });
+  const queryClient = useQueryClient();
+  return useQueries({
+    queries:
+      groupIds?.map((groupId) => {
+        return {
+          ...options,
+          ...getGroupOptions(queryClient, groupId),
+        } satisfies UseGroupOptions;
+      }) || [],
+  });
 };

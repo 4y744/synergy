@@ -1,7 +1,6 @@
 import { ReactNode, useState } from "react";
-import { Loader2 } from "lucide-react";
-
 import { useTranslation } from "react-i18next";
+import { Loader2Icon } from "lucide-react";
 
 import {
   AlertDialog,
@@ -15,8 +14,8 @@ import {
   Button,
 } from "@synergy/ui";
 
-import { useChat } from "../hooks/use-chat";
-import { useDeleteChat } from "../hooks/use-delete-chat";
+import { useChat } from "../api/get-chats";
+import { useDeleteChat } from "../api/delete-chat";
 
 type DeleteChatDialogProps = Readonly<{
   children: ReactNode;
@@ -59,7 +58,7 @@ export const DeleteChatDialog = ({
           >
             {isPending ? (
               <>
-                <Loader2 className="animate-spin" />
+                <Loader2Icon className="animate-spin" />
                 {t("client.action.delete")}
               </>
             ) : (
@@ -71,3 +70,4 @@ export const DeleteChatDialog = ({
     </AlertDialog>
   );
 };
+DeleteChatDialog.displayName = "DeleteChatDialog";

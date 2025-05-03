@@ -1,11 +1,11 @@
 import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Loader2 } from "lucide-react";
+import { Loader2Icon } from "lucide-react";
 
 import { useTranslation } from "react-i18next";
 import { Button } from "@synergy/ui";
 
 import { ProtectedRoute } from "~/features/auth/components/protected-route";
-import { useCreateMember } from "~/features/members/hooks/use-create-member";
+import { useCreateMember } from "~/features/members/api/create-member";
 import { ContentLayout } from "~/components/layouts/content-layout";
 
 export const Route = createLazyFileRoute("/(app)/invite/$inviteId")({
@@ -29,7 +29,7 @@ export const Route = createLazyFileRoute("/(app)/invite/$inviteId")({
           >
             {isPending ? (
               <>
-                <Loader2 className="animate-spin" />
+                <Loader2Icon className="animate-spin" />
                 {t("client.action.proceeding")}
               </>
             ) : (

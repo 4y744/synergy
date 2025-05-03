@@ -13,7 +13,7 @@ export const ContentLayout = forwardRef<HTMLDivElement, ContentProps>(
     return (
       <div
         className={cn(
-          "w-full min-h-[100svh] space-y-4 p-4",
+          "w-full min-h-screen space-y-4 p-4",
           { "flex flex-col justify-center items-center": isCentered },
           className
         )}

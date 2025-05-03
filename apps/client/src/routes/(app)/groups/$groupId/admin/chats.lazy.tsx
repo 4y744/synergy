@@ -1,7 +1,6 @@
+import { useTranslation } from "react-i18next";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { HashIcon } from "lucide-react";
-
-import { useTranslation } from "react-i18next";
 
 import { ChatsList } from "~/features/chats/components/chats-list";
 import { ContentLayout } from "~/components/layouts/content-layout";

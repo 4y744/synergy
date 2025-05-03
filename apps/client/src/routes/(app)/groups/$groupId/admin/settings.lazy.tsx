@@ -1,11 +1,12 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { Settings } from "lucide-react";
-
 import { useTranslation } from "react-i18next";
+import { SettingsIcon } from "lucide-react";
+
 import { Button } from "@synergy/ui";
 
 import { UpdateGroupForm } from "~/features/groups/components/update-group";
 import { DeleteGroupDialog } from "~/features/groups/components/delete-group";
+
 import { Header } from "~/components/layouts/header";
 import { ContentLayout } from "~/components/layouts/content-layout";
 
@@ -20,7 +21,7 @@ export const Route = createLazyFileRoute(
       <ContentLayout>
         <Header
           title={t("client.feature.group.settings")}
-          icon={<Settings size={16} />}
+          icon={<SettingsIcon size={16} />}
         />
         <UpdateGroupForm groupId={groupId} />
         <DeleteGroupDialog groupId={groupId}>

@@ -1,9 +1,8 @@
 import { createLazyFileRoute, Navigate } from "@tanstack/react-router";
-
-import { CLIENT_URL } from "~/config/env";
+import { Loader2Icon } from "lucide-react";
 
 import { ContentLayout } from "~/components/layouts/content-layout";
-import { LoadingFallback } from "~/components/loading-fallback";
+import { CLIENT_URL } from "~/config/env";
 
 export const Route = createLazyFileRoute("/invite/$inviteId")({
   component: () => {
@@ -15,7 +14,10 @@ export const Route = createLazyFileRoute("/invite/$inviteId")({
           href={`${CLIENT_URL}/invite/${inviteId}`}
           reloadDocument
         />
-        <LoadingFallback />
+        <Loader2Icon
+          className="animate-spin"
+          size={48}
+        />
       </ContentLayout>
     );
   },

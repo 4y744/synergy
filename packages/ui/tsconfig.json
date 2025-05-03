@@ -1,5 +1,5 @@
 {
-  "extends": "@synergy/configs/typescript",
+  "extends": "@synergy/config/typescript",
   "compilerOptions": {
     "paths": {
       "~/*": ["./src/*"]

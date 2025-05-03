@@ -1,5 +1,4 @@
-import { useState } from "react";
-import i18n from "i18next";
+import { useTranslation } from "react-i18next";
 import { GlobeIcon } from "lucide-react";
 
 import { LANGUAGES } from "@synergy/i18n";
@@ -14,7 +13,7 @@ import {
 } from "@synergy/ui";
 
 export const LanguageToggle = () => {
-  const [language, setLanguage] = useState(i18n.language);
+  const { i18n } = useTranslation();
 
   return (
     <DropdownMenu modal={false}>
@@ -32,10 +31,9 @@ export const LanguageToggle = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuRadioGroup
-          value={language}
+          value={i18n.language}
           onValueChange={(value) => {
             i18n.changeLanguage(value);
-            setLanguage(value);
           }}
         >
           {LANGUAGES.map(({ name, id }) => (

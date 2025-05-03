@@ -1,5 +1,8 @@
-import { MutationOptions } from "@tanstack/react-query";
-
+import {
+  MutationOptions,
+  useMutation,
+  UseMutationOptions,
+} from "@tanstack/react-query";
 import {
   collection,
   doc,
@@ -8,10 +11,13 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import z from "zod";
 
 import { auth, db, storage } from "@synergy/libs/firebase";
 
-import { CreateFileInput } from "../types/create-file";
+export const createFileInputSchema = z.instanceof(File);
+
+export type CreateFileInput = z.infer<typeof createFileInputSchema>;
 
 type CreateFileOptions = MutationOptions<
   string,
@@ -53,4 +59,25 @@ export const createFileOptions = (
       return fileDocRef.id;
     },
   } satisfies CreateFileOptions;
+};
+
+type UseCreateFileOptions = UseMutationOptions<
+  string,
+  FirestoreError,
+  CreateFileInput
+>;
+
+export const useCreateFile = (
+  groupId: string,
+  chatId: string,
+  options?: Partial<UseCreateFileOptions> & {
+    onProgressChange?: (percentage: number) => void;
+  }
+) => {
+  return useMutation({
+    ...options,
+    ...createFileOptions(groupId, chatId, {
+      onProgressChange: options?.onProgressChange,
+    }),
+  } satisfies UseCreateFileOptions);
 };

@@ -1,7 +1,9 @@
 import {
   InfiniteData,
   QueryClient,
+  useInfiniteQuery,
   UseInfiniteQueryOptions,
+  useQueryClient,
 } from "@tanstack/react-query";
 import {
   collection,
@@ -16,10 +18,18 @@ import {
   query,
   startAfter,
 } from "firebase/firestore";
+import z from "zod";
 
 import { db } from "@synergy/libs/firebase";
 
-import { Message, messageSchema } from "../types/message";
+export const messageSchema = z.object({
+  id: z.string(),
+  createdAt: z.date(),
+  payload: z.string(),
+  createdBy: z.string(),
+});
+
+export type Message = z.infer<typeof messageSchema>;
 
 export type MessagesPage = {
   messages: Message[];
@@ -72,51 +82,45 @@ export const getMessagesOptions = (
           );
         }
 
-        const unsubscribe = onSnapshot(
+        onSnapshot(
           q,
           (snapshot) => {
-            const messages = messageSchema.array().safeParse(
-              snapshot.docs.map((doc) => {
-                const data = doc.data({ serverTimestamps: "estimate" });
-                return {
-                  id: doc.id,
-                  payload: data?.payload,
-                  createdBy: data?.createdBy,
-                  createdAt: data?.createdAt.toDate(),
-                } satisfies Message;
-              })
-            );
+            const parsedMessages = snapshot.docs.map((doc) => {
+              const data = doc.data({ serverTimestamps: "estimate" });
+              return messageSchema.safeParse({
+                id: doc.id,
+                payload: data?.payload,
+                createdBy: data?.createdBy,
+                createdAt: data?.createdAt.toDate(),
+              } satisfies Message);
+            });
 
-            if (messages.success) {
-              const messagesPage = {
-                messages: messages.data.filter(
-                  ({ payload }) => payload != "__init__"
-                ),
-                nextPage: snapshot.docs[snapshot.docs.length - 1],
-              };
+            const messages = parsedMessages
+              .filter(({ success }) => success)
+              .map(({ data }) => data!);
 
-              resolve(messagesPage);
-              queryClient.setQueryData(
-                queryKey,
-                (
-                  data: InfiniteData<MessagesPage, DocumentSnapshot | undefined>
-                ) => {
-                  if (!data) {
-                    return undefined;
-                  }
-                  data.pages = data.pages.map((page) => {
-                    const isMatch =
-                      page.nextPage?.id == messagesPage.nextPage?.id;
-                    return isMatch ? messagesPage : page;
-                  });
-                  return data;
+            const messagesPage = {
+              messages: messages.filter(({ payload }) => payload != "__init__"),
+              nextPage: snapshot.docs[snapshot.docs.length - 1],
+            };
+
+            resolve(messagesPage);
+            queryClient.setQueryData(
+              queryKey,
+              (
+                data: InfiniteData<MessagesPage, DocumentSnapshot | undefined>
+              ) => {
+                if (!data) {
+                  return undefined;
                 }
-              );
-            } else {
-              unsubscribe();
-              reject(messages.error);
-              queryClient.removeQueries({ queryKey });
-            }
+                data.pages = data.pages.map((page) => {
+                  const isMatch =
+                    page.nextPage?.id == messagesPage.nextPage?.id;
+                  return isMatch ? messagesPage : page;
+                });
+                return data;
+              }
+            );
           },
           (err) => {
             reject(err);
@@ -128,4 +132,24 @@ export const getMessagesOptions = (
     getNextPageParam: (prevPage) => prevPage.nextPage,
     initialPageParam: undefined,
   } satisfies GetMessagesOptions;
+};
+
+type UseMessagesOptions = GetMessagesOptions;
+
+export const useMessages = (
+  groupId: string,
+  chatId: string,
+  options?: Partial<UseMessagesOptions>
+) => {
+  const queryClient = useQueryClient();
+  const { data, ...rest } = useInfiniteQuery({
+    ...options,
+    ...getMessagesOptions(queryClient, groupId, chatId),
+  } satisfies UseMessagesOptions);
+  // For some reason useInfiniteQuery thinks
+  // ```data``` is of type MessagesPage, instead of InfiniteData
+  return {
+    data: data as InfiniteData<MessagesPage, DocumentSnapshot> | undefined,
+    ...rest,
+  };
 };

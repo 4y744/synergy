@@ -2,11 +2,12 @@ import { useRef } from "react";
 import { createLazyFileRoute, Navigate } from "@tanstack/react-router";
 import { HashIcon } from "lucide-react";
 
-import { useChat } from "~/features/chats/hooks/use-chat";
-import { MessagesList } from "~/features/messages/components/messages-list";
-import { CreateMessageForm } from "~/features/messages/components/create-message";
 import { ContentLayout } from "~/components/layouts/content-layout";
 import { Header } from "~/components/layouts/header";
+
+import { useChat } from "~/features/chats/api/get-chats";
+import { MessagesList } from "~/features/messages/components/messages-list";
+import { CreateMessageForm } from "~/features/messages/components/create-message";
 
 export const Route = createLazyFileRoute(
   "/(app)/groups/$groupId/chats/$chatId"

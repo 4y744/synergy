@@ -1,11 +1,12 @@
-import { createThemeStore, ThemeStore } from "~/stores/theme-store";
-import { Theme } from "~/types/theme";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { useStore } from "zustand";
 
+import { createThemeStore, ThemeStore } from "~/stores/theme-store";
+import { Theme } from "~/types/theme";
+
 export const ThemeContext = createContext<ThemeStore>({} as ThemeStore);
 
-export type ThemeProviderProps = Readonly<{
+type ThemeProviderProps = Readonly<{
   children?: ReactNode;
   defaultTheme?: Theme;
 }>;

@@ -1,10 +1,9 @@
 import { ComponentProps, ReactNode, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Loader2Icon } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useTranslation } from "react-i18next";
 
 import {
   Button,
@@ -23,11 +22,11 @@ import {
 
 import { cn } from "@synergy/utils";
 
-import { useCreateFolder } from "../hooks/use-create-folder";
 import {
+  useCreateFolder,
   CreateFolderInput,
   createFolderInputSchema,
-} from "../types/create-folder";
+} from "../api/create-folder";
 
 type CreateFolderProps = Readonly<
   ComponentProps<"form"> & {
@@ -73,6 +72,7 @@ export const CreateFolderForm = ({
       >
         <FormField
           name="name"
+          control={form.control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -96,7 +96,7 @@ export const CreateFolderForm = ({
         >
           {isPending ? (
             <>
-              <Loader2 className="animate-spin" />
+              <Loader2Icon className="animate-spin" />
               {t("client.action.creating")}
             </>
           ) : (
@@ -107,6 +107,7 @@ export const CreateFolderForm = ({
     </Form>
   );
 };
+CreateFolderForm.displayName = "CreateFolderForm";
 
 type CreateFolderDialogProps = Readonly<{
   children?: ReactNode;
@@ -136,3 +137,4 @@ export const CreateFolderDialog = ({
     </Dialog>
   );
 };
+CreateFolderDialog.displayName = "CreateFolderDialog";

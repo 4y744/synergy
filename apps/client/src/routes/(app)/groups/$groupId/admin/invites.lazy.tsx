@@ -1,7 +1,6 @@
+import { useTranslation } from "react-i18next";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { MailPlusIcon } from "lucide-react";
-
-import { useTranslation } from "react-i18next";
 
 import { InvitesList } from "~/features/invites/components/invites-list";
 import { ContentLayout } from "~/components/layouts/content-layout";

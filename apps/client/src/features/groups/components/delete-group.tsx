@@ -1,7 +1,6 @@
 import { ReactNode, useState } from "react";
-import { Loader2 } from "lucide-react";
-
 import { useTranslation } from "react-i18next";
+import { Loader2Icon } from "lucide-react";
 
 import {
   AlertDialog,
@@ -15,8 +14,8 @@ import {
   Button,
 } from "@synergy/ui";
 
-import { useGroup } from "../hooks/use-group";
-import { useDeleteGroup } from "../hooks/use-delete-group";
+import { useGroup } from "../api/get-group";
+import { useDeleteGroup } from "../api/delete-group";
 
 type DeleteGroupDialogProps = Readonly<{
   children: ReactNode;
@@ -57,7 +56,7 @@ export const DeleteGroupDialog = ({
           >
             {isPending ? (
               <>
-                <Loader2 className="animate-spin" />
+                <Loader2Icon className="animate-spin" />
                 {t("client.action.deleting")}
               </>
             ) : (
@@ -69,3 +68,4 @@ export const DeleteGroupDialog = ({
     </AlertDialog>
   );
 };
+DeleteGroupDialog.displayName = "DeleteGroupDialog";

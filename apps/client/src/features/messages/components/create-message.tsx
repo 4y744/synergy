@@ -1,19 +1,18 @@
 import { ComponentProps, forwardRef } from "react";
+import { useTranslation } from "react-i18next";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useTranslation } from "react-i18next";
 
 import { Input, Form, FormControl, FormField, FormItem } from "@synergy/ui";
 
 import { cn } from "@synergy/utils";
 
-import { useCreateMessage } from "../hooks/use-create-message";
 import {
   CreateMessageInput,
   createMessageInputSchema,
-} from "../types/create-message";
+  useCreateMessage,
+} from "../api/create-message";
 
 type ChatInputProps = Readonly<
   ComponentProps<"form"> & {
@@ -54,6 +53,7 @@ export const CreateMessageForm = forwardRef<HTMLFormElement, ChatInputProps>(
         >
           <FormField
             name="payload"
+            control={form.control}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -64,6 +64,7 @@ export const CreateMessageForm = forwardRef<HTMLFormElement, ChatInputProps>(
                       "focus-visible:ring-0"
                     )}
                     placeholder={`${t("client.feature.message.form.fields.send.placeholder")}...`}
+                    autoComplete="off"
                   />
                 </FormControl>
               </FormItem>
@@ -74,3 +75,4 @@ export const CreateMessageForm = forwardRef<HTMLFormElement, ChatInputProps>(
     );
   }
 );
+CreateMessageForm.displayName = "CreateMessageForm";

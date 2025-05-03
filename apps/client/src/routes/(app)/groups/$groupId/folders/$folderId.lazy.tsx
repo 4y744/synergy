@@ -1,10 +1,11 @@
 import { FolderIcon } from "lucide-react";
 import { createLazyFileRoute, Navigate } from "@tanstack/react-router";
 
-import { FilesList } from "~/features/files/components/files-list";
-import { useFolder } from "~/features/folders/hooks/use-folder";
 import { ContentLayout } from "~/components/layouts/content-layout";
 import { Header } from "~/components/layouts/header";
+
+import { FilesList } from "~/features/files/components/files-list";
+import { useFolder } from "~/features/folders/api/get-folders";
 
 export const Route = createLazyFileRoute(
   "/(app)/groups/$groupId/folders/$folderId"

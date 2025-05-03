@@ -1,4 +1,8 @@
-import { MutationOptions } from "@tanstack/react-query";
+import {
+  MutationOptions,
+  useMutation,
+  UseMutationOptions,
+} from "@tanstack/react-query";
 
 import { deleteDoc, doc, FirestoreError, getDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
@@ -28,4 +32,18 @@ export const deleteFileOptions = (
       return deleteDoc(fileDocRef);
     },
   } satisfies DeleteFileOptions;
+};
+
+type UseDeleteFileOptions = UseMutationOptions<void, FirestoreError, void>;
+
+export const useDeleteFile = (
+  groupId: string,
+  folderId: string,
+  fileId: string,
+  options?: Partial<UseDeleteFileOptions>
+) => {
+  return useMutation({
+    ...options,
+    ...deleteFileOptions(groupId, folderId, fileId),
+  } satisfies UseDeleteFileOptions);
 };

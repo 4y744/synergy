@@ -1,4 +1,10 @@
-import { QueryClient, QueryOptions } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryOptions,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import {
   collectionGroup,
   FirestoreError,
@@ -47,12 +53,27 @@ export const findGroupsOptions = (queryClient: QueryClient) => {
             resolve(groups);
             queryClient.setQueryData(queryKey, groups);
           },
-          () => {
-            reject();
+          (err) => {
+            reject(err);
             queryClient.removeQueries({ queryKey });
           }
         );
       });
     },
   } satisfies FindGroupsOptions;
+};
+
+type UseFindGroupsOptions = UseQueryOptions<
+  string[],
+  FirestoreError,
+  string[],
+  string[]
+>;
+
+export const useFindGroups = (options?: Partial<UseFindGroupsOptions>) => {
+  const queryClient = useQueryClient();
+  return useQuery({
+    ...options,
+    ...findGroupsOptions(queryClient),
+  } satisfies UseFindGroupsOptions);
 };

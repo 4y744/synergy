@@ -1,4 +1,4 @@
-import { createRootRouteWithContext } from "@tanstack/react-router";
+import { createRootRouteWithContext, Navigate } from "@tanstack/react-router";
 import { QueryClient } from "@tanstack/react-query";
 
 import { AuthStore } from "~/features/auth/stores/auth-store";
@@ -8,4 +8,6 @@ export type RouteContext = {
   authStore: AuthStore;
 };
 
-export const Route = createRootRouteWithContext<RouteContext>()({});
+export const Route = createRootRouteWithContext<RouteContext>()({
+  notFoundComponent: () => <Navigate to="/" />,
+});

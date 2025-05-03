@@ -1,19 +1,20 @@
 import { ComponentProps, ReactNode, useEffect, useRef, useState } from "react";
-import { FileUpIcon } from "lucide-react";
-
 import { useTranslation } from "react-i18next";
+import { FileUpIcon } from "lucide-react";
 
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
   Progress,
 } from "@synergy/ui";
 
-import { useCreateFile } from "../hooks/use-create-file";
+import { useCreateFile } from "../api/create-file";
 
-type CreateFileFormProps = Readonly<
+export type CreateFileFormProps = Readonly<
   ComponentProps<"div"> & {
     groupId: string;
     folderId: string;
@@ -34,6 +35,7 @@ export const CreateFileForm = ({
   const { mutateAsync, isPending } = useCreateFile(groupId, folderId, {
     onProgressChange: (progress) => setProgress(progress),
     onSuccess,
+    throwOnError: false,
   });
 
   const onSubmit = (file: File) => mutateAsync(file);
@@ -79,6 +81,7 @@ export const CreateFileForm = ({
     </>
   );
 };
+CreateFileForm.displayName = "CreateFileForm";
 
 type CreateFileDialogProps = Readonly<{
   children?: ReactNode;
@@ -101,7 +104,12 @@ export const CreateFileDialog = ({
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogTitle>{t("client.feature.file.create")}</DialogTitle>
+        <DialogHeader>
+          <DialogTitle>{t("client.feature.file.create")}</DialogTitle>
+          <DialogDescription>
+            {t("client.feature.file.create_desc")}
+          </DialogDescription>
+        </DialogHeader>
         <CreateFileForm
           groupId={groupId}
           folderId={folderId}
@@ -111,3 +119,4 @@ export const CreateFileDialog = ({
     </Dialog>
   );
 };
+CreateFileDialog.displayName = "CreateFileDialog";

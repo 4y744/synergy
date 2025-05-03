@@ -1,11 +1,15 @@
-import { MutationOptions } from "@tanstack/react-query";
-
+import {
+  MutationOptions,
+  useMutation,
+  UseMutationOptions,
+} from "@tanstack/react-query";
 import {
   collection,
   deleteDoc,
   doc,
   FirestoreError,
   getDocs,
+  updateDoc,
 } from "firebase/firestore";
 
 import { db } from "@synergy/libs/firebase";
@@ -21,7 +25,9 @@ export const deleteGroupOptions = (groupId: string) => {
       );
       await Promise.all(
         memberDocs.map(async ({ id: memberId }) => {
-          return deleteDoc(doc(db, "groups", groupId, "members", memberId));
+          return updateDoc(doc(db, "groups", groupId, "members", memberId), {
+            uid: "",
+          });
         })
       );
       // Find and delete all invites.
@@ -41,4 +47,16 @@ export const deleteGroupOptions = (groupId: string) => {
       return deleteDoc(doc(db, "groups", groupId));
     },
   } satisfies DeleteGroupOptions;
+};
+
+type UseDeleteGroupOptions = UseMutationOptions<void, FirestoreError, void>;
+
+export const useDeleteGroup = (
+  groupId: string,
+  options?: Partial<UseDeleteGroupOptions>
+) => {
+  return useMutation({
+    ...options,
+    ...deleteGroupOptions(groupId),
+  } satisfies UseDeleteGroupOptions);
 };

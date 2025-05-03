@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { loadAuth } from "~/features/auth/api/load-auth";
+import { loadAuth } from "~/features/auth/utils/load-auth";
 import { findGroupsOptions } from "~/features/groups/api/find-groups";
 import { getGroupOptions } from "~/features/groups/api/get-group";
 import { getUserOptions } from "~/features/users/api/get-user";

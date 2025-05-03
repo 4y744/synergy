@@ -1,11 +1,12 @@
+import { useTranslation } from "react-i18next";
 import { createLazyFileRoute } from "@tanstack/react-router";
 
-import { useTranslation } from "react-i18next";
 import { Muted } from "@synergy/ui";
 
 import { Header } from "~/components/layouts/header";
 import { ContentLayout } from "~/components/layouts/content-layout";
-import { useGroup } from "~/features/groups/hooks/use-group";
+
+import { useGroup } from "~/features/groups/api/get-group";
 
 export const Route = createLazyFileRoute("/(app)/groups/$groupId/")({
   component: () => {

@@ -1,5 +1,8 @@
-import { MutationOptions } from "@tanstack/react-query";
-
+import {
+  MutationOptions,
+  useMutation,
+  UseMutationOptions,
+} from "@tanstack/react-query";
 import {
   addDoc,
   collection,
@@ -8,10 +11,15 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
+import z from "zod";
 
 import { auth, db } from "@synergy/libs/firebase";
 
-import { CreateGroupInput } from "../types/create-group";
+export const createGroupInputSchema = z.object({
+  name: z.string().min(4).max(32),
+});
+
+export type CreateGroupInput = z.infer<typeof createGroupInputSchema>;
 
 type CreateGroupOptions = MutationOptions<
   string,
@@ -34,4 +42,17 @@ export const createGroupOptions = () => {
       return groupId;
     },
   } satisfies CreateGroupOptions;
+};
+
+type UseCreateGroupOptions = UseMutationOptions<
+  string,
+  FirestoreError,
+  CreateGroupInput
+>;
+
+export const useCreateGroup = (options?: Partial<UseCreateGroupOptions>) => {
+  return useMutation({
+    ...options,
+    ...createGroupOptions(),
+  } satisfies UseCreateGroupOptions);
 };

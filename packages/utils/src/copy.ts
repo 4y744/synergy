@@ -7,7 +7,7 @@
 export const copyToClipboard = (
   str: string,
   options?: {
-    onError?: (reason: string) => void;
+    onError?: (error: string) => void;
   }
 ) => {
   try {

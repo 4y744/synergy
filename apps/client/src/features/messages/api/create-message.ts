@@ -1,14 +1,23 @@
-import { MutationOptions } from "@tanstack/react-query";
+import {
+  MutationOptions,
+  useMutation,
+  UseMutationOptions,
+} from "@tanstack/react-query";
 import {
   addDoc,
   collection,
   FirestoreError,
   serverTimestamp,
 } from "firebase/firestore";
+import z from "zod";
 
 import { auth, db } from "@synergy/libs/firebase";
 
-import { CreateMessageInput } from "../types/create-message";
+export const createMessageInputSchema = z.object({
+  payload: z.string().min(1),
+});
+
+export type CreateMessageInput = z.infer<typeof createMessageInputSchema>;
 
 type CreateMessageOptions = MutationOptions<
   string,
@@ -30,4 +39,21 @@ export const createMessageOptions = (groupId: string, chatId: string) => {
       return id;
     },
   } satisfies CreateMessageOptions;
+};
+
+type UseCreateMessageOptions = UseMutationOptions<
+  string,
+  FirestoreError,
+  CreateMessageInput
+>;
+
+export const useCreateMessage = (
+  groupId: string,
+  chatId: string,
+  options?: Partial<UseCreateMessageOptions>
+) => {
+  return useMutation({
+    ...options,
+    ...createMessageOptions(groupId, chatId),
+  } satisfies UseCreateMessageOptions);
 };

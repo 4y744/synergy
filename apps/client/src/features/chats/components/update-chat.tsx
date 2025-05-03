@@ -1,10 +1,9 @@
 import { useState, ReactNode, ComponentProps } from "react";
-import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Loader2Icon } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useTranslation } from "react-i18next";
 
 import {
   Button,
@@ -23,9 +22,9 @@ import {
 
 import { cn } from "@synergy/utils";
 
-import { useChat } from "../hooks/use-chat";
-import { useUpdateChat } from "../hooks/use-update-chat";
-import { CreateChatInput, createChatInputSchema } from "../types/create-chat";
+import { useChat } from "../api/get-chats";
+import { useUpdateChat } from "../api/update-chat";
+import { CreateChatInput, createChatInputSchema } from "../api/create-chat";
 
 type UpdateChatProps = Readonly<
   ComponentProps<"form"> & {
@@ -75,6 +74,7 @@ export const UpdateChatForm = ({
       >
         <FormField
           name="name"
+          control={form.control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -92,10 +92,13 @@ export const UpdateChatForm = ({
             </FormItem>
           )}
         />
-        <Button type="submit">
+        <Button
+          type="submit"
+          disabled={isPending}
+        >
           {isPending ? (
             <>
-              <Loader2 className="animate-spin" />
+              <Loader2Icon className="animate-spin" />
               {t("client.action.saving")}
             </>
           ) : (
@@ -106,6 +109,7 @@ export const UpdateChatForm = ({
     </Form>
   );
 };
+UpdateChatForm.displayName = "UpdateChatForm";
 
 type UpdateChatDialogProps = Readonly<{
   children?: ReactNode;
@@ -119,7 +123,6 @@ export const UpdateChatDialog = ({
   chatId,
 }: UpdateChatDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const { t } = useTranslation();
 
   return (
@@ -139,3 +142,4 @@ export const UpdateChatDialog = ({
     </Dialog>
   );
 };
+UpdateChatDialog.displayName = "UpdateChatDialog";

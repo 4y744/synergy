@@ -19,8 +19,11 @@
     "client": {
       "form": {
         "errors": {
-          "too_long": "Too long. Must contain more than {{max_lenght}} characters.",
-          "too_short": "Too short. Must contain less than {{min_lenght}} characters."
+          "too_long": "Too long. Must contain less than {{max_lenght}} characters.",
+          "too_short": "Too short. Must contain more than {{min_lenght}} characters.",
+          "invalid_email": "This email is invalid.",
+          "required": "Please fill out this field.",
+          "generic": "Invalid data."
         }
       },
       "action": {
@@ -47,6 +50,7 @@
         "5_mins": "5 minutes",
         "30_mins": "30 minutes",
         "1_hour": "1 hour",
+        "1_day": "1 day",
         "1_week": "1 week",
         "1_month": "1 month",
         "1_year": "1 year",
@@ -63,10 +67,13 @@
           "invites": "Invites",
           "members": "Members",
           "chats": "Chats",
+          "calls": "Calls",
           "folders": "Folders",
+          "boards": "Boards",
           "settings": "Settings"
         },
         "settings": {
+          "upgrade": "Upgrade",
           "account": "Account",
           "theme": "Theme",
           "language": "Language"
@@ -79,8 +86,11 @@
           "sign_up": "Sign up",
           "sign_up_desc": "Create an account.",
           "sign_out": "Sign out",
-          "no_account": "Don't have an account?",
+          "create_guest": "Sign in as a guest",
+          "upgrade_guest": "Upgrade guest account",
+          "with_email": "Sign up with email",
           "have_account": "Already have an account?",
+          "as_guest": "Sign up as a guest",
           "form": {
             "fields": {
               "username": {
@@ -101,11 +111,10 @@
               }
             },
             "errors": {
-              "invalid_email": "This email is invalid.",
               "email_in_use": "This email is already in use.",
               "weak_password": "This password is too weak.",
               "wrong_password": "Wrong password",
-              "password_required": "Please enter a password.",
+              "missing_password": "Please enter a password",
               "password_mismatch": "These passwords dont match.",
               "user_not_found": "User not found.",
               "disabled_user": "This user is disabled."
@@ -119,7 +128,6 @@
           "update": "Edit group",
           "delete": "Delete group",
           "delete_desc": "Are you sure you want to delete {{name}}?",
-          "leave": "Leave group",
           "settings": "Group settings",
           "upload_icon": "Upload an icon",
           "form": {
@@ -165,6 +173,21 @@
             }
           }
         },
+        "call": {
+          "name": "Call name",
+          "create": "Create a call",
+          "update": "Edit call",
+          "delete": "Delete call",
+          "delete_desc": "Are you sure you want to delete {{name}}?",
+          "form": {
+            "fields": {
+              "name": {
+                "label": "Calls name",
+                "placeholder": "Call 1"
+              }
+            }
+          }
+        },
         "folder": {
           "name": "Folder name",
           "create": "Create a folder",
@@ -183,8 +206,50 @@
         "file": {
           "name": "File name",
           "create": "Upload a file",
+          "create_desc": "Select a file up to 100MB to upload to this folder.",
           "delete": "Delete file",
           "delete_desc": "Are you sure you want to delete {{name}}?"
+        },
+        "board": {
+          "name": "Board name",
+          "create": "Create a board",
+          "update": "Edit board",
+          "delete": "Delete board",
+          "delete_desc": "Are you sure you want to delete {{name}}?",
+          "form": {
+            "fields": {
+              "name": {
+                "label": "Board name",
+                "placeholder": "Board 1"
+              }
+            }
+          }
+        },
+        "task": {
+          "name": "Task name",
+          "create": "Create a task",
+          "update": "Edit task",
+          "delete": "Delete task",
+          "delete_desc": "Are you sure you want to delete {{name}}?",
+          "assigned_to": "assigned to",
+          "created_by": "by",
+          "created_at": "at",
+          "form": {
+            "fields": {
+              "name": {
+                "label": "Task name",
+                "placeholder": "Presentation"
+              },
+              "description": {
+                "label": "Task description",
+                "placeholder": "Do this, and this, and that..."
+              },
+              "assigned_to": {
+                "label": "Assigned to",
+                "placeholder": "No one"
+              }
+            }
+          }
         },
         "invite": {
           "id": "Invite ID",

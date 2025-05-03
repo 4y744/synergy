@@ -1,14 +1,25 @@
-import { QueryClient, QueryOptions } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryOptions,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import { collection, FirestoreError, onSnapshot } from "firebase/firestore";
-import { ZodError } from "zod";
+import z from "zod";
 
 import { db } from "@synergy/libs/firebase";
 
-import { Invite, inviteSchema } from "../types/invite";
+export const inviteSchema = z.object({
+  id: z.string(),
+  expiresAt: z.date(),
+});
+
+export type Invite = z.infer<typeof inviteSchema>;
 
 type GetInvitesOptions = QueryOptions<
   Invite[],
-  FirestoreError | ZodError<Invite[]>,
+  FirestoreError,
   Invite[],
   string[]
 >;
@@ -21,34 +32,48 @@ export const getInvitesOptions = (
     queryKey: ["groups", groupId, "invites"],
     queryFn: ({ queryKey }) => {
       return new Promise<Invite[]>((resolve, reject) => {
-        const unsubscribe = onSnapshot(
+        onSnapshot(
           collection(db, "groups", groupId, "invites"),
           (snapshot) => {
-            const invites = inviteSchema.array().safeParse(
-              snapshot.docs.map((doc) => {
-                const data = doc.data({ serverTimestamps: "estimate" });
-                return {
-                  id: doc.id,
-                  expiresAt: data?.expiresAt.toDate(),
-                } satisfies Invite;
-              })
-            );
+            const parsedInvites = snapshot.docs.map((doc) => {
+              const data = doc.data({ serverTimestamps: "estimate" });
+              return inviteSchema.safeParse({
+                id: doc.id,
+                expiresAt: data?.expiresAt.toDate(),
+              } as Invite);
+            });
 
-            if (invites.success) {
-              resolve(invites.data);
-              queryClient.setQueryData(queryKey, invites.data);
-            } else {
-              unsubscribe();
-              reject(invites.error);
-              queryClient.removeQueries({ queryKey });
-            }
+            const invites = parsedInvites
+              .filter(({ success }) => success)
+              .map(({ data }) => data!);
+
+            resolve(invites);
+            queryClient.setQueryData(queryKey, invites);
           },
-          (err) => {
-            reject(err);
+          (error) => {
+            reject(error);
             queryClient.removeQueries({ queryKey });
           }
         );
       });
     },
   } satisfies GetInvitesOptions;
+};
+
+type UseInvitesOptions = UseQueryOptions<
+  Invite[],
+  FirestoreError,
+  Invite[],
+  string[]
+>;
+
+export const useInvites = (
+  groupId: string,
+  options?: Partial<UseInvitesOptions>
+) => {
+  const queryClient = useQueryClient();
+  return useQuery({
+    ...options,
+    ...getInvitesOptions(queryClient, groupId),
+  } satisfies UseInvitesOptions);
 };

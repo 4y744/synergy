@@ -18,7 +18,7 @@
     "react-i18next": "^15.4.0"
   },
   "devDependencies": {
-    "@synergy/configs": "workspace:*",
+    "@synergy/config": "workspace:*",
     "tsup": "8.0.0",
     "typescript": "^5.5.3"
   }

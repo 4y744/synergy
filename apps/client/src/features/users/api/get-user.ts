@@ -1,9 +1,23 @@
-import { QueryClient, QueryOptions } from "@tanstack/react-query";
-
+import {
+  QueryClient,
+  QueryOptions,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import { doc, FirestoreError, onSnapshot } from "firebase/firestore";
+import z from "zod";
 
 import { db } from "@synergy/libs/firebase";
-import { User, userSchema } from "../types/user";
+
+export const userSchema = z.object({
+  uid: z.string(),
+  username: z.string(),
+  pfp: z.string().optional(),
+  createdAt: z.date(),
+});
+
+export type User = z.infer<typeof userSchema>;
 
 type GetUserOptions = QueryOptions<User, FirestoreError, User, string[]>;
 
@@ -40,4 +54,14 @@ export const getUserOptions = (queryClient: QueryClient, uid: string) => {
       });
     },
   } satisfies GetUserOptions;
+};
+
+type UseUserOptions = UseQueryOptions<User, FirestoreError, User, string[]>;
+
+export const useUser = (uid: string, options?: Partial<UseUserOptions>) => {
+  const queryClient = useQueryClient();
+  return useQuery({
+    ...options,
+    ...getUserOptions(queryClient, uid),
+  } satisfies UseUserOptions);
 };

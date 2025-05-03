@@ -1,15 +1,23 @@
-import { MutationOptions } from "@tanstack/react-query";
-
+import {
+  MutationOptions,
+  useMutation,
+  UseMutationOptions,
+} from "@tanstack/react-query";
 import {
   addDoc,
   collection,
   FirestoreError,
   serverTimestamp,
 } from "firebase/firestore";
+import z from "zod";
 
 import { db } from "@synergy/libs/firebase";
 
-import { CreateFolderInput } from "../types/create-folder";
+export const createFolderInputSchema = z.object({
+  name: z.string().min(4).max(32),
+});
+
+export type CreateFolderInput = z.infer<typeof createFolderInputSchema>;
 
 type CreateFolderOptions = MutationOptions<
   string,
@@ -30,4 +38,20 @@ export const createFolderOptions = (groupId: string) => {
       return folderId;
     },
   } satisfies CreateFolderOptions;
+};
+
+type UseCreateFolderOptions = UseMutationOptions<
+  string,
+  FirestoreError,
+  CreateFolderInput
+>;
+
+export const useCreateFolder = (
+  groupId: string,
+  options?: Partial<UseCreateFolderOptions>
+) => {
+  return useMutation({
+    ...options,
+    ...createFolderOptions(groupId),
+  } satisfies UseCreateFolderOptions);
 };

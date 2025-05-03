@@ -1,6 +1,5 @@
-import { FolderIcon, MoreHorizontalIcon, PlusIcon } from "lucide-react";
-
 import { useTranslation } from "react-i18next";
+import { FolderIcon, MoreHorizontalIcon, PlusIcon } from "lucide-react";
 
 import {
   Button,
@@ -18,10 +17,10 @@ import {
   TableRow,
 } from "@synergy/ui";
 
+import { useFolders } from "../api/get-folders";
 import { CreateFolderDialog } from "./create-folder";
 import { UpdateFolderDialog } from "./update-folder";
 import { DeleteFolderDialog } from "./delete-folder";
-import { useFolders } from "../hooks/use-folders";
 
 type FoldersListProps = Readonly<{
   groupId: string;
@@ -36,17 +35,15 @@ export const FoldersList = ({ groupId }: FoldersListProps) => {
       <TableHeader>
         <TableRow>
           <TableHead>{t("client.feature.folder.name")}</TableHead>
-          <TableHead className="float-end">
-            <div className="flex items-center h-full">
-              <CreateFolderDialog groupId={groupId}>
-                <Button
-                  className="w-8 h-8"
-                  variant="ghost"
-                >
-                  <PlusIcon />
-                </Button>
-              </CreateFolderDialog>
-            </div>
+          <TableHead className="flex items-center float-end">
+            <CreateFolderDialog groupId={groupId}>
+              <Button
+                className="w-8 h-8"
+                variant="ghost"
+              >
+                <PlusIcon />
+              </Button>
+            </CreateFolderDialog>
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -59,7 +56,7 @@ export const FoldersList = ({ groupId }: FoldersListProps) => {
                 {name}
               </div>
             </TableCell>
-            <TableCell className="float-end">
+            <TableCell className="flex items-center float-end">
               <DropdownMenu>
                 <DropdownMenuTrigger className="hover:bg-secondary rounded-md focus:outline-none">
                   <MoreHorizontalIcon
@@ -102,3 +99,4 @@ export const FoldersList = ({ groupId }: FoldersListProps) => {
     </Table>
   );
 };
+FoldersList.displayName = "FoldersList";

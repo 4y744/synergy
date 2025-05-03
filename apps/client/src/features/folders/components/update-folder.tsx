@@ -1,10 +1,10 @@
 import { useState, ReactNode, ComponentProps } from "react";
-import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Loader2Icon } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useTranslation } from "react-i18next";
 import {
   Button,
   Input,
@@ -22,12 +22,13 @@ import {
 
 import { cn } from "@synergy/utils";
 
-import { useFolder } from "../hooks/use-folder";
-import { useUpdateFolder } from "../hooks/use-update-folder";
+import { useFolder } from "../api/get-folders";
+
 import {
+  useUpdateFolder,
   UpdateFolderInput,
   updateFolderInputSchema,
-} from "../types/update-folder";
+} from "../api/update-folder";
 
 type UpdateFolderProps = Readonly<
   ComponentProps<"form"> & {
@@ -77,6 +78,7 @@ export const UpdateFolderForm = ({
       >
         <FormField
           name="name"
+          control={form.control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -94,10 +96,13 @@ export const UpdateFolderForm = ({
             </FormItem>
           )}
         />
-        <Button type="submit">
+        <Button
+          type="submit"
+          disabled={isPending}
+        >
           {isPending ? (
             <>
-              <Loader2 className="animate-spin" />
+              <Loader2Icon className="animate-spin" />
               {t("client.action.saving")}
             </>
           ) : (
@@ -108,6 +113,7 @@ export const UpdateFolderForm = ({
     </Form>
   );
 };
+UpdateFolderForm.displayName = "UpdateFolderDialog";
 
 type UpdateFolderDialogProps = Readonly<{
   children?: ReactNode;
@@ -140,3 +146,4 @@ export const UpdateFolderDialog = ({
     </Dialog>
   );
 };
+UpdateFolderDialog.displayName = "UpdateFolderDialog";

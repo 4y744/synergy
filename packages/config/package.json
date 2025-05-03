@@ -1,0 +1,19 @@
+{
+  "name": "@synergy/config",
+  "version": "1.0.0",
+  "license": "GPL-3.0-only",
+  "private": true,
+  "exports": {
+    "./typescript": "./tsconfig.json",
+    "./tsup": "./tsup.config.js",
+    "./tailwind": "./tailwind.preset.ts"
+  },
+  "dependencies": {
+    "tailwindcss": "^3.4.10",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "tsup": "8.0.0",
+    "typescript": "^5.5.3"
+  }
+}

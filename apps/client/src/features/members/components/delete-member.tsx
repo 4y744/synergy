@@ -1,7 +1,7 @@
 import { ReactNode, useState } from "react";
-import { Loader2 } from "lucide-react";
-
 import { useTranslation } from "react-i18next";
+
+import { Loader2Icon } from "lucide-react";
 
 import {
   AlertDialog,
@@ -15,10 +15,10 @@ import {
   Button,
 } from "@synergy/ui";
 
-import { useUser } from "~/features/users/hooks/use-user";
-import { useGroup } from "~/features/groups/hooks/use-group";
+import { useUser } from "~/features/users/api/get-user";
+import { useGroup } from "~/features/groups/api/get-group";
 
-import { useDeleteMember } from "../hooks/use-delete-member";
+import { useDeleteMember } from "../api/delete-member";
 
 type DeleteMemberDialogProps = Readonly<{
   children?: ReactNode;
@@ -35,15 +35,18 @@ export const DeleteMemberDialog = ({
 }: DeleteMemberDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { mutateAsync: deleteMember, isPending } = useDeleteMember(
+  const { t } = useTranslation();
+
+  const { mutate: deleteMember, isPending } = useDeleteMember(
     groupId,
-    memberId
+    memberId,
+    {
+      onSuccess: () => setIsOpen(false),
+    }
   );
 
   const { data: group } = useGroup(groupId);
   const { data: user } = useUser(memberId);
-
-  const { t } = useTranslation();
 
   return (
     <AlertDialog
@@ -65,15 +68,13 @@ export const DeleteMemberDialog = ({
         <AlertDialogFooter>
           <AlertDialogCancel>{t("client.action.cancel")}</AlertDialogCancel>
           <Button
-            onClick={() => {
-              deleteMember().then(() => setIsOpen(false));
-            }}
+            onClick={() => deleteMember()}
             disabled={isPending}
             variant="destructive"
           >
             {isPending ? (
               <>
-                <Loader2 className="animate-spin" />
+                <Loader2Icon className="animate-spin" />
                 {t(
                   type == "kick"
                     ? "client.action.kicking"
@@ -89,3 +90,4 @@ export const DeleteMemberDialog = ({
     </AlertDialog>
   );
 };
+DeleteMemberDialog.displayName = "DeleteMemberDialog";

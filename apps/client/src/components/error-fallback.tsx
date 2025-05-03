@@ -1,5 +1,5 @@
-import { TriangleAlertIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { TriangleAlertIcon } from "lucide-react";
 
 import { Button, Separator } from "@synergy/ui";
 

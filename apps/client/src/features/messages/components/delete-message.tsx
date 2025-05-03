@@ -1,7 +1,6 @@
 import { ReactNode, useState } from "react";
-import { Loader2 } from "lucide-react";
-
 import { useTranslation } from "react-i18next";
+import { Loader2Icon } from "lucide-react";
 
 import {
   AlertDialog,
@@ -15,7 +14,7 @@ import {
   Button,
 } from "@synergy/ui";
 
-import { useDeleteMessage } from "../hooks/use-delete-message";
+import { useDeleteMessage } from "../api/delete-message";
 
 type DeleteMessageDialogProps = Readonly<{
   children?: ReactNode;
@@ -65,7 +64,7 @@ export const DeleteMessageDialog = ({
           >
             {isPending ? (
               <>
-                <Loader2 className="animate-spin" />
+                <Loader2Icon className="animate-spin" />
                 {t("client.action.deleting")}
               </>
             ) : (
@@ -77,3 +76,4 @@ export const DeleteMessageDialog = ({
     </AlertDialog>
   );
 };
+DeleteMessageDialog.displayName = "DeleteMessageDialog";

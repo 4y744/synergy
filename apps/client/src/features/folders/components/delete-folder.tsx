@@ -1,7 +1,6 @@
 import { ReactNode, useState } from "react";
-import { Loader2 } from "lucide-react";
-
 import { useTranslation } from "react-i18next";
+import { Loader2Icon } from "lucide-react";
 
 import {
   AlertDialog,
@@ -15,8 +14,8 @@ import {
   Button,
 } from "@synergy/ui";
 
-import { useFolder } from "../hooks/use-folder";
-import { useDeleteFolder } from "../hooks/use-delete-folder";
+import { useFolder } from "../api/get-folders";
+import { useDeleteFolder } from "../api/delete-folder";
 
 type DeleteFolderDialogProps = Readonly<{
   children: ReactNode;
@@ -64,7 +63,7 @@ export const DeleteFolderDialog = ({
           >
             {isPending ? (
               <>
-                <Loader2 className="animate-spin" />
+                <Loader2Icon className="animate-spin" />
                 {t("client.action.deleting")}
               </>
             ) : (
@@ -76,3 +75,4 @@ export const DeleteFolderDialog = ({
     </AlertDialog>
   );
 };
+DeleteFolderDialog.displayName = "DeleteFolderDialog";

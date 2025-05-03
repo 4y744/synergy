@@ -1,10 +1,9 @@
 import { ComponentProps, ReactNode, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Loader2Icon } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { t } from "i18next";
 
 import {
   Button,
@@ -23,8 +22,11 @@ import {
 
 import { cn } from "@synergy/utils";
 
-import { useCreateChat } from "../hooks/use-create-chat";
-import { CreateChatInput, createChatInputSchema } from "../types/create-chat";
+import {
+  useCreateChat,
+  CreateChatInput,
+  createChatInputSchema,
+} from "../api/create-chat";
 
 type CreateChatProps = Readonly<
   ComponentProps<"form"> & {
@@ -40,6 +42,8 @@ export const CreateChatForm = ({
   className,
   ...props
 }: CreateChatProps) => {
+  const { t } = useTranslation();
+
   const { mutateAsync: createChat, isPending } = useCreateChat(groupId, {
     onSuccess,
     throwOnError: false,
@@ -68,6 +72,7 @@ export const CreateChatForm = ({
       >
         <FormField
           name="name"
+          control={form.control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -91,7 +96,7 @@ export const CreateChatForm = ({
         >
           {isPending ? (
             <>
-              <Loader2 className="animate-spin" />
+              <Loader2Icon className="animate-spin" />
               {t("client.action.creating")}
             </>
           ) : (
@@ -102,6 +107,7 @@ export const CreateChatForm = ({
     </Form>
   );
 };
+CreateChatForm.displayName = "CreateChatForm";
 
 type CreateChatDialogProps = Readonly<{
   children?: ReactNode;
@@ -113,6 +119,7 @@ export const CreateChatDialog = ({
   groupId,
 }: CreateChatDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <Dialog
@@ -130,3 +137,4 @@ export const CreateChatDialog = ({
     </Dialog>
   );
 };
+CreateChatDialog.displayName = "CreateChatDialog";

@@ -1,7 +1,6 @@
 import { ReactNode, useState } from "react";
-import { Loader2 } from "lucide-react";
-
 import { useTranslation } from "react-i18next";
+import { Loader2Icon } from "lucide-react";
 
 import {
   AlertDialog,
@@ -15,7 +14,7 @@ import {
   Button,
 } from "@synergy/ui";
 
-import { useDeleteInvite } from "../hooks/use-delete-invite";
+import { useDeleteInvite } from "../api/delete-invite";
 
 type DeleteInviteDialogProps = Readonly<{
   children?: ReactNode;
@@ -31,9 +30,12 @@ export const DeleteInviteDialog = ({
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
 
-  const { mutateAsync: deleteInvite, isPending } = useDeleteInvite(
+  const { mutate: deleteInvite, isPending } = useDeleteInvite(
     groupId,
-    inviteId
+    inviteId,
+    {
+      onSuccess: () => setIsOpen(false),
+    }
   );
 
   return (
@@ -54,15 +56,13 @@ export const DeleteInviteDialog = ({
         <AlertDialogFooter>
           <AlertDialogCancel>{t("client.action.cancel")}</AlertDialogCancel>
           <Button
-            onClick={() => {
-              deleteInvite().then(() => setIsOpen(false));
-            }}
+            onClick={() => deleteInvite()}
             disabled={isPending}
             variant="destructive"
           >
             {isPending ? (
               <>
-                <Loader2 className="animate-spin" />
+                <Loader2Icon className="animate-spin" />
                 {t("client.action.deleting")}
               </>
             ) : (
@@ -74,3 +74,4 @@ export const DeleteInviteDialog = ({
     </AlertDialog>
   );
 };
+DeleteInviteDialog.displayName = "DeleteInviteDialog";

@@ -1,10 +1,22 @@
-import { MutationOptions } from "@tanstack/react-query";
+import {
+  MutationOptions,
+  useMutation,
+  UseMutationOptions,
+} from "@tanstack/react-query";
 import { AuthError, signInWithEmailAndPassword } from "firebase/auth";
+import z from "zod";
 
 import { auth } from "@synergy/libs/firebase";
 
+import { useAuth } from "../hooks/use-auth";
 import { Auth } from "../types/auth";
-import { SignInInput } from "../types/sign-in";
+
+export const signInInputSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
+
+export type SignInInput = z.infer<typeof signInInputSchema>;
 
 type SignInOptions = MutationOptions<Partial<Auth>, AuthError, SignInInput>;
 
@@ -21,4 +33,22 @@ export const signInOptions = () => {
       };
     },
   } satisfies SignInOptions;
+};
+
+type UseSignInOptions = UseMutationOptions<
+  Partial<Auth>,
+  AuthError,
+  SignInInput
+>;
+
+export const useSignIn = ({ onSuccess, ...rest }: UseSignInOptions = {}) => {
+  const { signIn } = useAuth();
+  return useMutation({
+    ...rest,
+    onSuccess: (auth, ...args) => {
+      signIn(auth);
+      onSuccess?.(auth, ...args);
+    },
+    ...signInOptions(),
+  } satisfies UseSignInOptions);
 };
