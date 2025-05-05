@@ -1,6 +1,5 @@
 import { ComponentProps, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "@tanstack/react-router";
 import { Loader2Icon } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -24,18 +23,22 @@ import {
   useCreateGuest,
 } from "../api/create-guest";
 
-type CreateGuestFormProps = Readonly<ComponentProps<"form">>;
+type CreateGuestFormProps = Readonly<
+  ComponentProps<"form"> & {
+    onSuccess?: () => void;
+  }
+>;
 
 export const CreateGuestForm = ({
+  onSuccess,
   onSubmit,
   className,
   ...props
 }: CreateGuestFormProps) => {
-  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
   const { mutate: createGuest, isPending } = useCreateGuest({
-    onSuccess: () => navigate({ to: "/groups" }),
+    onSuccess,
     throwOnError: false,
   });
 

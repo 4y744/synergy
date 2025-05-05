@@ -1,6 +1,5 @@
 import { ComponentProps, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "@tanstack/react-router";
 import { Loader2Icon } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -21,18 +20,22 @@ import { cn } from "@synergy/utils";
 import { SignInInput, signInInputSchema, useSignIn } from "../api/sign-in";
 import { getAuthError } from "../utils/get-auth-error";
 
-type SignInFormProps = Readonly<ComponentProps<"form">>;
+type SignInFormProps = Readonly<
+  ComponentProps<"form"> & {
+    onSuccess?: () => void;
+  }
+>;
 
 export const SignInForm = ({
+  onSuccess,
   className,
   onSubmit,
   ...props
 }: SignInFormProps) => {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
 
   const { mutate: signIn, isPending } = useSignIn({
-    onSuccess: () => navigate({ to: "/groups" }),
+    onSuccess,
     onError: (error) => {
       form.setError("password", {
         message: getAuthError(error.code),

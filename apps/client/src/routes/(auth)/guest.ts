@@ -10,4 +10,9 @@ export const Route = createFileRoute("/(auth)/guest")({
       throw redirect({ to: "/groups" });
     }
   },
+  validateSearch: (search: Record<string, unknown>) => {
+    return search as {
+      invite?: string;
+    };
+  },
 });

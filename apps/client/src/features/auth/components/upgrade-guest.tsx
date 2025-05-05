@@ -1,6 +1,5 @@
 import { ComponentProps, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "@tanstack/react-router";
 import { Loader2Icon } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -25,18 +24,22 @@ import {
 } from "../api/upgrade-guest";
 import { getAuthError } from "../utils/get-auth-error";
 
-type UpgradeGuestFormProps = Readonly<ComponentProps<"form">>;
+type UpgradeGuestFormProps = Readonly<
+  ComponentProps<"form"> & {
+    onSuccess?: () => void;
+  }
+>;
 
 export const UpgradeGuestForm = ({
+  onSuccess,
   className,
   onSubmit,
   ...props
 }: UpgradeGuestFormProps) => {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
 
   const { mutate: upgradeGuest, isPending } = useUpgradeGuest({
-    onSuccess: () => navigate({ to: "/groups" }),
+    onSuccess,
     onError: (error) => {
       form.setError("confirmPassword", {
         message: getAuthError(error.code),

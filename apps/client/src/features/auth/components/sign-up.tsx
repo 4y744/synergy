@@ -1,6 +1,5 @@
 import { ComponentProps, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "@tanstack/react-router";
 import { Loader2Icon } from "lucide-react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -21,18 +20,22 @@ import { cn } from "@synergy/utils";
 import { SignUpInput, signUpInputSchema, useSignUp } from "../api/sign-up";
 import { getAuthError } from "../utils/get-auth-error";
 
-type SignUpFormProps = Readonly<ComponentProps<"form">>;
+type SignUpFormProps = Readonly<
+  ComponentProps<"form"> & {
+    onSuccess?: () => void;
+  }
+>;
 
 export const SignUpForm = ({
+  onSuccess,
   className,
   onSubmit,
   ...props
 }: SignUpFormProps) => {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
 
   const { mutate: signUp, isPending } = useSignUp({
-    onSuccess: () => navigate({ to: "/groups" }),
+    onSuccess,
     onError: (error) => {
       form.setError("confirmPassword", {
         message: getAuthError(error.code),
